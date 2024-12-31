@@ -1,4 +1,6 @@
 import { CopyButton } from "@/components/copy-button";
+import { OpenapiQuery } from "@/components/openapi/openapi-query";
+import { OpenapiSchema } from "@/components/openapi/openapi-schema";
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
 import { useMDXComponent } from "next-contentlayer2/hooks";
@@ -58,6 +60,8 @@ const mdxComponents: MDXComponents = {
 	hr: ({ className, ...props }) => (
 		<hr className={cn("my-4 md:my-8", className)} {...props} />
 	),
+	OpenapiQuery: OpenapiQuery,
+	OpenapiSchema: OpenapiSchema,
 };
 
 interface MdxProps {

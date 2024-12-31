@@ -47,16 +47,6 @@ code span[data-highlighted-line] {
 	background-color: #272738;
 }
 
-pre code {
-	padding-right: 1.5rem;
-	padding-left: 1.5rem;
-}
-
-code {
-	padding-right: 0.3rem;
-	padding-left: 0.3rem;
-}
-
 figure figcaption + pre {
 	margin-top: 0;
 	border-top-left-radius: 0 !important;

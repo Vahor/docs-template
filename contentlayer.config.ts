@@ -11,6 +11,7 @@ import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 
 import type { ShikiTransformer } from "shiki";
+import { shikiOptions } from "@/lib/shiki";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -90,12 +91,7 @@ function shikiCustom(): ShikiTransformer {
 
 const highlightPlugin = () => {
 	return rehypePrettyCode({
-		theme: {
-			dark: "catppuccin-mocha",
-			light: "catppuccin-latte",
-		},
-		keepBackground: false,
-		defaultLang: "plaintext",
+		...shikiOptions,
 		transformers: [
 			transformerRenderWhitespace(),
 			transformerNotationDiff(),

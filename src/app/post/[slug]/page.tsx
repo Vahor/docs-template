@@ -1,6 +1,7 @@
 import { JsonLd } from "@/components/jsonld";
 import { articlePage } from "@/lib/jsonld";
 import { Mdx } from "@/lib/mdx";
+import { openapi } from "@/lib/openapi";
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 
@@ -54,17 +55,15 @@ export default async function Page(props: PagePropsSlug) {
 					dateModified: page.dateModified,
 				})}
 			/>
-			<div className="grid grid-cols-2">
-				<div className="space-y-4 text-left">
-					<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
-					<p>{page.dateModified}</p>
-					<p>{page.description}</p>
-				</div>
-
-				<article className="mt-8 text-pretty">
-					<Mdx code={page.body.code} />
-				</article>
+			<div className="space-y-4 text-left">
+				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
+				<p>{page.dateModified}</p>
+				<p>{page.description}</p>
 			</div>
+
+			<article className="mt-8 text-pretty">
+				<Mdx code={page.body.code} />
+			</article>
 		</main>
 	);
 }

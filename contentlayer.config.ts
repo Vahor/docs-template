@@ -9,6 +9,11 @@ import rehypeSlug from "rehype-slug";
 import codeImport from "remark-code-import";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
+import { remark } from "remark";
+import { visit } from "unist-util-visit";
+import remarkParse from "remark-parse";
+import { toString as toStringMdx } from "mdast-util-to-string";
+import GithubSlugger from "github-slugger";
 
 import type { ShikiTransformer } from "shiki";
 import { shikiOptions } from "@/lib/shiki";
@@ -22,6 +27,28 @@ const lastModified = (path: string) => {
 	const stats = fs.statSync(`${contentFolder}/${path}`);
 	const date = stats.mtime;
 	return date;
+};
+
+const extractToc = async (raw: string) => {
+	const headings: { depth: number; value: string; slug: string }[] = [];
+	const slugger = new GithubSlugger();
+
+	await remark()
+		.use(remarkParse)
+		.use(() => (tree) => {
+			visit(tree, "heading", (node) => {
+				const text = toStringMdx(node);
+				headings.push({
+					// @ts-ignore
+					depth: node.depth,
+					value: text,
+					slug: slugger.slug(text),
+				});
+			});
+		})
+		.process(raw);
+
+	return headings;
 };
 
 const contentFolder = "content";
@@ -44,6 +71,12 @@ export const Post = defineDocumentType(() => ({
 			resolve: (post) => {
 				const sourceFilePath = post._raw.sourceFilePath;
 				return lastModified(sourceFilePath);
+			},
+		},
+		toc: {
+			type: "json",
+			resolve: async (post) => {
+				return extractToc(post.body.raw);
 			},
 		},
 	},
@@ -77,6 +110,12 @@ export const Changelog = defineDocumentType(() => ({
 				return lastModified(sourceFilePath);
 			},
 		},
+		toc: {
+			type: "json",
+			resolve: async (post) => {
+				return extractToc(post.body.raw);
+			},
+		},
 	},
 }));
 
@@ -104,11 +143,13 @@ const highlightPlugin = () => {
 	});
 };
 
+export const mdxOptions = {
+	rehypePlugins: [highlightPlugin, rehypeSlug, codeImport],
+	remarkPlugins: [remarkGfm],
+};
+
 export default makeSource({
 	contentDirPath: contentFolder,
 	documentTypes: [Post, Changelog],
-	mdx: {
-		rehypePlugins: [highlightPlugin, rehypeSlug, codeImport],
-		remarkPlugins: [remarkGfm],
-	},
+	mdx: mdxOptions,
 });

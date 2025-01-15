@@ -55,6 +55,7 @@ export default async function Page(props: PagePropsSlug) {
 					dateModified: page.dateModified,
 				})}
 			/>
+			<pre>{JSON.stringify(page.toc, null, 2)}</pre>
 
 			<div className="space-y-4 text-left">
 				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>

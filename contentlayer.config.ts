@@ -121,15 +121,6 @@ export const Changelog = defineDocumentType(() => ({
 	},
 }));
 
-function shikiCustom(): ShikiTransformer {
-	return {
-		name: "@vahor/skiki",
-		pre(node) {
-			node.properties.__raw_source = this.source;
-		},
-	};
-}
-
 const highlightPlugin = () => {
 	return rehypePrettyCode({
 		...shikiOptions,
@@ -140,7 +131,6 @@ const highlightPlugin = () => {
 				explicitTrigger: true,
 				renderer: rendererRich(),
 			}),
-			shikiCustom(),
 		],
 	});
 };

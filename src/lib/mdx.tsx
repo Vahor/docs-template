@@ -60,6 +60,15 @@ const mdxComponents: MDXComponents = {
 	hr: ({ className, ...props }) => (
 		<hr className={cn("my-4 md:my-8", className)} {...props} />
 	),
+	callout: ({ className, type, ...props }) => {
+		return (
+			<div className={cn("my-4 md:my-8", className)} {...props}>
+				Custom callout of type {type}
+				{props.children}
+			</div>
+		);
+	},
+
 	OpenapiQuery: OpenapiQuery,
 	OpenapiSchema: OpenapiSchema,
 };

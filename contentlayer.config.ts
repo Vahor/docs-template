@@ -1,22 +1,24 @@
 import * as fs from "node:fs";
+import { shikiOptions } from "@/lib/shiki";
 import {
 	transformerNotationDiff,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
 import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
-import rehypeSlug from "rehype-slug";
-import codeImport from "remark-code-import";
-import remarkGfm from "remark-gfm";
-import rehypePrettyCode from "rehype-pretty-code";
-import { remark } from "remark";
-import { visit } from "unist-util-visit";
-import remarkParse from "remark-parse";
-import { toString as toStringMdx } from "mdast-util-to-string";
 import GithubSlugger from "github-slugger";
-
+import { h } from "hastscript";
+import { toString as toStringMdx } from "mdast-util-to-string";
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
+import { remark } from "remark";
+import codeImport from "remark-code-import";
+import remarkDirective from "remark-directive";
+import remarkGfm from "remark-gfm";
+import remarkParse from "remark-parse";
 import type { ShikiTransformer } from "shiki";
-import { shikiOptions } from "@/lib/shiki";
+import type { Node } from "unist";
+import { visit } from "unist-util-visit";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -143,9 +145,30 @@ const highlightPlugin = () => {
 	});
 };
 
+function addCalloutComponent() {
+	return (tree: Node) => {
+		visit(tree, (node) => {
+			if (
+				node.type === "containerDirective" ||
+				node.type === "leafDirective" ||
+				node.type === "textDirective"
+			) {
+				const data = node.data || {};
+				const tagName = "callout";
+
+				node.attributes = node.attributes || {};
+				node.attributes.type = node.attributes.type || node.name || "note";
+				data.hName = tagName;
+				data.hProperties = h(tagName, node.attributes || {}).properties;
+				node.data = data;
+			}
+		});
+	};
+}
+
 export const mdxOptions = {
 	rehypePlugins: [highlightPlugin, rehypeSlug, codeImport],
-	remarkPlugins: [remarkGfm],
+	remarkPlugins: [remarkGfm, remarkDirective, addCalloutComponent],
 };
 
 export default makeSource({

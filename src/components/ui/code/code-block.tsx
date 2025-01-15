@@ -27,6 +27,7 @@ export const CodeBlock = forwardRef(function CodeBlock(
 		<div
 			className={clsx(
 				"not-prose relative my-3 max-h-[650px] overfow-x-auto rounded-xl bg-zinc-950 dark:bg-zinc-900",
+				"group-[.code-group]:my-0",
 				className,
 			)}
 			ref={ref}
@@ -57,10 +58,12 @@ function CodeTabBar({
 	children?: ReactElement;
 }) {
 	return (
-		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-xl bg-zinc-900 px-3 pt-2.5 pr-5">
+		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-xl bg-zinc-900 px-3 pr-5 py-3">
 			<div className="mr-auto text-xs font-semibold text-white">{filename}</div>
 			{children && (
-				<div className="text-zinc-500 hover:text-zinc-400">{children}</div>
+				<div className="text-zinc-500 hover:text-zinc-400 size-5">
+					{children}
+				</div>
 			)}
 		</div>
 	);

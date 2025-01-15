@@ -2,6 +2,7 @@ import { OpenapiQuery } from "@/components/openapi/openapi-query";
 import { OpenapiSchema } from "@/components/openapi/openapi-schema";
 import { Check, Info, Note, Tip, Warning } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code/code-block";
+import { CodeGroup } from "@/components/ui/code/code-group";
 import { getNodeText } from "@/lib/getNodeText";
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
@@ -69,6 +70,7 @@ const mdxComponents: MDXComponents = {
 
 	OpenapiQuery: OpenapiQuery,
 	OpenapiSchema: OpenapiSchema,
+	CodeGroup: CodeGroup,
 };
 
 interface MdxProps {

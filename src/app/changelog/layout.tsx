@@ -1,12 +1,12 @@
 export default function ChangelogLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <div>
-      <h1>Changelog</h1>
-      {children}
-    </div>
-  );
+	return (
+		<div>
+			<h1>Changelog</h1>
+			{children}
+		</div>
+	);
 }

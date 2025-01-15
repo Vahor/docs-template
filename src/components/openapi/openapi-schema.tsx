@@ -1,4 +1,4 @@
-import { openapi, type IJsonSchema, type OpenAPIV3 } from "@/lib/openapi";
+import { type IJsonSchema, type OpenAPIV3, openapi } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
 	path: string;

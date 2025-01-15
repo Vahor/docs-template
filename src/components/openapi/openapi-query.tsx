@@ -1,5 +1,5 @@
 import { OpenapiPlayground } from "@/components/openapi/playground";
-import { openapi, type OpenAPIV3 } from "@/lib/openapi";
+import { type OpenAPIV3, openapi } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
 	path: string;

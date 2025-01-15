@@ -1,6 +1,6 @@
 import { OPENAPI_JSON_URL } from "@/lib/constants";
 import OpenAPIParser from "@readme/openapi-parser";
-import type { OpenAPIV3, IJsonSchema } from "openapi-types";
+import type { IJsonSchema, OpenAPIV3 } from "openapi-types";
 
 const parser = new OpenAPIParser();
 const openapi = (await parser.dereference(OPENAPI_JSON_URL, {

@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/lib/constants";
-import { allPosts, allChangelogs } from "contentlayer/generated";
+import { allChangelogs, allPosts } from "contentlayer/generated";
 import type { MetadataRoute } from "next";
 
 export const getPosts = (): MetadataRoute.Sitemap => {

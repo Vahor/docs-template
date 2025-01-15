@@ -1,5 +1,5 @@
 import { shikiOptions } from "@/lib/shiki";
-import { codeToHtml, type BundledLanguage } from "shiki";
+import { type BundledLanguage, codeToHtml } from "shiki";
 
 interface CodeBlockProps {
 	children: string;

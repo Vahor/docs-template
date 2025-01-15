@@ -1,13 +1,9 @@
 "use client";
 
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { type OpenAPIV3 } from "@/lib/openapi";
+import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
+import { PlaygroundResponse } from "@/components/openapi/response";
+import { generateFromSchema } from "@/components/openapi/utils";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -16,14 +12,18 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { useForm, type UseFormReturn } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { generateFromSchema } from "@/components/openapi/utils";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import type { OpenAPIV3 } from "@/lib/openapi";
 import { shiki, shikiOptions } from "@/lib/shiki";
 import { Suspense, use, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
-import { PlaygroundResponse } from "@/components/openapi/response";
+import { type UseFormReturn, useForm } from "react-hook-form";
 
 type FormType = {
 	_body: string;
@@ -36,8 +36,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-	server: OpenAPIV3.ServerObject;
-}) {
+		server: OpenAPIV3.ServerObject;
+	}) {
 	const requestBody = (spec.requestBody as OpenAPIV3.RequestBodyObject)
 		?.content?.["application/json"].schema as OpenAPIV3.BaseSchemaObject;
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];

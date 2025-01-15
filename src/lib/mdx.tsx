@@ -1,6 +1,7 @@
 import { CopyButton } from "@/components/copy-button";
 import { OpenapiQuery } from "@/components/openapi/openapi-query";
 import { OpenapiSchema } from "@/components/openapi/openapi-schema";
+import { Check, Info, Note, Tip, Warning } from "@/components/ui/callout";
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
 import { useMDXComponent } from "next-contentlayer2/hooks";
@@ -36,37 +37,21 @@ const mdxComponents: MDXComponents = {
 			</pre>
 		);
 	},
-	ul: ({ className, ...props }) => (
-		<ul className={cn("mt-4 list-disc pl-4 md:pl-8", className)} {...props} />
-	),
-	ol: ({ className, ...props }) => (
-		<ol
-			className={cn(
-				"mt-4 list-decimal pl-4 md:pl-8 [&>ol]:mt-1 [&>ol]:list-lower-alpha [&>ul]:mt-1",
-				className,
-			)}
-			{...props}
-		/>
-	),
-	li: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
-		<li
-			className={cn(
-				"mt-2 pl-1 md:pl-2 [&>ol]:mt-1 [&>ol]:list-lower-alpha [&>ul]:mt-1",
-				className,
-			)}
-			{...props}
-		/>
-	),
-	hr: ({ className, ...props }) => (
-		<hr className={cn("my-4 md:my-8", className)} {...props} />
-	),
-	callout: ({ className, type, ...props }) => {
-		return (
-			<div className={cn("my-4 md:my-8", className)} {...props}>
-				Custom callout of type {type}
-				{props.children}
-			</div>
-		);
+	callout: ({ type, ...props }) => {
+		switch (type) {
+			case "info":
+				return <Info {...props} />;
+			case "warning":
+				return <Warning {...props} />;
+			case "note":
+				return <Note {...props} />;
+			case "tip":
+				return <Tip {...props} />;
+			case "check":
+				return <Check {...props} />;
+			default:
+				throw new Error(`Unknown callout type: ${type}`);
+		}
 	},
 
 	OpenapiQuery: OpenapiQuery,

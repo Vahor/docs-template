@@ -44,10 +44,7 @@ export default async function Page(props: PagePropsSlug) {
 	if (!page) notFound(); // should never happen
 
 	return (
-		<main
-			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
-			id="skip-nav"
-		>
+		<main className="relative" id="skip-nav">
 			<JsonLd
 				jsonLd={articlePage({
 					headline: page.title,
@@ -61,7 +58,7 @@ export default async function Page(props: PagePropsSlug) {
 				<p>{page.description}</p>
 			</div>
 
-			<article className="mt-8 text-pretty">
+			<article className="mt-8 text-pretty prose">
 				<Mdx code={page.body.code} />
 			</article>
 		</main>

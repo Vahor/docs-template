@@ -36,8 +36,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-		server: OpenAPIV3.ServerObject;
-	}) {
+	server: OpenAPIV3.ServerObject;
+}) {
 	const requestBody = (spec.requestBody as OpenAPIV3.RequestBodyObject)
 		?.content?.["application/json"].schema as OpenAPIV3.BaseSchemaObject;
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];

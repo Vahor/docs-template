@@ -57,15 +57,15 @@ export default async function Page(props: PagePropsSlug) {
 			/>
 			<pre>{JSON.stringify(page.toc, null, 2)}</pre>
 
-			<div className="space-y-4 text-left">
-				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
-				<p>{page.version}</p>
-				<p>{page.releaseDate}</p>
-				<p>{page.dateModified}</p>
-				<p>{page.description}</p>
-			</div>
+			<article className="mt-8 text-pretty prose">
+				<div className="space-y-4 text-left">
+					<h1>{page.title}</h1>
+					<p>{page.version}</p>
+					<p>{page.releaseDate}</p>
+					<p>{page.dateModified}</p>
+					<p>{page.description}</p>
+				</div>
 
-			<article className="mt-8 text-pretty">
 				<Mdx code={page.body.code} />
 			</article>
 		</main>

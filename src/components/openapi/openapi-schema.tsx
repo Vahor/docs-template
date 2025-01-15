@@ -1,3 +1,4 @@
+import { Properties, Property } from "@/components/ui/property";
 import { type IJsonSchema, type OpenAPIV3, openapi } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
@@ -28,38 +29,42 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 			<br />
 			<div>
 				<p>Parameters</p>
-				<ul className="list-disc space-y-4 ml-8">
+				<Properties>
 					{parameters.map((param) => {
 						const schema = param.schema as OpenAPIV3.SchemaObject;
 						return (
-							<li key={param.name}>
-								<p>field: {param.name}</p>
-								<p>type: {schema.type}</p>
-								<p>default: {schema.default}</p>
-								<p>desc: {param.description}</p>
-								<p>values: {schema.enum?.join(", ")}</p>
-							</li>
+							<Property
+								key={param.name}
+								name={param.name}
+								type={schema.type}
+								defaultValue={schema.default}
+								required={param.required}
+								values={schema.enum}
+							>
+								{param.description}
+							</Property>
 						);
 					})}
-				</ul>
+				</Properties>
 			</div>
-			<br />
 			<div>
 				<p>Request Body</p>
-				<ul className="list-disc space-y-4 ml-8">
+				<Properties>
 					{Object.entries(requestBody?.properties ?? {}).map(([key, value]) => {
 						const schema = value as OpenAPIV3.SchemaObject;
 						return (
-							<li key={key} className="pl-2">
-								<p>field: {key}</p>
-								<p>type: {schema.type}</p>
-								<p>default: {schema.default}</p>
-								<p>desc: {value.description}</p>
-								<p>values: {schema.enum?.join(", ")}</p>
-							</li>
+							<Property
+								key={key}
+								name={key}
+								type={schema.type}
+								defaultValue={schema.default}
+								values={schema.enum}
+							>
+								{value.description}
+							</Property>
 						);
 					})}
-				</ul>
+				</Properties>
 			</div>
 		</div>
 	);

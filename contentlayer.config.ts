@@ -166,9 +166,24 @@ function addCalloutComponent() {
 	};
 }
 
+function headingOffset() {
+	return (tree: Node) => {
+		visit(tree, "heading", (node) => {
+			// Offset headings by one level (to keep the title as h1)
+			const depth = node.depth;
+			node.depth = depth + 1;
+		});
+	};
+}
+
 export const mdxOptions = {
 	rehypePlugins: [highlightPlugin, rehypeSlug, codeImport],
-	remarkPlugins: [remarkGfm, remarkDirective, addCalloutComponent],
+	remarkPlugins: [
+		remarkGfm,
+		remarkDirective,
+		addCalloutComponent,
+		headingOffset,
+	],
 };
 
 export default makeSource({

@@ -36,20 +36,18 @@ module.exports = ({ theme }) => ({
 
 			// Lists
 			ol: {
-				listStyleType: "decimal",
 				marginTop: theme("spacing.5"),
 				marginBottom: theme("spacing.5"),
 			},
 			ul: {
-				listStyleType: "none",
 				marginTop: theme("spacing.5"),
 				marginBottom: theme("spacing.5"),
 			},
-			"ul:not(.list-none) li": {
+			"ul li,ol li": {
+				position: "relative",
 				listStyleType: "none",
 				marginTop: theme("spacing.2"),
 				marginBottom: theme("spacing.2"),
-				position: "relative",
 				paddingLeft: "32px",
 			},
 			"ol > li::before": {
@@ -70,7 +68,7 @@ module.exports = ({ theme }) => ({
 				left: "0px",
 				top: 3,
 			},
-			"ul:not(.list-none) > li::before": {
+			"ul > li::before": {
 				background: "var(--tw-prose-list-bullet)",
 				height: "6px",
 				width: "6px",

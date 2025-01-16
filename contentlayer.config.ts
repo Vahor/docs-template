@@ -16,9 +16,9 @@ import codeImport from "remark-code-import";
 import remarkDirective from "remark-directive";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
-import type { ShikiTransformer } from "shiki";
 import type { Node } from "unist";
 import { visit } from "unist-util-visit";
+import path from "node:path";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -156,6 +156,43 @@ function addCalloutComponent() {
 	};
 }
 
+function includeMarkdown() {
+	// Adapted from https://github.com/hashicorp/remark-plugins/blob/main/plugins/include-markdown/index.js
+	return (tree: Node, file: any) => {
+		visit(tree, "paragraph", (node) => {
+			const includeMatch = node.children[0].value?.match(
+				/^@include\s['"](.*)['"]$/,
+			);
+			if (!includeMatch) return;
+			try {
+				const includePath = path.join(file.dirname, includeMatch[1]);
+				const contents = fs.readFileSync(includePath, "utf8");
+
+				const extension = includePath.match(/\.(\w+)$/)[1];
+				const isMdx = extension === "mdx";
+				if (isMdx) {
+					const processor = remark();
+					for (const plugin of mdxOptions.remarkPlugins) {
+						processor.use(plugin);
+					}
+					const ast = processor.parse(contents);
+					const result = processor.runSync(ast, contents);
+					node.type = "root";
+					node.children = result.children;
+					node.position = result.position;
+					return;
+				}
+
+				node.type = "code";
+				node.lang = extension;
+				node.value = contents;
+			} catch (err) {
+				console.error(err);
+			}
+		});
+	};
+}
+
 function headingOffset() {
 	return (tree: Node) => {
 		visit(tree, "heading", (node) => {
@@ -173,6 +210,7 @@ export const mdxOptions = {
 		remarkDirective,
 		addCalloutComponent,
 		headingOffset,
+		includeMarkdown,
 	],
 };
 

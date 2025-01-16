@@ -12,6 +12,7 @@
 		"typecheck": "tsc --noEmit --declaration"
 	},
 	"dependencies": {
+		"@hashicorp/remark-plugins": "^4.1.1",
 		"@hookform/resolvers": "^3.9.1",
 		"@radix-ui/react-label": "^2.1.1",
 		"@radix-ui/react-select": "^2.1.4",
@@ -23,6 +24,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"contentlayer2": "^0.5.3",
+		"github-slugger": "^2.0.0",
 		"lucide-react": "^0.469.0",
 		"next": "15.1.3",
 		"next-contentlayer2": "^0.5.3",

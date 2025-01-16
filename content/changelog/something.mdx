@@ -30,7 +30,7 @@ const colors = {
 }
 ```
 
-```json title="Request" /John/#r /30/#g /car/#b /null/#y
+```json title="Request" /John/#r /30/#g /car/#b /null/#y 
 {
   "name": "John",
   "age": 30,
@@ -39,6 +39,27 @@ const colors = {
 ```
 
 You can then reuse the colors in your doc for instance you can say hey look at <R>John</R> he's in red, and <G>30</G> is green, and <B>car</B> is blue, and <Y>null</Y> is yellow.
+
+
+**There are also "captions" with color code for each method**
+
+```json title="Response" caption="GET /pet/findByStatus"
+...
+```
+```json title="Response" caption="DELETE /pet/findByStatus"
+
+...
+```
+```json title="Response" caption="POST /pet/findByStatus"
+...
+```
+```json title="Response" caption="PATCH /pet/findByStatus"
+...
+```
+```json title="Response" caption="PUT /pet/findByStatus"
+...
+```
+
 
 <CodeGroup>
     ```json title="Tab 1"

@@ -1,11 +1,9 @@
-import { CopyToClipboardButton } from "@/components/ui/code/clipboard-button";
 import {
 	CodeBlock,
 	type CodeBlockProps,
 } from "@/components/ui/code/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getNodeText } from "@/lib/getNodeText";
-import { Tab } from "@headlessui/react";
 import { clsx } from "clsx";
 import {
 	Children,
@@ -13,7 +11,6 @@ import {
 	type FormEventHandler,
 	type ForwardedRef,
 	type ReactElement,
-	type ReactNode,
 	forwardRef,
 } from "react";
 
@@ -58,12 +55,12 @@ export const CodeGroup = forwardRef(function CodeGroup(
 			ref={ref}
 			className={clsx(
 				"not-prose group code-group",
-				"border-zinc-800 rounded-xl bg-zinc-900 px-3 pr-5 py-3",
+				"rounded-2xl bg-zinc-900 py-3",
 				className,
 			)}
 			{...props}
 		>
-			<TabsList className="gap-3 bg-transparent pl-1">
+			<TabsList className="gap-3 bg-transparent pl-1 p-0 h-max w-full border-b justify-start px-3 border-zinc-700">
 				{childArr.map((child, tabIndex: number) => {
 					const children = child?.props?.children as ReactElement[];
 					const title =

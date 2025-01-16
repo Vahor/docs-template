@@ -1,3 +1,5 @@
+// https://mintlify.com/docs/content/components/callouts
+//
 import { clsx } from "clsx";
 import type { ReactNode } from "react";
 

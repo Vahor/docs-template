@@ -21,7 +21,7 @@ const MarkColor: React.FC<{ children: string; color: string }> = ({
 	color,
 }) => {
 	return (
-		<code className="rounded-lg p-1.5 bg-zinc-950 dark:bg-zinc-900 not-prose relative">
+		<code className="rounded-lg p-1.5 bg-zinc-950 dark:bg-zinc-900 not-prose relative text-xs">
 			<mark data-highlighted-chars="" data-chars-id={color}>
 				{children}
 			</mark>
@@ -46,7 +46,7 @@ const mdxComponents: MDXComponents = {
 	code: ({ className, ...props }) => (
 		<code
 			className={cn(
-				"relative whitespace-nowrap bg-zinc-950 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8 text-white",
+				"relative whitespace-nowrap bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8 text-white text-xs",
 				className,
 			)}
 			{...props}

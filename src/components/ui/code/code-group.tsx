@@ -4,6 +4,7 @@ import {
 } from "@/components/ui/code/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getNodeText } from "@/lib/getNodeText";
+import { cn } from "@/lib/utils";
 import { clsx } from "clsx";
 import {
 	Children,
@@ -15,7 +16,7 @@ import {
 } from "react";
 
 export type CodeGroupPropsBase = {
-	isSmallText?: boolean;
+	title?: string;
 
 	children?: ReactElement<CodeBlockProps>[] | ReactElement<CodeBlockProps>;
 
@@ -33,7 +34,7 @@ export type CodeGroupProps = CodeGroupPropsBase &
  * @param {CodeBlock[]} - children
  */
 export const CodeGroup = forwardRef(function CodeGroup(
-	{ children, isSmallText, className, ...props }: CodeGroupProps,
+	{ children, className, title, ...props }: CodeGroupProps,
 	ref: ForwardedRef<HTMLDivElement> | undefined,
 ) {
 	if (children == null) {
@@ -55,25 +56,37 @@ export const CodeGroup = forwardRef(function CodeGroup(
 			ref={ref}
 			className={clsx(
 				"not-prose group code-group",
-				"rounded-2xl bg-zinc-900 py-3",
+				"rounded-2xl bg-zinc-800",
 				className,
 			)}
 			{...props}
 		>
-			<TabsList className="gap-3 bg-transparent pl-1 p-0 h-max w-full border-b justify-start px-3 border-zinc-700">
-				{childArr.map((child, tabIndex: number) => {
-					const children = child?.props?.children as ReactElement[];
-					const title =
-						children && children.length > 1
-							? getNodeText(children[0])
-							: "Missing title";
-					return (
-						<TabsTrigger key={title} value={String(tabIndex)}>
-							{title}
-						</TabsTrigger>
-					);
-				})}
-			</TabsList>
+			<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl px-3 min-h-12 gap-6">
+				{title && (
+					<div className="mr-auto text-xs font-semibold text-white shrink-0">
+						{title}
+					</div>
+				)}
+				<TabsList
+					className={cn(
+						"gap-3 bg-transparent h-max pl-1 p-0 relative overflow-x-auto overflow-y-visible",
+						!title && "justify-start",
+					)}
+				>
+					{childArr.map((child, tabIndex: number) => {
+						const children = child?.props?.children as ReactElement[];
+						const title =
+							children && children.length > 1
+								? getNodeText(children[0])
+								: "Missing title";
+						return (
+							<TabsTrigger key={title} value={String(tabIndex)}>
+								{title}
+							</TabsTrigger>
+						);
+					})}
+				</TabsList>
+			</div>
 			{childArr.map((child, tabIndex: number) => {
 				const children = child?.props?.children as ReactElement[];
 				const title =
@@ -81,9 +94,14 @@ export const CodeGroup = forwardRef(function CodeGroup(
 						? getNodeText(children[0])
 						: "Missing title";
 
-				const renderChildren = children.length > 1 ? children[1] : children;
+				const renderChildren =
+					children.length === 0 ? children : children.slice(1);
 				return (
-					<TabsContent key={title} value={String(tabIndex)} className="mt-0">
+					<TabsContent
+						key={title}
+						value={String(tabIndex)}
+						className="mt-0 [&>*]:rounded-t-none"
+					>
 						<CodeBlock>{renderChildren}</CodeBlock>
 					</TabsContent>
 				);

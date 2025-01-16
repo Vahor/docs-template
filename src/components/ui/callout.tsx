@@ -18,7 +18,10 @@ function CalloutTemplate({
 }: CalloutProps) {
 	return (
 		<div
-			className={clsx("px-5 py-4 mb-4 overflow-hidden rounded-xl", className)}
+			className={clsx(
+				"px-5 py-4 mb-4 overflow-hidden rounded-xl not-prose",
+				className,
+			)}
 		>
 			<div className="flex items-start space-x-3">
 				<div className="mt-0.5 w-4">{icon}</div>

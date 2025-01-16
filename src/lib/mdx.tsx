@@ -15,6 +15,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useId } from "react";
 
 const MarkColor: React.FC<{ children: string; color: string }> = ({
 	children,
@@ -94,6 +101,28 @@ const mdxComponents: MDXComponents = {
 	OpenapiQuery: OpenapiQuery,
 	OpenapiSchema: OpenapiSchema,
 	CodeGroup: CodeGroup,
+
+	Accordion: ({ children, multiple, props }) => (
+		<Accordion
+			type={multiple ? "multiple" : "single"}
+			collapsible={multiple ? undefined : true}
+			className="not-prose"
+			{...props}
+		>
+			{children}
+		</Accordion>
+	),
+	AccordionItem: ({ children, title, props }) => {
+		const id = useId();
+		return (
+			<AccordionItem value={id} {...props}>
+				<AccordionTrigger>{title}</AccordionTrigger>
+				<AccordionContent>{children}</AccordionContent>
+			</AccordionItem>
+		);
+	},
+	AccordionTrigger,
+	AccordionContent,
 };
 
 interface MdxProps {

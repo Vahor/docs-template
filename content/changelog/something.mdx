@@ -61,6 +61,7 @@ You can then reuse the colors in your doc for instance you can say hey look at <
 ```
 
 
+**Even tabs**
 <CodeGroup>
     ```json title="Tab 1"
     {
@@ -76,7 +77,57 @@ You can then reuse the colors in your doc for instance you can say hey look at <
     ```
 </CodeGroup>
 
-Inline code is also supported `console.log("hello"){:js}` `print("hello"){:py}` `System.out.println("hello"){:java}`. I add more words to check if it breaks line height.
+Or a mix of everything
+
+<CodeGroup title="Request">
+    ```json title="Yey" caption="POST /pet/findByStatus"
+    {
+      "name": "John",
+      "age": 30,
+      "car": null
+    }
+    ```
+    ```json title="Something else" caption="DELETE /pet/findByStatus"
+    {
+      "hash": "1234567890",
+    }
+    ```
+</CodeGroup>
+
+And with a *lot* of tabs 
+
+<CodeGroup title="Request">
+    ```json title="Yey" caption="POST /pet/findByStatus"
+    {
+      "name": "John",
+      "age": 30,
+      "car": null
+    }
+    ```
+    ```json title="Something else" caption="DELETE /pet/findByStatus"
+    {
+      "hash": "1234567890",
+    }
+    ```
+    ```json title="Something else 2" caption="DELETE /pet/findByStatus"
+    {
+      "hash": "1234567890",
+    }
+    ```
+    ```json title="Something else 3" caption="DELETE /pet/findByStatus"
+    {
+      "hash": "1234567890",
+    }
+    ```
+    ```json title="Something else 4" caption="DELETE /pet/findByStatus"
+    {
+      "hash": "1234567890",
+    }
+    ```
+</CodeGroup>
+
+
+Inline code is also supported `console.log("hello"){:js}` `print("hello"){:py}` `System.out.println("hello"){:java}`. 
 
 ## Lists
 
@@ -159,6 +210,29 @@ Markdown are parsed
 And other files are imported as code
 
 @include "../../src/mdx/test.js"
+
+### Accordion
+
+<Accordion multiple>
+  <AccordionItem title="Title 1">
+      This is the accordion content
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+      This is the accordion content
+  </AccordionItem>
+</Accordion>
+
+Or one by one
+
+<Accordion>
+  <AccordionItem title="Title 1">
+      This is the accordion content
+  </AccordionItem>
+  <AccordionItem title="Title 2">
+      This is the accordion content
+  </AccordionItem>
+</Accordion>
+
 
 ### OpenAPI
 

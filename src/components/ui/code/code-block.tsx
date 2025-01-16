@@ -31,7 +31,6 @@ export const CodeBlock = forwardRef(function CodeBlock(
 	if (Array.isArray(children)) {
 		header = Array.isArray(children) ? children[1] : children;
 		children = children[0];
-		console.log(header);
 	}
 
 	return (
@@ -44,19 +43,21 @@ export const CodeBlock = forwardRef(function CodeBlock(
 			ref={ref}
 			{...props}
 		>
-			{filename ? (
+			{filename && (
 				<CodeTabBar filename={filename}>
 					<Button className={"relative"} />
 				</CodeTabBar>
-			) : (
-				<Button className="absolute top-[18px] right-5 z-[1] text-zinc-500 hover:text-zinc-400" />
 			)}
 			{header && <CodePanelHeader header={header} />}
 
 			<div
-				className="block overlow-auto relative [&_code]:py-4 [&_code>span]:px-4"
+				className="block overlow-auto relative [&_code]:py-4 [&_code>span]:px-4 [&_code]:rounded-2xl"
 				style={{ fontVariantLigatures: "none" }}
 			>
+				{!filename && (
+					<Button className="absolute top-[18px] right-5 z-[1] text-zinc-500 hover:text-zinc-400" />
+				)}
+
 				{children}
 			</div>
 		</div>
@@ -71,7 +72,7 @@ function CodeTabBar({
 	children?: ReactElement;
 }) {
 	return (
-		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl bg-zinc-800 px-3 pr-5 py-3">
+		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl bg-zinc-800 px-3 pr-5 h-12">
 			<div className="mr-auto text-xs font-semibold text-white">{filename}</div>
 			{children && (
 				<div className="text-zinc-500 hover:text-zinc-400 size-5">

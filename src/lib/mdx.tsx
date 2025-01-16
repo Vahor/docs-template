@@ -7,6 +7,14 @@ import { getNodeText } from "@/lib/getNodeText";
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
 import { useMDXComponent } from "next-contentlayer2/hooks";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 
 const MarkColor: React.FC<{ children: string; color: string }> = ({
 	children,
@@ -22,10 +30,17 @@ const MarkColor: React.FC<{ children: string; color: string }> = ({
 };
 
 const mdxComponents: MDXComponents = {
+	table: Table,
+	thead: TableHeader,
+	th: TableHead,
+	td: TableCell,
+	tr: TableRow,
+	tbody: TableBody,
+
 	code: ({ className, ...props }) => (
 		<code
 			className={cn(
-				"relative whitespace-nowrap bg-zinc-950 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8",
+				"relative whitespace-nowrap bg-zinc-950 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8 text-white",
 				className,
 			)}
 			{...props}

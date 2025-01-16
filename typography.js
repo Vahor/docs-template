@@ -137,11 +137,19 @@ module.exports = ({ theme }) => ({
 			},
 			h3: {
 				color: "var(--tw-prose-headings)",
-				fontSize: theme("fontSize.base")[0],
-				...theme("fontSize.base")[1],
+				fontSize: theme("fontSize.lg")[0],
+				...theme("fontSize.lg")[1],
 				fontWeight: "600",
 				marginTop: theme("spacing.10"),
 				marginBottom: theme("spacing.2"),
+			},
+			h4: {
+				color: "var(--tw-prose-headings)",
+				fontSize: theme("fontSize.base")[0],
+				...theme("fontSize.sm")[1],
+				fontWeight: "600",
+				marginTop: theme("spacing.6"),
+				marginBottom: theme("spacing.1"),
 			},
 
 			// Inline elements

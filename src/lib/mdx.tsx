@@ -25,7 +25,7 @@ const mdxComponents: MDXComponents = {
 	code: ({ className, ...props }) => (
 		<code
 			className={cn(
-				"relative whitespace-nowrap rounded py-[0.2rem] font-mono text-sm",
+				"relative whitespace-nowrap bg-zinc-950 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8",
 				className,
 			)}
 			{...props}

@@ -5,13 +5,9 @@ releaseDate: 2025-01-01
 
 import Component from "../../src/mdx/test.mdx";
 
-# Something
+# All components
 
-Something
-
-## Components
-
-### Code
+## Code
 
 ```ts twoslash
 console.log("Hello world");
@@ -55,7 +51,9 @@ You can then reuse the colors in your doc for instance you can say hey look at <
     ```
 </CodeGroup>
 
-### Lists
+Inline code is also supported `console.log("hello"){:js}` `print("hello"){:py}` `System.out.println("hello"){:java}`. I add more words to check if it breaks line height.
+
+## Lists
 
 1. One
 2. Two
@@ -65,7 +63,7 @@ You can then reuse the colors in your doc for instance you can say hey look at <
 - Two
 - Three
 
-### Callout
+## Callout
 
 :::note
 This is a note
@@ -86,6 +84,8 @@ This is a tip
 :::check
 This is a check
 :::
+
+## Inline components
 
 ---
 

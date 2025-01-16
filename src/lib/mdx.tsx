@@ -29,6 +29,12 @@ const MarkColor: React.FC<{ children: string; color: string }> = ({
 	);
 };
 
+const Col: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+	return (
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">{children}</div>
+	);
+};
+
 const mdxComponents: MDXComponents = {
 	table: Table,
 	thead: TableHeader,
@@ -82,6 +88,8 @@ const mdxComponents: MDXComponents = {
 	G: ({ children }) => <MarkColor color="g">{children}</MarkColor>,
 	B: ({ children }) => <MarkColor color="b">{children}</MarkColor>,
 	Y: ({ children }) => <MarkColor color="y">{children}</MarkColor>,
+
+	Col,
 
 	OpenapiQuery: OpenapiQuery,
 	OpenapiSchema: OpenapiSchema,

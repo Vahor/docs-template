@@ -3,8 +3,6 @@ version: 1.0.0
 releaseDate: 2025-01-01
 ---
 
-import Component from "../../src/mdx/test.mdx";
-
 # All components
 
 ## Code
@@ -116,9 +114,18 @@ This is a check
 
 ## Custom components
 
+### Cols
+
+<Col>
+  <div>element to the left</div>
+  <div>element to the right</div>
+  <div>another element to the left but below the first</div>
+  <div>another element to the right but below the first</div>
+</Col>
+
 ### Reusable component
 
-<Component />
+@include "../../src/mdx/test.mdx"
 
 ### OpenAPI
 

@@ -30,6 +30,7 @@ export function Property({
 	required = false,
 	hidden = false,
 	deprecated = false,
+	values,
 	children,
 }: PropertyProps) {
 	if (hidden) {
@@ -58,13 +59,18 @@ export function Property({
 				)}
 			</div>
 			<p className="mt-2">
+				{children}
 				{defaultValue && (
-					<span className="text-slate-500 dark:text-slate-300">
+					<span className="text-slate-500 dark:text-slate-300 block">
 						Default: {defaultValue}
 					</span>
 				)}
 
-				{children}
+				{values && (
+					<span className="text-slate-500 dark:text-slate-300 block">
+						Values: {values.join(", ")}
+					</span>
+				)}
 			</p>
 		</li>
 	);

@@ -117,6 +117,22 @@ pre[data-theme*=" "] {
 	background-color: var(--shiki-light-bg);
 }
 
+code .diff.remove {
+	opacity: 0.7;
+	background-color: rgba(244, 63, 94, 0.16);
+}
+code .diff.remove::before {
+	color: rgb(203, 118, 118);
+	content: "-";
+}
+code .diff.add {
+	background-color: rgba(16, 185, 129, 0.16);
+}
+code .diff.add::before {
+	color: rgb(61, 214, 140);
+	content: "+";
+}
+
 .dark {
 	code[data-theme*=" "],
 	code[data-theme*=" "] span,

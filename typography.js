@@ -45,7 +45,7 @@ module.exports = ({ theme }) => ({
 				marginTop: theme("spacing.5"),
 				marginBottom: theme("spacing.5"),
 			},
-			li: {
+			"ul:not(.list-none) li": {
 				listStyleType: "none",
 				marginTop: theme("spacing.2"),
 				marginBottom: theme("spacing.2"),
@@ -70,7 +70,7 @@ module.exports = ({ theme }) => ({
 				left: "0px",
 				top: 3,
 			},
-			"ul > li::before": {
+			"ul:not(.list-none) > li::before": {
 				background: "var(--tw-prose-list-bullet)",
 				height: "6px",
 				width: "6px",

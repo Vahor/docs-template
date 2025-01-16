@@ -78,7 +78,7 @@ body {
 	ol {
 		counter-reset: listitem;
 	}
-	ul li::before {
+	ul:not(.list-none) li::before {
 		content: "";
 	}
 }

@@ -54,6 +54,7 @@ export const CodeGroup = forwardRef(function CodeGroup(
 	>;
 	return (
 		<Tabs
+			defaultValue="0"
 			ref={ref}
 			className={clsx(
 				"not-prose group code-group",

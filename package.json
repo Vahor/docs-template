@@ -12,6 +12,7 @@
 		"typecheck": "tsc --noEmit --declaration"
 	},
 	"dependencies": {
+		"@algolia/autocomplete-js": "^1.17.9",
 		"@hookform/resolvers": "^3.10.0",
 		"@radix-ui/react-accordion": "^1.2.2",
 		"@radix-ui/react-collapsible": "^1.1.2",
@@ -24,8 +25,10 @@
 		"@radix-ui/react-tooltip": "^1.1.6",
 		"@readme/openapi-parser": "^2.6.0",
 		"@tailwindcss/typography": "^0.5.16",
+		"algoliasearch": "^5.19.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"cmdk": "1.0.0",
 		"contentlayer2": "^0.5.3",
 		"github-slugger": "^2.0.0",
 		"lucide-react": "^0.473.0",

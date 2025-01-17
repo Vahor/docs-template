@@ -6,6 +6,7 @@ import { Providers } from "@/app/providers";
 import { AppSidebar } from "@/app/sidebar";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { AlgoliaSearchBox } from "@/components/algolia/search-box";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -23,10 +24,11 @@ export default function RootLayout({
 				<Providers>
 					<AppSidebar />
 					<SidebarInset>
-						<header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+						<header className="flex h-14 sticky top-0 shrink-0 items-center gap-2 border-b px-4 bg-background z-10">
 							<div className="flex flex-1 items-center gap-2 px-3">
 								<SidebarTrigger className="-ml-1" />
 								<Separator orientation="vertical" className="mr-2 h-4" />
+								<AlgoliaSearchBox />
 							</div>
 						</header>
 						<main>{children}</main>

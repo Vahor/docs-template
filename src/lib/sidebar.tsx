@@ -55,12 +55,12 @@ export const sidebar: SidebarGroup[] = [
 								url: "#",
 							},
 							{
-								title: "Another level 2",
+								title: "Test active state post",
 								badge: "NEW",
-								url: "#",
+								url: `/post/${allPosts[0].slug}`,
 							},
 							{
-								title: "Test active state",
+								title: "Test active state changelog",
 								badge: "NEW",
 								url: `/changelog/${allChangelogs[0].slug}`,
 							},

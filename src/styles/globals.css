@@ -30,7 +30,7 @@
 
 		--radius: 0.5rem;
 
-		--sidebar-background: 0 0% 98%;
+		--sidebar-background: 0 0% 100%;
 		--sidebar-foreground: 240 5.3% 26.1%;
 		--sidebar-primary: 240 5.9% 10%;
 		--sidebar-primary-foreground: 0 0% 98%;
@@ -106,5 +106,9 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+
+	.border-indicator:has(li a[data-active="true"]) {
+		@apply border-primary;
 	}
 }

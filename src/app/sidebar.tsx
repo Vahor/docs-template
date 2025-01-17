@@ -15,6 +15,7 @@ import {
 	SidebarMenuSub,
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
+	SidebarRail,
 } from "@/components/ui/sidebar";
 import {
 	Collapsible,
@@ -31,7 +32,26 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cache } from "react";
 
-const SidebarGroupComponent = ({ group }: { group: TSidebarGroup }) => {
+const BorderIndicator = ({
+	level,
+	children,
+}: { level: number; children: React.ReactNode }) => {
+	return (
+		<div
+			style={{
+				paddingLeft: level * 8,
+			}}
+			className="border-l hover:border-zinc-400 peer-data-[state=open]:border-zinc-400 border-indicator py-0.5"
+		>
+			{children}
+		</div>
+	);
+};
+
+const SidebarGroupComponent = ({
+	group,
+	level,
+}: { group: TSidebarGroup; level: number }) => {
 	const pathname = usePathname();
 	const active = isActive(group, pathname);
 
@@ -39,21 +59,23 @@ const SidebarGroupComponent = ({ group }: { group: TSidebarGroup }) => {
 		<Collapsible
 			key={group.title}
 			asChild
-			className="data-[state=open]:[&>span>svg]:rotate-90 group/collapsible [&[data-state=open]>button>svg]:rotate-90"
+			className="data-[state=open]:[&>span>svg]:rotate-90 group/collapsible [&[data-state=open]>div>button>svg]:rotate-90"
 			defaultOpen={active}
 		>
 			<SidebarMenuItem>
-				<CollapsibleTrigger asChild>
-					<SidebarMenuButton tooltip={group.title} isActive={active}>
-						<span>{group.title}</span>
-						<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
-						<ChevronRight className="ml-auto transition-transform duration-200" />
-					</SidebarMenuButton>
-				</CollapsibleTrigger>
+				<BorderIndicator level={level}>
+					<CollapsibleTrigger asChild>
+						<SidebarMenuButton isActive={active}>
+							<span>{group.title}</span>
+							<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
+							<ChevronRight className="ml-auto transition-transform duration-200" />
+						</SidebarMenuButton>
+					</CollapsibleTrigger>
+				</BorderIndicator>
 				<CollapsibleContent>
 					<SidebarMenuSub>
 						{group.items.map((item) => (
-							<SidebarComponent item={item} key={item.title} />
+							<SidebarComponent item={item} key={item.title} level={level} />
 						))}
 					</SidebarMenuSub>
 				</CollapsibleContent>
@@ -62,19 +84,24 @@ const SidebarGroupComponent = ({ group }: { group: TSidebarGroup }) => {
 	);
 };
 
-const SidebarItemComponent = ({ item }: { item: TSidebarItem }) => {
+const SidebarItemComponent = ({
+	item,
+	level,
+}: { item: TSidebarItem; level: number }) => {
 	const pathname = usePathname();
 	const active = isActive(item, pathname);
 
 	return (
-		<SidebarMenuSubItem key={item.title}>
-			<SidebarMenuSubButton asChild isActive={active}>
-				<Link href={item.url}>
-					<span>{item.title}</span>
-					<SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-				</Link>
-			</SidebarMenuSubButton>
-		</SidebarMenuSubItem>
+		<BorderIndicator level={level + 1}>
+			<SidebarMenuSubItem key={item.title}>
+				<SidebarMenuSubButton asChild isActive={active}>
+					<Link href={item.url}>
+						<span>{item.title}</span>
+						<SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+					</Link>
+				</SidebarMenuSubButton>
+			</SidebarMenuSubItem>
+		</BorderIndicator>
 	);
 };
 
@@ -87,17 +114,36 @@ const isActive = cache((item: TSidebarItem, pathname: string): boolean => {
 	return false;
 });
 
-const SidebarComponent = ({ item }: { item: TSidebarItem }) => {
+const SidebarComponent = ({
+	item,
+	level = 0,
+}: { item: TSidebarItem; level?: number }) => {
 	if (item.items && item.items.length > 0) {
-		return <SidebarGroupComponent group={item as TSidebarGroup} />;
+		return (
+			<SidebarGroupComponent group={item as TSidebarGroup} level={level + 1} />
+		);
 	}
-	return <SidebarItemComponent item={item as TSidebarItem} />;
+	return <SidebarItemComponent item={item as TSidebarItem} level={level} />;
 };
 
 export function AppSidebar() {
 	return (
 		<Sidebar>
-			<SidebarHeader />
+			<SidebarHeader>
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<SidebarMenuButton
+							size="lg"
+							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+							asChild
+						>
+							<Link href="/">
+								<img src="https://placehold.co/255x52" />
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarHeader>
 			<SidebarContent>
 				{sidebar.map((item) => (
 					<SidebarGroup key={item.title}>
@@ -113,6 +159,7 @@ export function AppSidebar() {
 				))}
 			</SidebarContent>
 			<SidebarFooter />
+			<SidebarRail />
 		</Sidebar>
 	);
 }

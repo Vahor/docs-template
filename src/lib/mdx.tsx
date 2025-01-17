@@ -22,6 +22,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { useId } from "react";
 
 const MarkColor: React.FC<{ children: string; color: string }> = ({
@@ -135,6 +136,32 @@ const mdxComponents: MDXComponents = {
 				<AccordionTrigger>{title}</AccordionTrigger>
 				<AccordionContent>{children}</AccordionContent>
 			</AccordionItem>
+		);
+	},
+	Tabs: ({ children, defaultValue, props }) => {
+		const childrenArray = Array.isArray(children) ? children : [children];
+		const _defaultValue = defaultValue || childrenArray[0]?.props?.title;
+		return (
+			<Tabs defaultValue={_defaultValue} {...props}>
+				<TabsList>
+					{childrenArray.map((child) => {
+						const title = child?.props?.title;
+						return (
+							<TabsTrigger key={title} value={title}>
+								{title}
+							</TabsTrigger>
+						);
+					})}
+				</TabsList>
+				{children}
+			</Tabs>
+		);
+	},
+	TabsItem: ({ children, title, props }) => {
+		return (
+			<TabsContent value={title} {...props}>
+				{children}
+			</TabsContent>
 		);
 	},
 	AccordionTrigger,

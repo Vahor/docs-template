@@ -49,7 +49,7 @@ const JSONResponse = ({ response }: { response: ArrayBuffer }) => {
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 				dangerouslySetInnerHTML={{
 					__html: highlighter.codeToHtml(JSON.stringify(json, null, 2), {
-						themes: shikiOptions.theme,
+						theme: shikiOptions.theme,
 						lang: "json",
 					}),
 				}}

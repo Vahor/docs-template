@@ -12,7 +12,6 @@ import { toString as toStringMdx } from "mdast-util-to-string";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { remark } from "remark";
-import codeImport from "remark-code-import";
 import remarkDirective from "remark-directive";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
@@ -204,7 +203,7 @@ function headingOffset() {
 }
 
 export const mdxOptions = {
-	rehypePlugins: [highlightPlugin, rehypeSlug, codeImport],
+	rehypePlugins: [highlightPlugin, rehypeSlug],
 	remarkPlugins: [
 		remarkGfm,
 		remarkDirective,

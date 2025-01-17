@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 
-// required and optional should be merged into a single prop that allows arbitrary text
 export type PropertyProps = {
 	name: string;
 	type?: string;

@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import "@/styles/code.css";
 import "@/styles/twoslash.css";
-import Link from "next/link";
+import { Providers } from "@/app/providers";
+import { AppSidebar } from "@/app/sidebar";
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -17,19 +20,16 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body>
-				<ul>
-					<li>
-						Home page: <Link href="/">Home</Link>
-					</li>
-					<li>
-						Changelog: <Link href="/changelog/something">Something</Link>
-					</li>
-					<li>
-						Post page: <Link href="/post/hello">Hello</Link>
-					</li>
-				</ul>
-
-				{children}
+				<Providers>
+					<AppSidebar />
+					<SidebarInset>
+						<header>
+							<SidebarTrigger className="-ml-1" />
+							<Separator orientation="vertical" className="mr-2 h-4" />
+						</header>
+						<main>{children}</main>
+					</SidebarInset>
+				</Providers>
 			</body>
 		</html>
 	);

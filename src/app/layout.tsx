@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import "@/styles/code.css";
 import "@/styles/twoslash.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -18,13 +19,13 @@ export default function RootLayout({
 			<body>
 				<ul>
 					<li>
-						Home page: <a href="/">Home</a>
+						Home page: <Link href="/">Home</Link>
 					</li>
 					<li>
-						Changelog: <a href="/changelog/something">Something</a>
+						Changelog: <Link href="/changelog/something">Something</Link>
 					</li>
 					<li>
-						Post page: <a href="/post/hello">Hello</a>
+						Post page: <Link href="/post/hello">Hello</Link>
 					</li>
 				</ul>
 

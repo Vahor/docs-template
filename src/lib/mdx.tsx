@@ -7,6 +7,7 @@ import { getNodeText } from "@/lib/getNodeText";
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
 import { useMDXComponent } from "next-contentlayer2/hooks";
+import Link from "next/link";
 import {
 	Table,
 	TableBody,
@@ -49,6 +50,19 @@ const mdxComponents: MDXComponents = {
 	td: TableCell,
 	tr: TableRow,
 	tbody: TableBody,
+	a: ({ children, href, ...props }) => {
+		const isHash = href?.startsWith("#");
+		const isExternal = href?.startsWith("http");
+		return (
+			<Link
+				href={href}
+				target={!isHash && isExternal ? "_blank" : undefined}
+				{...props}
+			>
+				{children}
+			</Link>
+		);
+	},
 
 	code: ({ className, ...props }) => (
 		<code

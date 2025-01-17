@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
 
 	output: "export",
 	cleanDistDir: true,
+	basePath: process.env.NEXT_PUBLIC_BASE_PATH
+		? `/${process.env.NEXT_PUBLIC_BASE_PATH}`
+		: "",
 
 	images: {
 		remotePatterns: [],

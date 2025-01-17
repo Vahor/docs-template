@@ -18,6 +18,7 @@ import remarkParse from "remark-parse";
 import type { Node } from "unist";
 import { visit } from "unist-util-visit";
 import path from "node:path";
+import emoji from "remark-emoji";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -210,6 +211,7 @@ export const mdxOptions = {
 		addCalloutComponent,
 		headingOffset,
 		includeMarkdown,
+		emoji,
 	],
 };
 

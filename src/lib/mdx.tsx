@@ -39,7 +39,9 @@ const MarkColor: React.FC<{ children: string; color: string }> = ({
 
 const Col: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	return (
-		<div className="grid grid-cols-1 gap-4 md:grid-cols-2">{children}</div>
+		<div className="grid grid-cols-1 gap-4 md:grid-cols-2 max-w-full mx-0">
+			{children}
+		</div>
 	);
 };
 

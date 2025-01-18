@@ -1,7 +1,8 @@
 import { JsonLd } from "@/components/jsonld";
+import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import { articlePage } from "@/lib/jsonld";
 import { Mdx } from "@/lib/mdx";
-import { openapi } from "@/lib/openapi";
+import { getPageBreadcrumbs } from "@/lib/sidebar";
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 
@@ -43,6 +44,8 @@ export default async function Page(props: PagePropsSlug) {
 	const page = getPage(params);
 	if (!page) notFound(); // should never happen
 
+	const breadcrumbs = getPageBreadcrumbs(`/post/${page.slug}`).slice(0, -1);
+
 	return (
 		<main
 			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
@@ -55,6 +58,8 @@ export default async function Page(props: PagePropsSlug) {
 					dateModified: page.dateModified,
 				})}
 			/>
+			<BreadcrumbResponsive items={breadcrumbs} />
+
 			<div className="space-y-4 text-left">
 				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
 				<p>{page.dateModified}</p>

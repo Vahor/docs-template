@@ -5,7 +5,6 @@ import "@/styles/twoslash.css";
 import { Providers } from "@/app/providers";
 import { AppSidebar } from "@/app/sidebar";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { AlgoliaSearchBox } from "@/components/algolia/search-box";
 import { MenuIcon } from "lucide-react";
 
@@ -23,6 +22,7 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<head>
 				<script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+				<meta name="algolia-site-verification" content="B011E83821BA687B" />
 			</head>
 			<body>
 				<Providers>

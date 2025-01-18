@@ -52,7 +52,7 @@ export const sidebar: SidebarGroup[] = [
 						items: [
 							{
 								title: "Another level",
-								url: "#",
+								url: "/a/random/path",
 							},
 							{
 								title: "Test active state post",
@@ -71,3 +71,48 @@ export const sidebar: SidebarGroup[] = [
 		],
 	},
 ];
+
+const breadcrumbsCache = new Map<string, SidebarItem[]>();
+export const getPageBreadcrumbs = (
+	path: string,
+): Pick<SidebarItem, "title" | "url">[] => {
+	const cached = breadcrumbsCache.get(path);
+	if (cached) {
+		return cached;
+	}
+
+	const breadcrumbs = findBreadcrumbs(path, sidebar);
+	if (!breadcrumbs) {
+		return [];
+	}
+	const result = breadcrumbs.map((item) => ({
+		title: item.title,
+		url: item.url,
+	}));
+	breadcrumbsCache.set(path, result);
+	return result;
+};
+
+const findBreadcrumbs = (
+	targetPath: string,
+	items: SidebarItem[],
+	breadcrumbs: SidebarItem[] = [],
+): SidebarItem[] | null => {
+	// PERF: not the best way but as it's pre-build on the server, it's fine
+
+	for (const item of items) {
+		const currentPath = [...breadcrumbs, item];
+		if (item.url === targetPath) {
+			return currentPath;
+		}
+
+		if (item.items?.length) {
+			const result = findBreadcrumbs(targetPath, item.items, currentPath);
+			if (result) {
+				return result;
+			}
+		}
+	}
+
+	return null;
+};

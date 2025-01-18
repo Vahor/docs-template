@@ -25,8 +25,16 @@ export type Entry = {
 	description: string;
 	url: string;
 
-	_highlightResult?: {
-		[key: string]: {
+	_highlightResult: {
+		headers?: Array<{
+			value: string;
+			matchedWords: string[];
+		}>;
+		title?: {
+			value: string;
+			matchedWords: string[];
+		};
+		description?: {
 			value: string;
 			matchedWords: string[];
 		};

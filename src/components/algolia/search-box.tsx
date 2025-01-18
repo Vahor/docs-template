@@ -22,8 +22,8 @@ import {
 	CommandGroup,
 } from "@/components/ui/command";
 import { create } from "zustand";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getPageBreadcrumbs } from "@/lib/sidebar";
 
 const dialogStore = create<{ open: boolean; setOpen: (open: boolean) => void }>(
 	(set) => ({
@@ -41,35 +41,39 @@ const SearchResult = ({
 	const { setOpen } = dialogStore((state) => state);
 	const router = useRouter();
 
-	const title = result._highlightResult?.title?.value ?? result.title;
-	const description =
-		result._highlightResult?.description?.value ?? result.description;
+	const title = result._highlightResult.title?.value;
+	const description = result._highlightResult.description?.value;
+	const headers = result._highlightResult.headers;
+	const matchedHeader = headers
+		?.sort((a, b) => b.matchedWords.length - a.matchedWords.length)
+		.filter((h) => h.matchedWords.length > 0)
+		.shift();
+
+	const breadcrumbs = getPageBreadcrumbs(result.url);
 
 	return (
-		<Link href={result.url}>
-			<CommandItem
-				value={result.objectID}
-				aria-labelledby={`${id}-title`}
-				className="block"
-				onSelect={() => {
-					router.push(result.url);
-					setOpen(false);
-				}}
-			>
-				<div
-					id={`${id}-title`}
-					className="font-medium text-sm block overflow-ellipsis whitespace-nowrap"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
-					dangerouslySetInnerHTML={{ __html: title }}
-				/>
-				<div
-					id={`${id}-description`}
-					className="overflow-ellipsis whitespace-nowrap text-xs overflow-hidden text-muted-foreground"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
-					dangerouslySetInnerHTML={{ __html: description }}
-				/>
-			</CommandItem>
-		</Link>
+		<CommandItem
+			value={result.objectID}
+			aria-labelledby={`${id}-title`}
+			className="block"
+			onSelect={() => {
+				router.push(result.url);
+				setOpen(false);
+			}}
+		>
+			<div
+				id={`${id}-title`}
+				className="font-medium text-sm block overflow-ellipsis whitespace-nowrap"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+				dangerouslySetInnerHTML={{ __html: title }}
+			/>
+			<div
+				id={`${id}-description`}
+				className="overflow-ellipsis whitespace-nowrap text-xs overflow-hidden text-muted-foreground"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+				dangerouslySetInnerHTML={{ __html: description }}
+			/>
+		</CommandItem>
 	);
 };
 

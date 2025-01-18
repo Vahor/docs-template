@@ -1,6 +1,8 @@
 import { JsonLd } from "@/components/jsonld";
+import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import { articlePage } from "@/lib/jsonld";
 import { Mdx } from "@/lib/mdx";
+import { getPageBreadcrumbs } from "@/lib/sidebar";
 import { allChangelogs } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 
@@ -42,6 +44,11 @@ export default async function Page(props: PagePropsSlug) {
 	const page = getPage(params);
 	if (!page) notFound(); // should never happen
 
+	const breadcrumbs = getPageBreadcrumbs(`/changelog/${page.slug}`).slice(
+		0,
+		-1,
+	);
+
 	return (
 		<main
 			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
@@ -55,6 +62,7 @@ export default async function Page(props: PagePropsSlug) {
 					dateModified: page.dateModified,
 				})}
 			/>
+			<BreadcrumbResponsive items={breadcrumbs} />
 			<pre>{JSON.stringify(page.toc, null, 2)}</pre>
 
 			<article className="mt-8 text-pretty prose">

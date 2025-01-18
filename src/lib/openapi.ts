@@ -1,3 +1,5 @@
+import "server-only";
+
 import { OPENAPI_JSON_URL } from "@/lib/constants";
 import OpenAPIParser from "@readme/openapi-parser";
 import type { IJsonSchema, OpenAPIV3 } from "openapi-types";

@@ -47,10 +47,7 @@ export default async function Page(props: PagePropsSlug) {
 	const breadcrumbs = getPageBreadcrumbs(`/post/${page.slug}`).slice(0, -1);
 
 	return (
-		<main
-			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
-			id="skip-nav"
-		>
+		<main className="relative mx-auto mt-4 max-w-6xl px-6">
 			<JsonLd
 				jsonLd={articlePage({
 					headline: page.title,

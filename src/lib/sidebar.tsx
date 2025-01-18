@@ -18,7 +18,8 @@ export const sidebar: SidebarGroup[] = [
 		url: "#",
 		collapsible: true,
 		items: allChangelogs
-			.toSorted((a, b) => a.version.localeCompare(b.version))
+			.toSorted((a, b) => b.version.localeCompare(a.version))
+			.slice(1) // TODO: remove this
 			.map((changelog) => ({
 				title: changelog.title,
 				url: `/changelog/${changelog.slug}`,
@@ -62,7 +63,7 @@ export const sidebar: SidebarGroup[] = [
 							{
 								title: "Test active state changelog",
 								badge: "NEW",
-								url: `/changelog/${allChangelogs[0].slug}`,
+								url: `/changelog/${allChangelogs[1].slug}`,
 							},
 						],
 					},

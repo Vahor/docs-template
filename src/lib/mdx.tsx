@@ -4,7 +4,6 @@ import { Check, Info, Note, Tip, Warning } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import { CodeGroup } from "@/components/ui/code/code-group";
 import { getNodeText } from "@/lib/getNodeText";
-import { cn } from "@/lib/utils";
 import type { MDXComponents } from "mdx/types";
 import { useMDXComponent } from "next-contentlayer2/hooks";
 import Link from "next/link";
@@ -67,15 +66,6 @@ const mdxComponents: MDXComponents = {
 		);
 	},
 
-	code: ({ className, ...props }) => (
-		<code
-			className={cn(
-				"relative whitespace-nowrap bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg not-prose leading-8 text-white text-xs",
-				className,
-			)}
-			{...props}
-		/>
-	),
 	figure: ({ children, ...props }) => {
 		const isCode = props["data-rehype-pretty-code-figure"] !== undefined;
 		if (isCode) {

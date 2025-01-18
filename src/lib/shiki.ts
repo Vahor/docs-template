@@ -1,5 +1,6 @@
 import type { Options } from "rehype-pretty-code";
-import { createHighlighter } from "shiki/bundle/web";
+import { createHighlighterCore } from "shiki/core";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 export const shikiOptions = {
 	theme: "aurora-x",
@@ -7,7 +8,8 @@ export const shikiOptions = {
 	defaultLang: "plaintext",
 } satisfies Options;
 
-export const shiki = createHighlighter({
-	langs: ["json"],
-	themes: [shikiOptions.theme],
+export const shiki = createHighlighterCore({
+	langs: [import("@shikijs/langs/json")],
+	themes: [import("@shikijs/themes/aurora-x")],
+	engine: createJavaScriptRegexEngine(),
 });

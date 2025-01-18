@@ -141,3 +141,26 @@ code .diff.add::before {
 		background-color: var(--shiki-dark-bg);
 	}
 }
+
+/* Focus */
+pre.has-focused span[data-line]:not(.focused) {
+	opacity: 0.7;
+	filter: blur(1px);
+	transition: filter 0.35s, opacity 0.35s;
+}
+pre.has-focused:hover span[data-line]:not(.focused) {
+	filter: blur(0);
+	opacity: 1;
+}
+
+/* Error or warning */
+
+code .diff.remove {
+	background-color: rgba(244, 63, 94, 0.16);
+}
+code .highlighted.error {
+	background-color: rgba(244, 63, 94, 0.16);
+}
+code .highlighted.warning {
+	background-color: rgba(234, 179, 8, 0.16);
+}

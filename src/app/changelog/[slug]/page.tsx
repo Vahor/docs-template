@@ -50,10 +50,7 @@ export default async function Page(props: PagePropsSlug) {
 	);
 
 	return (
-		<main
-			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
-			id="skip-nav"
-		>
+		<main className="relative mx-auto mt-4 max-w-6xl px-6">
 			<JsonLd
 				jsonLd={articlePage({
 					headline: page.title,
@@ -63,7 +60,6 @@ export default async function Page(props: PagePropsSlug) {
 				})}
 			/>
 			<BreadcrumbResponsive items={breadcrumbs} />
-			<pre>{JSON.stringify(page.toc, null, 2)}</pre>
 
 			<article className="mt-8 text-pretty prose">
 				<div className="space-y-4 text-left">

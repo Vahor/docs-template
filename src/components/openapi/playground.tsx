@@ -4,6 +4,7 @@ import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
 import { PlaygroundResponse } from "@/components/openapi/response";
 import { generateFromSchema } from "@/components/openapi/utils";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/ui/code/code-block";
 import {
 	Form,
 	FormControl,
@@ -200,7 +201,7 @@ function BodyPlayground({
 	return (
 		<div>
 			<p>Body</p>
-			<div>
+			<CodeBlock filename="Request" className="text-white">
 				{editing ? (
 					<Textarea
 						value={value}
@@ -214,7 +215,7 @@ function BodyPlayground({
 					/>
 				) : (
 					<div
-						className="border"
+						className="[&_code]:grid"
 						// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 						dangerouslySetInnerHTML={{
 							__html: highlighter.codeToHtml(value, {
@@ -224,7 +225,7 @@ function BodyPlayground({
 						}}
 					/>
 				)}
-			</div>
+			</CodeBlock>
 			<button
 				type="button"
 				onClick={() => {

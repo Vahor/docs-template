@@ -2,6 +2,8 @@ import * as fs from "node:fs";
 import { shikiOptions } from "@/lib/shiki";
 import {
 	transformerNotationDiff,
+	transformerNotationFocus,
+	transformerNotationErrorLevel,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
 import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
@@ -127,6 +129,8 @@ const highlightPlugin = () => {
 		transformers: [
 			transformerRenderWhitespace(),
 			transformerNotationDiff(),
+			transformerNotationErrorLevel(),
+			transformerNotationFocus(),
 			transformerTwoslash({
 				explicitTrigger: true,
 				renderer: rendererRich(),

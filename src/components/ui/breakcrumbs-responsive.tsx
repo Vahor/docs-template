@@ -30,6 +30,7 @@ export const BreadcrumbResponsive = ({
 		url?: SidebarItem["url"];
 	}[];
 }) => {
+	if (items.length === 0) return null;
 	const [open, setOpen] = React.useState(false);
 	const elipsisItems = items.slice(1, -ITEMS_TO_DISPLAY + 1);
 	const restItems = items.slice(1 + elipsisItems.length);

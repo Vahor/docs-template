@@ -76,12 +76,17 @@ const breadcrumbsCache = new Map<string, SidebarItem[]>();
 export const getPageBreadcrumbs = (
 	path: string,
 ): Pick<SidebarItem, "title" | "url">[] => {
-	const cached = breadcrumbsCache.get(path);
+	const withoutDomain = path
+		.replace(/^https?:\/\/[^\/]+/, "")
+		// TODO: remove this
+		.replace(process.env.NEXT_PUBLIC_BASE_PATH, "");
+
+	const cached = breadcrumbsCache.get(withoutDomain);
 	if (cached) {
 		return cached;
 	}
 
-	const breadcrumbs = findBreadcrumbs(path, sidebar);
+	const breadcrumbs = findBreadcrumbs(withoutDomain, sidebar);
 	if (!breadcrumbs) {
 		return [];
 	}
@@ -89,7 +94,7 @@ export const getPageBreadcrumbs = (
 		title: item.title,
 		url: item.url,
 	}));
-	breadcrumbsCache.set(path, result);
+	breadcrumbsCache.set(withoutDomain, result);
 	return result;
 };
 

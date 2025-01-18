@@ -24,6 +24,8 @@ import {
 import { create } from "zustand";
 import { useRouter } from "next/navigation";
 import { getPageBreadcrumbs } from "@/lib/sidebar";
+import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
+import { breadcrumbsToString } from "@/lib/breadcrumbs";
 
 const dialogStore = create<{ open: boolean; setOpen: (open: boolean) => void }>(
 	(set) => ({
@@ -43,13 +45,8 @@ const SearchResult = ({
 
 	const title = result._highlightResult.title?.value;
 	const description = result._highlightResult.description?.value;
-	const headers = result._highlightResult.headers;
-	const matchedHeader = headers
-		?.sort((a, b) => b.matchedWords.length - a.matchedWords.length)
-		.filter((h) => h.matchedWords.length > 0)
-		.shift();
 
-	const breadcrumbs = getPageBreadcrumbs(result.url);
+	const breadcrumbs = getPageBreadcrumbs(result.url).slice(0, -1);
 
 	return (
 		<CommandItem
@@ -73,6 +70,9 @@ const SearchResult = ({
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
 				dangerouslySetInnerHTML={{ __html: description }}
 			/>
+			<div className="text-2xs text-muted-foreground">
+				{breadcrumbsToString(breadcrumbs)}
+			</div>
 		</CommandItem>
 	);
 };

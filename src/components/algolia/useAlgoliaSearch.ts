@@ -15,7 +15,7 @@ const appId = "Q0OYUSVGI1";
 const apiKey = "3aff17a7cbdc78a5e00020231d08b636";
 const searchClient = algoliasearch(appId, apiKey);
 
-const indexName = "helosion_articles";
+const indexName = "docs_template_pages";
 
 // TODO: update depending on the index
 export type Entry = {
@@ -26,10 +26,6 @@ export type Entry = {
 	url: string;
 
 	_highlightResult: {
-		headers?: Array<{
-			value: string;
-			matchedWords: string[];
-		}>;
 		title?: {
 			value: string;
 			matchedWords: string[];

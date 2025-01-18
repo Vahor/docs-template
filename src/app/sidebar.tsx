@@ -1,6 +1,11 @@
 "use client";
 
 import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
@@ -19,14 +24,9 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
-	sidebar,
 	type SidebarGroup as TSidebarGroup,
 	type SidebarItem as TSidebarItem,
+	sidebar,
 } from "@/lib/sidebar";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";

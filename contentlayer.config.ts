@@ -1,9 +1,10 @@
 import * as fs from "node:fs";
+import path from "node:path";
 import { shikiOptions } from "@/lib/shiki";
 import {
 	transformerNotationDiff,
-	transformerNotationFocus,
 	transformerNotationErrorLevel,
+	transformerNotationFocus,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
 import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
@@ -15,12 +16,11 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { remark } from "remark";
 import remarkDirective from "remark-directive";
+import emoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import type { Node } from "unist";
 import { visit } from "unist-util-visit";
-import path from "node:path";
-import emoji from "remark-emoji";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -189,7 +189,7 @@ function includeMarkdown() {
 
 				node.type = "code";
 				node.lang = extension;
-				node.value = contents;
+				node.value = contents.replace(/\n$/, "");
 			} catch (err) {
 				console.error(err);
 			}

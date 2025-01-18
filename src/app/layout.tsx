@@ -4,8 +4,8 @@ import "@/styles/code.css";
 import "@/styles/twoslash.css";
 import { Providers } from "@/app/providers";
 import { AppSidebar } from "@/app/sidebar";
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AlgoliaSearchBox } from "@/components/algolia/search-box";
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { MenuIcon } from "lucide-react";
 
 export const metadata: Metadata = {

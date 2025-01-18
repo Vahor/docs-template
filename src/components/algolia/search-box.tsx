@@ -1,31 +1,31 @@
 "use client";
 
-import { useEffect, useId } from "react";
+import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import {
-	useAutocomplete,
-	type AutocompleteCollection,
-	type Entry,
-} from "./useAlgoliaSearch";
-import { SearchIcon } from "lucide-react";
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import {
-	Command,
-	CommandEmpty,
-	CommandInput,
-	CommandItem,
-	CommandList,
-	CommandGroup,
-} from "@/components/ui/command";
-import { create } from "zustand";
-import { useRouter } from "next/navigation";
-import { getPageBreadcrumbs } from "@/lib/sidebar";
-import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import { breadcrumbsToString } from "@/lib/breadcrumbs";
+import { getPageBreadcrumbs } from "@/lib/sidebar";
+import { SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useId } from "react";
+import { create } from "zustand";
+import {
+	type AutocompleteCollection,
+	type Entry,
+	useAutocomplete,
+} from "./useAlgoliaSearch";
 
 const dialogStore = create<{ open: boolean; setOpen: (open: boolean) => void }>(
 	(set) => ({

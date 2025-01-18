@@ -1,12 +1,14 @@
 import { OpenapiQuery } from "@/components/openapi/openapi-query";
 import { OpenapiSchema } from "@/components/openapi/openapi-schema";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Check, Info, Note, Tip, Warning } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import { CodeGroup } from "@/components/ui/code/code-group";
-import { getNodeText } from "@/lib/getNodeText";
-import type { MDXComponents } from "mdx/types";
-import { useMDXComponent } from "next-contentlayer2/hooks";
-import Link from "next/link";
 import {
 	Table,
 	TableBody,
@@ -15,13 +17,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getNodeText } from "@/lib/getNodeText";
+import type { MDXComponents } from "mdx/types";
+import { useMDXComponent } from "next-contentlayer2/hooks";
+import Link from "next/link";
 import { useId } from "react";
 
 const MarkColor: React.FC<{ children: string; color: string }> = ({

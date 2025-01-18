@@ -23,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { shiki, shikiOptions } from "@/lib/shiki";
+import { cn } from "@/lib/utils";
 import { Suspense, use, useState } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 
@@ -201,21 +202,26 @@ function BodyPlayground({
 	return (
 		<div>
 			<p>Body</p>
-			<CodeBlock filename="Request" className="text-white">
+			<CodeBlock
+				filename="Request"
+				data-editing={editing}
+				className="text-white max-h-full group"
+			>
 				{editing ? (
 					<Textarea
 						value={value}
 						cacheMeasurements
 						minRows={3}
-						className="resize-none px-0 py-0 font-mono"
+						className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs leading-8"
 						autoCorrect="off"
+						spellCheck={false}
 						onChange={(e) => {
 							form.setValue("_body", e.target.value);
 						}}
 					/>
 				) : (
 					<div
-						className="[&_code]:grid"
+						className="[&_code]:grid [&_span]:whitespace-pre-wrap [&_span]:break-words [&_pre]:rounded-2xl"
 						// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 						dangerouslySetInnerHTML={{
 							__html: highlighter.codeToHtml(value, {

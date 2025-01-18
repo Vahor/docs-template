@@ -1,12 +1,12 @@
 "use client";
 
-import { useId, useState } from "react";
 import {
-	type AutocompleteState,
 	type AutocompleteCollection,
+	type AutocompleteState,
 	createAutocomplete,
 } from "@algolia/autocomplete-core";
 import { getAlgoliaResults } from "@algolia/autocomplete-preset-algolia";
+import { useId, useState } from "react";
 
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import { useRouter } from "next/navigation";

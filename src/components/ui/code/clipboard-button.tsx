@@ -1,13 +1,13 @@
 "use client";
 
-import { useClipboard } from "@/hooks/useClipboard";
-import { clsx } from "clsx";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useClipboard } from "@/hooks/useClipboard";
+import { clsx } from "clsx";
 import type { ComponentPropsWithoutRef } from "react";
 
 interface CopyToClipboardButtonProps

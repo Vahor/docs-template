@@ -5,10 +5,10 @@ import { Tag } from "@/components/ui/tag";
 import { getNodeText } from "@/lib/getNodeText";
 import { clsx } from "clsx";
 import {
-	forwardRef,
 	type ComponentPropsWithoutRef,
 	type ForwardedRef,
 	type ReactElement,
+	forwardRef,
 } from "react";
 
 export interface CodeBlockPropsBase {
@@ -73,7 +73,9 @@ function CodeTabBar({
 }) {
 	return (
 		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl bg-zinc-800 px-3 pr-5 h-12">
-			<div className="mr-auto text-xs font-semibold text-white">{filename}</div>
+			<div className="mr-auto text-xs font-semibold text-white group-data-[editing=true]:italic">
+				{filename}
+			</div>
 			{children && (
 				<div className="text-zinc-500 hover:text-zinc-400 size-5">
 					{children}

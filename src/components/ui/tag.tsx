@@ -1,7 +1,7 @@
 // based on https://protocol.tailwindui.com/contacts#retrieve-a-contact
 
-import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const valueColorMap = {
 	get: "emerald",

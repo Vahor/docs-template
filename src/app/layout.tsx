@@ -21,6 +21,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
+			<head>
+				<script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+			</head>
 			<body>
 				<Providers>
 					<header className="flex h-14 sticky top-0 shrink-0 items-center gap-2 border-b px-4 bg-zinc-50 z-10">

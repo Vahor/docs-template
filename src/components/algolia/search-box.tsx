@@ -1,104 +1,112 @@
 "use client";
 
-import { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId } from "react";
 import {
 	useAutocomplete,
 	type AutocompleteCollection,
 	type Entry,
-	type HookAutocomplete,
-	type HookAutocompleteState,
 } from "./useAlgoliaSearch";
-import { LoaderCircleIcon, Search, SearchIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { SearchIcon } from "lucide-react";
 import {
 	Dialog,
-	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	Command,
+	CommandEmpty,
+	CommandInput,
+	CommandItem,
+	CommandList,
+	CommandGroup,
+} from "@/components/ui/command";
+import { create } from "zustand";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const dialogStore = create<{ open: boolean; setOpen: (open: boolean) => void }>(
+	(set) => ({
+		open: false,
+		setOpen: (open) => set({ open }),
+	}),
+);
 
 const SearchResult = ({
 	result,
-	resultIndex,
-	autocomplete,
-	collection,
 }: {
 	result: Entry;
-	resultIndex: number;
-	autocomplete: HookAutocomplete;
-	collection: AutocompleteCollection<Entry>;
 }) => {
 	const id = useId();
+	const { setOpen } = dialogStore((state) => state);
+	const router = useRouter();
 
 	const title = result._highlightResult?.title?.value ?? result.title;
-	const content = result._highlightResult?.content?.value ?? result.content;
+	const description =
+		result._highlightResult?.description?.value ?? result.description;
 
 	return (
-		/* @ts-expect-error event type is wrong */
-		<li
-			className={cn(
-				resultIndex > 0 && "border-t border-zinc-100 dark:border-zinc-800",
-			)}
-			aria-labelledby={`${id}-title`}
-			{...autocomplete.getItemProps({
-				item: result,
-				source: collection.source,
-			})}
-		>
-			<div
-				id={`${id}-title`}
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
-				dangerouslySetInnerHTML={{ __html: title }}
-			/>
-		</li>
+		<Link href={result.url}>
+			<CommandItem
+				value={result.objectID}
+				aria-labelledby={`${id}-title`}
+				className="block"
+				onSelect={() => {
+					router.push(result.url);
+					setOpen(false);
+				}}
+			>
+				<div
+					id={`${id}-title`}
+					className="font-medium text-sm block overflow-ellipsis whitespace-nowrap"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+					dangerouslySetInnerHTML={{ __html: title }}
+				/>
+				<div
+					id={`${id}-description`}
+					className="overflow-ellipsis whitespace-nowrap text-xs overflow-hidden text-muted-foreground"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+					dangerouslySetInnerHTML={{ __html: description }}
+				/>
+			</CommandItem>
+		</Link>
 	);
 };
 
 const SearchResults = ({
-	autocomplete,
 	query,
 	collection,
 }: {
-	autocomplete: HookAutocomplete;
 	query: string;
 	collection: AutocompleteCollection<Entry>;
 }) => {
-	if (collection.items.length === 0) {
+	if (!collection || collection.items.length === 0) {
 		return (
-			<div className="p-6 text-center">
+			<CommandEmpty>
 				Nothing found for{" "}
-				<strong className="break-words font-semibold text-zinc-900">
+				<strong className="break-words font-semibold">
 					&lsquo;{query}&rsquo;
 				</strong>
-			</div>
+			</CommandEmpty>
 		);
 	}
 
 	return (
-		<ul {...autocomplete.getListProps()}>
-			{collection.items.map((result, resultIndex) => (
-				<SearchResult
-					key={result.objectID}
-					result={result}
-					resultIndex={resultIndex}
-					autocomplete={autocomplete}
-					collection={collection}
-				/>
+		<CommandGroup heading="Results">
+			{collection.items.map((result) => (
+				<SearchResult key={result.objectID} result={result} />
 			))}
-		</ul>
+		</CommandGroup>
 	);
 };
 
 export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
 	const { autocomplete, autocompleteState } = useAutocomplete();
-	const [open, setOpen] = useState(false);
-	const inputRef = useRef<HTMLInputElement>(null);
+	const { open, setOpen } = dialogStore((state) => state);
 	// @ts-expect-error event type is wrong
 	const inputProps = autocomplete.getInputProps({});
 
 	useEffect(() => {
-		console.log(open);
 		const down = (e: KeyboardEvent) => {
 			if (e.key === "/" && !open) {
 				e.preventDefault();
@@ -140,26 +148,23 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
 						Search the docs
 					</DialogDescription>
 
-					<div className="flex items-center border-b px-3">
-						<Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-						{/* @ts-expect-error event type is wrong */}
-						<input
-							className={cn(
-								"flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+					<Command shouldFilter={false} disablePointerSelection>
+						<CommandInput
+							value={autocompleteState?.query}
+							onValueChange={(value) => {
+								autocomplete.setQuery(value);
+								autocomplete.refresh();
+							}}
+						/>
+						<CommandList>
+							{autocompleteState && autocompleteState.query !== "" && (
+								<SearchResults
+									query={autocompleteState?.query}
+									collection={autocompleteState?.collections[0]}
+								/>
 							)}
-							suppressHydrationWarning
-							ref={inputRef}
-							{...inputProps}
-						/>
-					</div>
-
-					{autocompleteState?.isOpen && (
-						<SearchResults
-							autocomplete={autocomplete}
-							query={autocompleteState?.query}
-							collection={autocompleteState?.collections[0]}
-						/>
-					)}
+						</CommandList>
+					</Command>
 				</DialogContent>
 			</Dialog>
 		</div>

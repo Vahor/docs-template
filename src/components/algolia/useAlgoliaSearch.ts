@@ -22,9 +22,8 @@ export type Entry = {
 	objectID: string;
 
 	title: string;
-	headers: string[];
+	description: string;
 	url: string;
-	content: string;
 
 	_highlightResult?: {
 		[key: string]: {
@@ -47,15 +46,6 @@ export function useAutocomplete() {
 			defaultActiveItemId: 0,
 			onStateChange({ state }) {
 				setAutocompleteState(state);
-			},
-			shouldPanelOpen({ state }) {
-				return state.query !== "";
-			},
-			navigator: {
-				navigate({ itemUrl }) {
-					autocomplete.setIsOpen(true);
-					router.push(itemUrl);
-				},
 			},
 			getSources() {
 				return [
@@ -99,8 +89,4 @@ export function useAutocomplete() {
 	return { autocomplete: autocomplete ?? {}, autocompleteState };
 }
 
-type HookType = ReturnType<typeof useAutocomplete>;
-type HookAutocomplete = HookType["autocomplete"];
-type HookAutocompleteState = HookType["autocompleteState"];
-
-export type { HookAutocomplete, HookAutocompleteState, AutocompleteCollection };
+export type { AutocompleteCollection };

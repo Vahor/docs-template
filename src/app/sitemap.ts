@@ -1,10 +1,10 @@
 import { BASE_URL } from "@/lib/constants";
-import { allChangelogs, allPosts } from "contentlayer/generated";
+import { allApis, allChangelogs } from "contentlayer/generated";
 import type { MetadataRoute } from "next";
 
-export const getPosts = (): MetadataRoute.Sitemap => {
-	return allPosts.map((post) => ({
-		url: `${BASE_URL}/post/${post.slug}`,
+export const getApis = (): MetadataRoute.Sitemap => {
+	return allApis.map((post) => ({
+		url: `${BASE_URL}/api/${post.slug}`,
 		lastModified: post.dateModified,
 		changeFrequency: "monthly",
 		priority: 0.6,
@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: "monthly",
 			priority: 1,
 		},
-		...getPosts(),
+		...getApis(),
 		...getChangelogs(),
 	];
 }

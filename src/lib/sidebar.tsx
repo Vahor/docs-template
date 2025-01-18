@@ -1,5 +1,5 @@
 import { Tag } from "@/components/ui/tag";
-import { allChangelogs, allPosts } from "contentlayer/generated";
+import { allChangelogs, allApis } from "contentlayer/generated";
 
 export interface SidebarItem {
 	title: string;
@@ -29,10 +29,10 @@ export const sidebar: SidebarGroup[] = [
 		title: "API Reference",
 		url: "#",
 		badge: "New",
-		items: allPosts.map((api) => ({
+		items: allApis.map((api) => ({
 			title: api.title,
-			url: `/post/${api.slug}`,
-			badge: <Tag variant="small">GET</Tag>,
+			url: `/api/${api.slug}`,
+			badge: <Tag variant="small">{api.method.toUpperCase()}</Tag>,
 		})),
 	},
 	{
@@ -58,7 +58,7 @@ export const sidebar: SidebarGroup[] = [
 							{
 								title: "Test active state post",
 								badge: "NEW",
-								url: `/post/${allPosts[0].slug}`,
+								url: `/api/${allApis[0].slug}`,
 							},
 							{
 								title: "Test active state changelog",

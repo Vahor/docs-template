@@ -57,13 +57,14 @@ const extractToc = async (raw: string) => {
 
 const contentFolder = "content";
 
-export const Post = defineDocumentType(() => ({
-	name: "Post",
-	filePathPattern: "post/**/*.mdx",
+export const Api = defineDocumentType(() => ({
+	name: "Api",
+	filePathPattern: "api/**/*.mdx",
 	contentType: "mdx",
 	fields: {
 		title: { type: "string", required: true },
 		description: { type: "string", required: true },
+		method: { type: "string", required: true },
 	},
 	computedFields: {
 		slug: {
@@ -221,6 +222,6 @@ export const mdxOptions = {
 
 export default makeSource({
 	contentDirPath: contentFolder,
-	documentTypes: [Post, Changelog],
+	documentTypes: [Api, Changelog],
 	mdx: mdxOptions,
 });

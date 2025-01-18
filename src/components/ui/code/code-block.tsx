@@ -27,6 +27,7 @@ export const CodeBlock = forwardRef(function CodeBlock(
 		props: Partial<ComponentPropsWithoutRef<typeof CopyToClipboardButton>>,
 	) => <CopyToClipboardButton textToCopy={getNodeText(children)} {...props} />;
 
+	// TODO: use captions
 	let header: ReactElement | undefined = undefined;
 	if (Array.isArray(children)) {
 		header = Array.isArray(children) ? children[1] : children;
@@ -48,10 +49,9 @@ export const CodeBlock = forwardRef(function CodeBlock(
 					<Button className={"relative"} />
 				</CodeTabBar>
 			)}
-			{header && <CodePanelHeader header={header} />}
 
 			<div
-				className="block overlow-auto relative [&_code]:py-4 [&_code>span]:px-4 [&_code]:rounded-2xl"
+				className="block overlow-auto relative [&_code]:pt-4 [&_code]:pb-4 [&_code>span]:px-4 [&_code]:rounded-2xl"
 				style={{ fontVariantLigatures: "none" }}
 			>
 				{!filename && (
@@ -81,31 +81,6 @@ function CodeTabBar({
 					{children}
 				</div>
 			)}
-		</div>
-	);
-}
-
-function CodePanelHeader({
-	header,
-}: {
-	header: ReactElement;
-}) {
-	const text = getNodeText(header);
-	const [tag, ...urls] = text.split(" ");
-	const url = urls.join(" ");
-	if (!url && !tag) {
-		return null;
-	}
-
-	return (
-		<div className="flex h-9 items-center gap-2 border-b border-zinc-800 px-4">
-			{tag && (
-				<div className="dark flex">
-					<Tag variant="small">{tag}</Tag>
-				</div>
-			)}
-			{tag && url && <span className="h-0.5 w-0.5 rounded-full bg-zinc-500" />}
-			{url && <span className="font-mono text-xs text-zinc-400">{url}</span>}
 		</div>
 	);
 }

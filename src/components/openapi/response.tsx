@@ -1,5 +1,6 @@
 "use client";
 
+import { CodeBlock } from "@/components/ui/code/code-block";
 import { shiki, shikiOptions } from "@/lib/shiki";
 import { Suspense, use } from "react";
 
@@ -42,10 +43,9 @@ const JSONResponse = ({ response }: { response: ArrayBuffer }) => {
 	const highlighter = use(shiki);
 
 	return (
-		<div>
-			<p>JSON</p>
+		<CodeBlock filename="Response" className="text-white max-h-full group">
 			<div
-				className="overflow-y-auto max-h-[400px] border"
+				className="[&_code]:grid [&_span]:whitespace-pre-wrap [&_span]:break-words [&_pre]:rounded-2xl"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 				dangerouslySetInnerHTML={{
 					__html: highlighter.codeToHtml(JSON.stringify(json, null, 2), {
@@ -54,7 +54,7 @@ const JSONResponse = ({ response }: { response: ArrayBuffer }) => {
 					}),
 				}}
 			/>
-		</div>
+		</CodeBlock>
 	);
 };
 

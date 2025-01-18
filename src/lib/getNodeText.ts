@@ -1,5 +1,8 @@
 // biome-ignore lint/suspicious/noExplicitAny: can be any type
 export const getNodeText = (node: any): string => {
+	if (node.props?.dangerouslySetInnerHTML) {
+		return getNodeTextFromHtml(node.props.dangerouslySetInnerHTML.__html);
+	}
 	// ignore twoslash nodes
 	if (node.props?.className?.includes("twoslash-popup-container")) {
 		return "";
@@ -19,4 +22,11 @@ export const getNodeText = (node: any): string => {
 	}
 
 	return "";
+};
+
+export const getNodeTextFromHtml = (node: string): string => {
+	if (typeof DOMParser === "undefined") return "";
+	const parse = new DOMParser();
+	const doc = parse.parseFromString(node, "text/html");
+	return doc.body.textContent || "";
 };

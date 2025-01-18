@@ -14,6 +14,7 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogTitle,
 } from "@/components/ui/dialog";
 
@@ -89,7 +90,7 @@ const SearchResults = ({
 	);
 };
 
-export const AlgoliaSearchBox = () => {
+export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
 	const { autocomplete, autocompleteState } = useAutocomplete();
 	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -97,35 +98,48 @@ export const AlgoliaSearchBox = () => {
 	const inputProps = autocomplete.getInputProps({});
 
 	useEffect(() => {
+		console.log(open);
 		const down = (e: KeyboardEvent) => {
-			if (e.key === "/") {
+			if (e.key === "/" && !open) {
 				e.preventDefault();
 				setOpen(true);
 			}
 		};
 		document.addEventListener("keydown", down);
 		return () => document.removeEventListener("keydown", down);
-	}, []);
+	}, [open]);
 
 	return (
-		<div>
-			<label className="relative flex items-center">
-				<SearchIcon className="absolute left-0 size-4 opacity-50 pointer-events-none" />
+		<div className={className}>
+			<label className="relative items-center hidden lg:flex border p-2 bg-background rounded-md w-[400px] mx-auto">
+				<SearchIcon className="absolute left-2 size-4 opacity-50 pointer-events-none" />
 				<input
 					type="text"
-					className="flex w-48 rounded-md text-sm outline-none sm:w-96 pl-6"
+					className="flex rounded-md text-sm outline-none pl-6 w-full"
 					name="search"
 					placeholder={inputProps.placeholder}
 					onFocus={() => setOpen(true)}
 				/>
-				<kbd className="pointer-events-none absolute inset-y-0 right-0 h-5 select-none flex items-center rounded-md border px-1.5 text-muted-foreground text-xs">
+				<kbd className="pointer-events-none absolute right-2 h-5 select-none flex items-center rounded-md border px-1.5 text-muted-foreground text-xs bg-zinc-50">
 					<span>/</span>
 				</kbd>
 			</label>
 
+			<button
+				type="button"
+				className="flex lg:hidden"
+				onClick={() => setOpen(true)}
+			>
+				<SearchIcon className="h-4 w-4 shrink-0 opacity-50" />
+			</button>
+
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogContent className="top-4 translate-y-0 max-w-screen-sm overflow-hidden p-0 shadow-lg gap-2">
+				<DialogContent className="top-4 translate-y-0 max-w-full sm:max-w-screen-sm overflow-hidden p-0 shadow-lg gap-2">
 					<DialogTitle className="sr-only">Search</DialogTitle>
+					<DialogDescription className="sr-only">
+						Search the docs
+					</DialogDescription>
+
 					<div className="flex items-center border-b px-3">
 						<Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
 						{/* @ts-expect-error event type is wrong */}
@@ -137,7 +151,6 @@ export const AlgoliaSearchBox = () => {
 							ref={inputRef}
 							{...inputProps}
 						/>
-						<DialogClose />
 					</div>
 
 					{autocompleteState?.isOpen && (

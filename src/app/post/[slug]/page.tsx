@@ -44,7 +44,10 @@ export default async function Page(props: PagePropsSlug) {
 	if (!page) notFound(); // should never happen
 
 	return (
-		<main className="relative" id="skip-nav">
+		<main
+			className="relative mx-auto mt-4 max-w-5xl px-6 md:mt-16"
+			id="skip-nav"
+		>
 			<JsonLd
 				jsonLd={articlePage({
 					headline: page.title,

@@ -3,7 +3,11 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
-import { PanelLeft } from "lucide-react";
+import {
+	ArrowLeftFromLineIcon,
+	ArrowRightFromLineIcon,
+	PanelLeft,
+} from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -149,7 +153,7 @@ const SidebarProvider = React.forwardRef<
 							} as React.CSSProperties
 						}
 						className={cn(
-							"group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
+							"group/sidebar-wrapper flex flex-col min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
 							className,
 						)}
 						ref={ref}
@@ -168,8 +172,8 @@ const Sidebar = React.forwardRef<
 	HTMLDivElement,
 	React.ComponentProps<"div"> & {
 		side?: "left" | "right";
-		variant?: "sidebar" | "floating" | "inset";
-		collapsible?: "offcanvas" | "icon" | "none";
+		variant?: "sidebar";
+		collapsible?: "offcanvas" | "icon";
 	}
 >(
 	(
@@ -184,21 +188,6 @@ const Sidebar = React.forwardRef<
 		ref,
 	) => {
 		const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
-
-		if (collapsible === "none") {
-			return (
-				<div
-					className={cn(
-						"flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
-						className,
-					)}
-					ref={ref}
-					{...props}
-				>
-					{children}
-				</div>
-			);
-		}
 
 		if (isMobile) {
 			return (
@@ -233,24 +222,19 @@ const Sidebar = React.forwardRef<
 				{/* This is what handles the sidebar gap on desktop */}
 				<div
 					className={cn(
-						"duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
+						"duration-100 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
 						"group-data-[collapsible=offcanvas]:w-0",
 						"group-data-[side=right]:rotate-180",
-						variant === "floating" || variant === "inset"
-							? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
-							: "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+						"group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
 					)}
 				/>
 				<div
 					className={cn(
-						"duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+						"duration-100 fixed bottom-0 top-14 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
 						side === "left"
 							? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
 							: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
-						// Adjust the padding for floating and inset variants.
-						variant === "floating" || variant === "inset"
-							? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
-							: "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
+						"group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
 						className,
 					)}
 					{...props}
@@ -271,8 +255,8 @@ Sidebar.displayName = "Sidebar";
 const SidebarTrigger = React.forwardRef<
 	React.ElementRef<typeof Button>,
 	React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-	const { toggleSidebar } = useSidebar();
+>(({ className, onClick, children, ...props }, ref) => {
+	const { toggleSidebar, open } = useSidebar();
 
 	return (
 		<Button
@@ -287,7 +271,8 @@ const SidebarTrigger = React.forwardRef<
 			}}
 			{...props}
 		>
-			<PanelLeft />
+			{children ??
+				(open ? <ArrowLeftFromLineIcon /> : <ArrowRightFromLineIcon />)}
 			<span className="sr-only">Toggle Sidebar</span>
 		</Button>
 	);
@@ -413,7 +398,7 @@ const SidebarContent = React.forwardRef<
 			ref={ref}
 			data-sidebar="content"
 			className={cn(
-				"flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+				"flex min-h-0 flex-1 flex-col gap-2 overflow-auto delay-100 group-data-[collapsible=icon]:opacity-0 opacity-100 transition-opacity ease-in-out",
 				className,
 			)}
 			{...props}
@@ -430,7 +415,7 @@ const SidebarGroup = React.forwardRef<
 		<div
 			ref={ref}
 			data-sidebar="group"
-			className={cn("flex w-full min-w-0 flex-col p-2", className)}
+			className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
 			{...props}
 		/>
 	);
@@ -448,8 +433,7 @@ const SidebarGroupLabel = React.forwardRef<
 			ref={ref}
 			data-sidebar="group-label"
 			className={cn(
-				"duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-				"group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+				"duration-100 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
 				className,
 			)}
 			{...props}

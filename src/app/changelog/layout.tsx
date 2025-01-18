@@ -3,10 +3,5 @@ export default function ChangelogLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return (
-		<div>
-			<h1>Changelog</h1>
-			{children}
-		</div>
-	);
+	return <div>{children}</div>;
 }

@@ -16,6 +16,7 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarRail,
+	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
 	Collapsible,
@@ -41,7 +42,7 @@ const BorderIndicator = ({
 			style={{
 				paddingLeft: level * 8,
 			}}
-			className="border-l hover:border-zinc-400 peer-data-[state=open]:border-zinc-400 border-indicator py-0.5"
+			className="border-l hover:border-zinc-400 peer-data-[state=open]:border-zinc-400 border-indicator py-0.5 group-data-[collapsible=icon]:hidden"
 		>
 			{children}
 		</div>
@@ -128,21 +129,9 @@ const SidebarComponent = ({
 
 export function AppSidebar() {
 	return (
-		<Sidebar>
-			<SidebarHeader>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-							size="lg"
-							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-							asChild
-						>
-							<Link href="/">
-								<img src="https://placehold.co/255x52" />
-							</Link>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
+		<Sidebar collapsible="icon">
+			<SidebarHeader className="group-data-[collapsible=icon]:relative absolute right-0 z-10 hidden lg:block">
+				<SidebarTrigger />
 			</SidebarHeader>
 			<SidebarContent>
 				{sidebar.map((item) => (

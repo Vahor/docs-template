@@ -6,6 +6,12 @@ export default {
 		"./content/**/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/**/**/*.{js,ts,jsx,tsx,mdx}",
 	],
+	safelist: [
+		{
+			pattern: /^grid-cols-(1|2|3|4|5)/,
+			variants: ["md", "lg"],
+		},
+	],
 	theme: {
 		listStyleType: {
 			none: "none",

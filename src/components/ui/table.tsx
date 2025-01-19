@@ -9,7 +9,10 @@ const Table = React.forwardRef<
 	<div className="relative w-full overflow-auto not-prose">
 		<table
 			ref={ref}
-			className={cn("w-full caption-bottom border", className)}
+			className={cn(
+				"w-full caption-bottom border rounded-2xl border-separate overflow-hidden border-spacing-0",
+				className,
+			)}
 			{...props}
 		/>
 	</div>
@@ -28,11 +31,7 @@ const TableBody = React.forwardRef<
 	HTMLTableSectionElement,
 	React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-	<tbody
-		ref={ref}
-		className={cn("[&_tr:last-child]:border-0", className)}
-		{...props}
-	/>
+	<tbody ref={ref} className={className} {...props} />
 ));
 TableBody.displayName = "TableBody";
 
@@ -58,7 +57,7 @@ const TableRow = React.forwardRef<
 	<tr
 		ref={ref}
 		className={cn(
-			"border-b transition-colors hover:bg-gray-100/50 data-[state=selected]:bg-gray-100",
+			"transition-colors hover:bg-gray-100/50 data-[state=selected]:bg-gray-100",
 			className,
 		)}
 		{...props}
@@ -73,7 +72,7 @@ const TableHead = React.forwardRef<
 	<th
 		ref={ref}
 		className={cn(
-			"h-10 px-2 text-left align-middle font-semibold text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] bg-gray-100",
+			"h-10 text-left align-middle font-semibold text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] bg-gray-100 border-s first:border-s-0 px-4",
 			className,
 		)}
 		{...props}
@@ -85,10 +84,11 @@ const TableCell = React.forwardRef<
 	HTMLTableCellElement,
 	React.TdHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
+	// border-b is removed in global.css when tr is last-child
 	<td
 		ref={ref}
 		className={cn(
-			"p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+			"py-2 px-4 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] border-b first:border-s-0 border-s",
 			className,
 		)}
 		{...props}

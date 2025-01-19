@@ -49,28 +49,6 @@ const colors = {
 You can then reuse the colors in your doc for instance you can say hey look at <R>John</R> he's in red, and <G>30</G> is green, and <B>car</B> is blue, and <Y>null</Y> is yellow.
 
 
-**There are also "captions" with color code for each method**
-
-```json title="Response" caption="GET /pet/findByStatus"
-...
-```
-```json title="Response" caption="DELETE /pet/findByStatus"
-...
-```
-
-```json title="Response" caption="POST /pet/findByStatus"
-...
-```
-
-```json title="Response" caption="PATCH /pet/findByStatus"
-...
-```
-
-```json title="Response" caption="PUT /pet/findByStatus"
-...
-```
-
-
 **Even tabs**
 <CodeGroup>
     ```json title="Tab 1"
@@ -90,14 +68,14 @@ You can then reuse the colors in your doc for instance you can say hey look at <
 Or a mix of everything
 
 <CodeGroup title="Request">
-    ```json title="Yey" caption="POST /pet/findByStatus"
+    ```json title="Yey" 
     {
       "name": "John",
       "age": 30,
       "car": null
     }
     ```
-    ```json title="Something else" caption="DELETE /pet/findByStatus"
+    ```json title="Something else" 
     {
       "hash": "1234567890",
     }
@@ -107,29 +85,29 @@ Or a mix of everything
 And with a *lot* of tabs 
 
 <CodeGroup title="Request">
-    ```json title="Yey" caption="POST /pet/findByStatus"
+    ```json title="Yey" 
     {
       "name": "John",
       "age": 30,
       "car": null
     }
     ```
-    ```json title="Something else" caption="DELETE /pet/findByStatus"
+    ```json title="Something else" 
     {
       "hash": "1234567890",
     }
     ```
-    ```json title="Something else 2" caption="DELETE /pet/findByStatus"
+    ```json title="Something else 2"
     {
       "hash": "1234567890",
     }
     ```
-    ```json title="Something else 3" caption="DELETE /pet/findByStatus"
+    ```json title="Something else 3" 
     {
       "hash": "1234567890",
     }
     ```
-    ```json title="Something else 4" caption="DELETE /pet/findByStatus"
+    ```json title="Something else 4" 
     {
       "hash": "1234567890",
     }
@@ -204,7 +182,7 @@ This is a check
 | -------- | -------- | -------- |
 | 1        | 2        | 3        |
 | Some     | Text     | Here     |
-| `401 Unauthorized` | The request requires user authentication. | |
+| `401 Unauthorized` | The request requires user authentication. | > |
 
 
 ### Horizontal rules

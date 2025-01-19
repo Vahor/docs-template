@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import "@/styles/code.css";
-import "@/styles/twoslash.css";
 import { Providers } from "@/app/providers";
 import { AppSidebar } from "@/app/sidebar";
 import { AlgoliaSearchBox } from "@/components/algolia/search-box";
@@ -42,7 +41,7 @@ export default function RootLayout({
 						</div>
 					</header>
 
-					<div className="flex">
+					<div className="lg:flex">
 						<AppSidebar />
 						<SidebarInset>{children}</SidebarInset>
 					</div>

@@ -7,7 +7,6 @@ import {
 	transformerNotationFocus,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
-import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import GithubSlugger from "github-slugger";
 import { h } from "hastscript";
@@ -132,10 +131,6 @@ const highlightPlugin = () => {
 			transformerNotationDiff(),
 			transformerNotationErrorLevel(),
 			transformerNotationFocus(),
-			transformerTwoslash({
-				explicitTrigger: true,
-				renderer: rendererRich(),
-			}),
 		],
 	});
 };

@@ -51,7 +51,7 @@ export const CodeBlock = forwardRef(function CodeBlock(
 			)}
 
 			<div
-				className="block overlow-auto relative [&_code]:pt-4 [&_code]:pb-4 [&_code>span]:px-4 [&_code]:rounded-2xl"
+				className="relative [&_code]:overflow-x-auto [&_code]:py-4 [&_code>span]:px-4 [&_code]:rounded-2xl"
 				style={{ fontVariantLigatures: "none" }}
 			>
 				{!filename && (

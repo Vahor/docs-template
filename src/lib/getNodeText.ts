@@ -3,10 +3,6 @@ export const getNodeText = (node: any): string => {
 	if (node.props?.dangerouslySetInnerHTML) {
 		return getNodeTextFromHtml(node.props.dangerouslySetInnerHTML.__html);
 	}
-	// ignore twoslash nodes
-	if (node.props?.className?.includes("twoslash-popup-container")) {
-		return "";
-	}
 
 	if (["string", "number"].includes(typeof node)) {
 		// Convert number into string

@@ -218,7 +218,7 @@ const Sidebar = React.forwardRef<
 				{/* This is what handles the sidebar gap on desktop */}
 				<div
 					className={cn(
-						"duration-100 relative h-[calc(100svh-theme(spacing.14))] w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
+						"duration-100 relative min-h-[calc(100svh-theme(spacing.14))] w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
 						"group-data-[collapsible=offcanvas]:w-0",
 						"group-data-[side=right]:rotate-180",
 						"group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
@@ -226,7 +226,7 @@ const Sidebar = React.forwardRef<
 				/>
 				<div
 					className={cn(
-						"duration-100 fixed bottom-0 top-14 h-[calc(100svh-3.5rem)] z-10 hidden w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+						"duration-100 fixed bottom-0 top-14 min-h-[calc(100svh-3.5rem)] z-10 hidden w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
 						side === "left"
 							? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
 							: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -312,7 +312,7 @@ const SidebarInset = React.forwardRef<
 		<main
 			ref={ref}
 			className={cn(
-				"relative flex h-[calc(100svh-theme(spacing.14))] flex-1 flex-col bg-background",
+				"relative flex min-h-[calc(100svh-theme(spacing.14))] flex-1 flex-col bg-background",
 				"@container",
 				className,
 			)}
@@ -603,7 +603,7 @@ const SidebarMenuAction = React.forwardRef<
 				"peer-data-[size=lg]/menu-button:top-2.5",
 				"group-data-[collapsible=icon]:hidden",
 				showOnHover &&
-				"group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+					"group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
 				className,
 			)}
 			{...props}

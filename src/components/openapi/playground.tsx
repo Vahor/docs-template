@@ -23,7 +23,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { shiki, shikiOptions } from "@/lib/shiki";
-import { cn } from "@/lib/utils";
 import { Suspense, use, useState } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 
@@ -38,8 +37,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-	server: OpenAPIV3.ServerObject;
-}) {
+		server: OpenAPIV3.ServerObject;
+	}) {
 	const requestBody = (spec.requestBody as OpenAPIV3.RequestBodyObject)
 		?.content?.["application/json"].schema as OpenAPIV3.BaseSchemaObject;
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
@@ -93,7 +92,10 @@ export function OpenapiPlayground({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="space-y-6 h-full relative"
+			>
 				<ParamsPlayground form={form} parameters={parameters} />
 				<Suspense>
 					<BodyPlayground form={form} requestBody={requestBody} />
@@ -200,46 +202,40 @@ function BodyPlayground({
 	const value = form.watch("_body");
 
 	return (
-		<div>
-			<p>Body</p>
-			<CodeBlock
-				filename="Request"
-				data-editing={editing}
-				className="text-white max-h-full group"
-			>
-				{editing ? (
-					<Textarea
-						value={value}
-						cacheMeasurements
-						minRows={3}
-						className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs"
-						autoCorrect="off"
-						spellCheck={false}
-						onChange={(e) => {
-							form.setValue("_body", e.target.value);
-						}}
-					/>
-				) : (
-					<div
-						className="[&_code]:grid [&_span]:whitespace-pre-wrap [&_span]:break-words [&_pre]:rounded-2xl"
-						// biome-ignore lint/security/noDangerouslySetInnerHtml: json
-						dangerouslySetInnerHTML={{
-							__html: highlighter.codeToHtml(value, {
-								theme: shikiOptions.theme,
-								lang: "json",
-							}),
-						}}
-					/>
-				)}
-			</CodeBlock>
+		<CodeBlock filename="Request" className="text-white">
+			{editing ? (
+				<Textarea
+					value={value}
+					cacheMeasurements
+					minRows={3}
+					className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs max-h-[500px] group-data-[fullscreen=true]:max-h-[calc(100svh-theme(spacing.12))]"
+					autoCorrect="off"
+					spellCheck={false}
+					onChange={(e) => {
+						form.setValue("_body", e.target.value);
+					}}
+				/>
+			) : (
+				<div
+					className="[&_code]:grid [&_span]:whitespace-pre-wrap [&_span]:break-words [&_pre]:rounded-2xl"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: json
+					dangerouslySetInnerHTML={{
+						__html: highlighter.codeToHtml(value, {
+							theme: shikiOptions.theme,
+							lang: "json",
+						}),
+					}}
+				/>
+			)}
+
 			<button
 				type="button"
 				onClick={() => {
 					setEditing((prev) => !prev);
 				}}
 			>
-				{editing ? "Hide" : "Show"}
+				{editing ? "Hide" : "Edit"}
 			</button>
-		</div>
+		</CodeBlock>
 	);
 }

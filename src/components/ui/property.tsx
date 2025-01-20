@@ -15,9 +15,7 @@ export type PropertyProps = {
 export function Properties({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="my-6">
-			<ul className="m-0 max-w-[calc(theme(maxWidth.lg)-theme(spacing.8))] list-none divide-y divide-zinc-900/5 p-0 dark:divide-white/5">
-				{children}
-			</ul>
+			<ul className="list-none">{children}</ul>
 		</div>
 	);
 }
@@ -37,11 +35,7 @@ export function Property({
 	}
 
 	return (
-		<li
-			className={clsx(
-				"pb-3 mb-4 border-b border-zinc-100 dark:border-zinc-800",
-			)}
-		>
+		<li className={clsx("pb-3 mb-4")}>
 			<div className="flex font-mono text-sm">
 				{name && (
 					<div className="py-0.5 flex-1 space-x-2 truncate">

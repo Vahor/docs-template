@@ -55,10 +55,11 @@ export const CodeGroup = forwardRef(function CodeGroup(
 			defaultValue="0"
 			ref={ref}
 			className={clsx(
-				"not-prose group code-group",
+				"not-prose group/code-group",
 				"rounded-2xl bg-zinc-800",
 				className,
 			)}
+			data-fullscreen
 			{...props}
 		>
 			<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl px-3 min-h-12 gap-6">

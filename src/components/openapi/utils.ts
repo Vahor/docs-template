@@ -20,8 +20,12 @@ export const generateFromSchema = (
 			if (!items) return [];
 			return [generateFromSchema(items)];
 		}
+		case "number($float)":
+		case "number":
 		case "integer":
 			return schema.example ?? 0;
+		case "map":
+			return {};
 		case "string":
 			return schema.example ?? "string";
 		default:

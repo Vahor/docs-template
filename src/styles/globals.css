@@ -122,4 +122,10 @@
 	tr:last-child td {
 		@apply border-b-0;
 	}
+	.sticky-but-not-when-fullscreen-idk {
+		@apply sticky top-16 self-start;
+	}
+	.sticky-but-not-when-fullscreen-idk:has(*[data-fullscreen="true"]) {
+		@apply relative;
+	}
 }

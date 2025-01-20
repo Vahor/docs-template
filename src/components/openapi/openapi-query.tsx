@@ -21,8 +21,7 @@ export function OpenapiQuery({ path, method }: OpenapiQueryProps) {
 	const openapiSpec = getOpenapiSpec({ path, method });
 
 	return (
-		<div>
-			<p>Url : {path}</p>
+		<div className="sticky-but-not-when-fullscreen-idk">
 			<OpenapiPlayground
 				spec={openapiSpec}
 				path={path}

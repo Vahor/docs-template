@@ -107,6 +107,17 @@ export default {
 			],
 		},
 		extend: {
+			containers: {
+				"2xs": "28rem",
+				xs: "32rem",
+				sm: "36rem",
+				md: "42rem",
+				lg: "48rem",
+				xl: "56rem",
+				"2xl": "64rem",
+				"3xl": "72rem",
+				"4xl": "80rem",
+			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
@@ -188,5 +199,9 @@ export default {
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+	plugins: [
+		require("tailwindcss-animate"),
+		require("@tailwindcss/typography"),
+		require("@tailwindcss/container-queries"),
+	],
 } satisfies Config;

@@ -25,6 +25,7 @@
 		"@radix-ui/react-tabs": "^1.1.2",
 		"@radix-ui/react-tooltip": "^1.1.6",
 		"@readme/openapi-parser": "^2.6.0",
+		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/typography": "^0.5.16",
 		"algoliasearch": "^5.19.0",
 		"class-variance-authority": "^0.7.1",

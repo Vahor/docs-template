@@ -117,7 +117,7 @@
 		@apply border-primary;
 	}
 	code {
-		@apply relative bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg leading-8 text-white text-xs;
+		@apply relative bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg text-white text-xs;
 	}
 	tr:last-child td {
 		@apply border-b-0;

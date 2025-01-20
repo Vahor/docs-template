@@ -38,8 +38,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-		server: OpenAPIV3.ServerObject;
-	}) {
+	server: OpenAPIV3.ServerObject;
+}) {
 	const requestBody = (spec.requestBody as OpenAPIV3.RequestBodyObject)
 		?.content?.["application/json"].schema as OpenAPIV3.BaseSchemaObject;
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
@@ -212,7 +212,7 @@ function BodyPlayground({
 						value={value}
 						cacheMeasurements
 						minRows={3}
-						className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs leading-8"
+						className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs"
 						autoCorrect="off"
 						spellCheck={false}
 						onChange={(e) => {

@@ -46,7 +46,7 @@ export const CodeBlock = function CodeBlock({
 				"not-prose relative my-3 rounded-2xl bg-zinc-900",
 				"group/my-0",
 				"group",
-				"data-[fullscreen=true]:fixed data-[fullscreen=true]:inset-0 data-[fullscreen=true]:z-50 data-[fullscreen=true]:max-h-svh data-[fullscreen=true]:my-0 data-[fullscreen=true]:rounded-none",
+				"data-[fullscreen=true]:fixed data-[fullscreen=true]:inset-0 data-[fullscreen=true]:z-50 data-[fullscreen=true]:max-h-svh data-[fullscreen=true]:!my-0 data-[fullscreen=true]:rounded-none",
 				className,
 			)}
 			ref={wrapperRef}

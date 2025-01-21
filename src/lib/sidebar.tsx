@@ -1,5 +1,5 @@
 import { Tag } from "@/components/ui/tag";
-import { allChangelogs, allApis } from "contentlayer/generated";
+import { allApis, allChangelogs } from "contentlayer/generated";
 
 export interface SidebarItem {
 	title: string;

@@ -15,8 +15,6 @@ export function FullScreenButton({
 	wrapperRef,
 	...props
 }: FullScreenButtonProps) {
-	console.log(wrapperRef);
-
 	const toggleFullScreen = () => {
 		const wrapper = wrapperRef.current;
 		if (!wrapper) return;

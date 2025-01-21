@@ -1,7 +1,28 @@
 import type { IJsonSchema, OpenAPIV3 } from "@/lib/openapi";
 
+type Example = Record<string, unknown> | unknown[] | string | number | null;
+
+export interface Examples {
+	schema: Example;
+	[key: string]: Example;
+}
+
+export const generateRequestsFromSchema = (
+	schema: OpenAPIV3.OperationObject,
+) => {
+	const requestBody = schema.requestBody as OpenAPIV3.RequestBodyObject;
+	const content = requestBody?.content?.["application/json"];
+	return {
+		...Object.entries(content.examples ?? {}).reduce((acc, [key, example]) => {
+			acc[key] = (example as OpenAPIV3.ExampleObject).value;
+			return acc;
+		}, {} as Examples),
+		schema: generateFromSchema(content.schema),
+	};
+};
+
 export const generateFromSchema = (
-	schema: OpenAPIV3.BaseSchemaObject & IJsonSchema,
+	schema: (OpenAPIV3.BaseSchemaObject & IJsonSchema) | undefined,
 ): Record<string, unknown> | unknown[] | string | number | null => {
 	if (!schema || !schema.type) return null;
 

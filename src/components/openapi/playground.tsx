@@ -2,7 +2,10 @@
 
 import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
 import { PlaygroundResponse } from "@/components/openapi/response";
-import { generateFromSchema } from "@/components/openapi/utils";
+import {
+	type Examples,
+	generateRequestsFromSchema,
+} from "@/components/openapi/utils";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import {
@@ -13,6 +16,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { NativeSelect } from "@/components/ui/native-select";
 import {
 	Select,
 	SelectContent,
@@ -39,19 +43,17 @@ export function OpenapiPlayground({
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
 		server: OpenAPIV3.ServerObject;
 	}) {
-	const requestBody = (spec.requestBody as OpenAPIV3.RequestBodyObject)
-		?.content?.["application/json"].schema as OpenAPIV3.BaseSchemaObject;
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
-	const requestDefaultValues = generateFromSchema(requestBody);
+	const bodyExamples = generateRequestsFromSchema(spec);
 	const [loading, setLoading] = useState(false);
 	const [headers, setHeaders] = useState<Headers | undefined>(undefined);
 	const [response, setResponse] = useState<ArrayBuffer | Error | null>(null);
 
+	const firstExample = Object.values(bodyExamples)[0];
+
 	const form = useForm<FormType>({
 		defaultValues: {
-			_body: requestDefaultValues
-				? JSON.stringify(requestDefaultValues, null, 2)
-				: undefined,
+			_body: JSON.stringify(firstExample, null, 2),
 			...parameters.reduce(
 				(acc, param) => {
 					acc[param.name] = (param.schema as OpenAPIV3.SchemaObject).default;
@@ -98,7 +100,7 @@ export function OpenapiPlayground({
 			>
 				<ParamsPlayground form={form} parameters={parameters} />
 				<Suspense>
-					<BodyPlayground form={form} requestBody={requestBody} />
+					<BodyPlayground form={form} examples={bodyExamples} />
 				</Suspense>
 				<Button type="submit" disabled={loading}>
 					Submit
@@ -192,11 +194,9 @@ function ParamsPlayground({
 }
 
 function BodyPlayground({
-	requestBody,
 	form,
-}: { requestBody: OpenAPIV3.BaseSchemaObject; form: UseFormReturn<FormType> }) {
-	if (!requestBody) return null;
-
+	examples,
+}: { form: UseFormReturn<FormType>; examples: Examples }) {
 	const highlighter = use(shiki);
 	const [editing, setEditing] = useState(false);
 	const value = form.watch("_body");
@@ -228,14 +228,29 @@ function BodyPlayground({
 				/>
 			)}
 
-			<button
-				type="button"
-				onClick={() => {
-					setEditing((prev) => !prev);
-				}}
-			>
-				{editing ? "Hide" : "Edit"}
-			</button>
+			<div className="flex items-center justify-between gap-4 w-full">
+				<button
+					type="button"
+					onClick={() => {
+						setEditing((prev) => !prev);
+					}}
+				>
+					{editing ? "Hide" : "Edit"}
+				</button>
+				<NativeSelect
+					className="border-zinc-800 basis-2/3 h-6 py-1 text-sm overflow-hidden truncate"
+					onChange={(e) => {
+						const example = examples[e.target.value];
+						form.setValue("_body", JSON.stringify(example, null, 2));
+					}}
+				>
+					{Object.entries(examples).map(([key, example]) => (
+						<option key={key} value={key}>
+							{key === "schema" ? "Schema" : key}
+						</option>
+					))}
+				</NativeSelect>
+			</div>
 		</CodeBlock>
 	);
 }

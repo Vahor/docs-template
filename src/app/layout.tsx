@@ -25,7 +25,7 @@ export default function RootLayout({
 			</head>
 			<body>
 				<Providers>
-					<header className="flex h-14 sticky top-0 shrink-0 items-center gap-2 border-b border-border/30 px-4 bg-background z-10">
+					<header className="flex h-14 sticky top-0 shrink-0 items-center gap-2 border-b border-border/30 px-4 bg-background z-20">
 						<div className="flex w-full items-center gap-2">
 							<div className="basis-1/4 justify-start">
 								<img

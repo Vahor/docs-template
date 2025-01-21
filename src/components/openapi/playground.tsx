@@ -56,6 +56,7 @@ export function OpenapiPlayground({
 			_body: JSON.stringify(firstExample, null, 2),
 			...parameters.reduce(
 				(acc, param) => {
+					console.log(param);
 					acc[param.name] = (param.schema as OpenAPIV3.SchemaObject).default;
 					return acc;
 				},
@@ -119,10 +120,12 @@ const PlaygroundSelect = ({
 	field,
 	onChange,
 	defaultValue,
+	values,
 }: {
 	field: OpenAPIV3.ParameterObject;
 	onChange: (value: string) => void;
 	defaultValue: string;
+	values?: string[];
 }) => {
 	const schema = field.schema as OpenAPIV3.SchemaObject;
 	return (
@@ -135,7 +138,7 @@ const PlaygroundSelect = ({
 				<SelectValue placeholder="Select a value" />
 			</SelectTrigger>
 			<SelectContent>
-				{schema.enum?.map((value) => (
+				{(values ?? schema.enum)?.map((value) => (
 					<SelectItem key={value} value={value}>
 						{value}
 					</SelectItem>
@@ -169,7 +172,7 @@ function ParamsPlayground({
 									<p>{schema.type}</p>
 								</div>
 								<div className="col-span-2">
-									<p>{param.description}</p>
+									<p>{schema.description}</p>
 									<p>Default: {schema.default}</p>
 									<FormControl>
 										{schema.type === "array" || schema.enum?.length ? (
@@ -177,6 +180,13 @@ function ParamsPlayground({
 												field={param}
 												onChange={field.onChange}
 												defaultValue={field.value as string}
+											/>
+										) : schema.type === "boolean" ? (
+											<PlaygroundSelect
+												field={param}
+												onChange={field.onChange}
+												defaultValue={field.value as string}
+												values={["true", "false"]}
 											/>
 										) : (
 											<p>todo</p>

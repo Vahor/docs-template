@@ -39,12 +39,24 @@ export const generateFromSchema = (
 		case "array": {
 			const items = schema.items as OpenAPIV3.BaseSchemaObject;
 			if (!items) return [];
-			return [generateFromSchema(items)];
+			return generateFromSchema(items);
 		}
 		case "number($float)":
 		case "number":
-		case "integer":
-			return schema.example ?? 0;
+		case "integer": {
+			if (schema.example) {
+				return schema.example;
+			}
+			if (schema.maximum !== undefined && schema.minimum !== undefined) {
+				return (schema.maximum - schema.minimum) / 2;
+			}
+
+			if (schema.type === "number($float)") {
+				return 0.5;
+			}
+
+			return 0;
+		}
 		case "map":
 			return {};
 		case "string":

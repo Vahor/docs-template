@@ -15,7 +15,7 @@ export type PropertyProps = {
 export function Properties({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="my-6">
-			<ul className="list-none">{children}</ul>
+			<ul className="list-none not-prose">{children}</ul>
 		</div>
 	);
 }

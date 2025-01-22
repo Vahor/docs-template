@@ -39,7 +39,11 @@ export const generateFromSchema = (
 		case "array": {
 			const items = schema.items as OpenAPIV3.BaseSchemaObject;
 			if (!items) return [];
-			return generateFromSchema(items);
+			const value = generateFromSchema(items);
+			if (Array.isArray(value)) {
+				return value;
+			}
+			return [value];
 		}
 		case "number($float)":
 		case "number":
@@ -62,6 +66,6 @@ export const generateFromSchema = (
 		case "string":
 			return schema.example ?? "string";
 		default:
-			return null;
+			return schema.example ?? null;
 	}
 };

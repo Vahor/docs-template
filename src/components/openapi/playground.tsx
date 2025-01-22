@@ -17,6 +17,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Properties, Property } from "@/components/ui/property";
 import {
 	Select,
 	SelectContent,
@@ -41,8 +42,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-		server: OpenAPIV3.ServerObject;
-	}) {
+	server: OpenAPIV3.ServerObject;
+}) {
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
 	const bodyExamples = generateRequestsFromSchema(spec);
 	const [loading, setLoading] = useState(false);
@@ -56,7 +57,6 @@ export function OpenapiPlayground({
 			_body: JSON.stringify(firstExample, null, 2),
 			...parameters.reduce(
 				(acc, param) => {
-					console.log(param);
 					acc[param.name] = (param.schema as OpenAPIV3.SchemaObject).default;
 					return acc;
 				},
@@ -155,7 +155,7 @@ function ParamsPlayground({
 	if (!parameters || !parameters.length) return null;
 
 	return (
-		<div>
+		<Properties>
 			{parameters.map((param) => {
 				const schema = param.schema as OpenAPIV3.SchemaObject;
 				const required = param.required ?? false;
@@ -166,14 +166,13 @@ function ParamsPlayground({
 						control={form.control}
 						name={param.name}
 						render={({ field }) => (
-							<FormItem className="grid grid-cols-3">
-								<div className="col-span-1">
-									<FormLabel required={required}>{field.name}</FormLabel>
-									<p>{schema.type}</p>
-								</div>
-								<div className="col-span-2">
-									<p>{schema.description}</p>
-									<p>Default: {schema.default}</p>
+							<FormItem>
+								<Property
+									key={param.name}
+									name={param.name}
+									type={schema.type}
+									required={param.required}
+								>
 									<FormControl>
 										{schema.type === "array" || schema.enum?.length ? (
 											<PlaygroundSelect
@@ -193,13 +192,13 @@ function ParamsPlayground({
 										)}
 									</FormControl>
 									<FormMessage />
-								</div>
+								</Property>
 							</FormItem>
 						)}
 					/>
 				);
 			})}
-		</div>
+		</Properties>
 	);
 }
 

@@ -1,18 +1,12 @@
+import { getOpenapiSpec } from "@/components/openapi/utils";
+import { SimpleMdx } from "@/components/simple-mdx";
 import { Properties, Property } from "@/components/ui/property";
-import { type IJsonSchema, type OpenAPIV3, openapi } from "@/lib/openapi";
+import type { IJsonSchema, OpenAPIV3 } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
 	path: string;
 	method: OpenAPIV3.HttpMethods;
 }
-
-const getOpenapiSpec = ({ path, method }: OpenapiQueryProps) => {
-	if (!openapi.paths) throw new Error("No OpenAPI paths");
-	if (!openapi.servers) throw new Error("No OpenAPI servers");
-	const openapiSpec = openapi.paths[path]?.[method];
-	if (!openapiSpec) throw new Error(`No OpenAPI spec for ${path} ${method}`);
-	return openapiSpec;
-};
 
 export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 	const openapiSpec = getOpenapiSpec({ path, method });
@@ -23,10 +17,6 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 
 	return (
 		<div>
-			<p>Url : {path}</p>
-			<p>Method : {method}</p>
-			<p>Description : {openapiSpec.description}</p>
-			<br />
 			<div>
 				<p>Parameters</p>
 				<Properties>
@@ -41,7 +31,7 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 								required={param.required}
 								values={schema.enum}
 							>
-								{param.description}
+								<SimpleMdx markdown={param.description} />
 							</Property>
 						);
 					})}
@@ -60,7 +50,7 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 								defaultValue={schema.default}
 								values={schema.enum}
 							>
-								{value.description}
+								<SimpleMdx markdown={value.description} />
 							</Property>
 						);
 					})}

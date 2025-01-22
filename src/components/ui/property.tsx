@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { clsx } from "clsx";
 
 export type PropertyProps = {
@@ -34,37 +35,44 @@ export function Property({
 		return null;
 	}
 
+	const defaultValueStr = Array.isArray(defaultValue)
+		? `[${defaultValue.join(", ")}]`
+		: defaultValue;
+
 	return (
 		<li className={clsx("pb-3 mb-4")}>
 			<div className="flex font-mono text-sm">
-				{name && (
-					<div className="py-0.5 flex-1 space-x-2 truncate">
-						<code>{name}</code>
-						{required && (
-							<span className="text-slate-500 dark:text-slate-300">
-								Required
-							</span>
-						)}
-					</div>
+				<div className="py-0.5 flex-1 space-x-2 truncate">
+					<code data-variant="light">{name}</code>
+					{type && (
+						<span className="text-slate-600 dark:text-slate-300">{type}</span>
+					)}
+				</div>
+				{required && (
+					<Badge variant="primary" className="text-xs">
+						Required
+					</Badge>
 				)}
-				{type && (
-					<div className="text-slate-600 dark:text-slate-300">{type}</div>
+				{deprecated && (
+					<Badge variant="destructive" className="text-xs">
+						Deprecated
+					</Badge>
 				)}
 			</div>
-			<p className="mt-2">
+			<div className="mt-2">
 				{children}
-				{defaultValue && (
+				{defaultValueStr != null && (
 					<span className="text-slate-500 dark:text-slate-300 block">
-						Default: {defaultValue}
+						Default: {defaultValueStr}
 					</span>
 				)}
 
-				{values && (
+				{values != null && (
 					<span className="text-slate-500 dark:text-slate-300 block">
 						Values: {values.join(", ")}
 					</span>
 				)}
-			</p>
+			</div>
 		</li>
 	);
 }

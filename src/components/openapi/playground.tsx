@@ -5,7 +5,7 @@ import { PlaygroundResponse } from "@/components/openapi/response";
 import {
 	type Examples,
 	generateRequestsFromSchema,
-} from "@/components/openapi/utils";
+} from "@/components/openapi/example";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import {
@@ -13,7 +13,6 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -158,7 +157,6 @@ function ParamsPlayground({
 		<Properties>
 			{parameters.map((param) => {
 				const schema = param.schema as OpenAPIV3.SchemaObject;
-				const required = param.required ?? false;
 
 				return (
 					<FormField
@@ -226,7 +224,7 @@ function BodyPlayground({
 				/>
 			) : (
 				<div
-					className="[&_code]:grid [&_span]:whitespace-pre-wrap [&_span]:break-words [&_pre]:rounded-2xl"
+					className="[&_code]:grid [&_span]:break-words [&_pre]:rounded-2xl"
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 					dangerouslySetInnerHTML={{
 						__html: highlighter.codeToHtml(value, {
@@ -253,7 +251,7 @@ function BodyPlayground({
 						form.setValue("_body", JSON.stringify(example, null, 2));
 					}}
 				>
-					{Object.entries(examples).map(([key, example]) => (
+					{Object.keys(examples).map((key) => (
 						<option key={key} value={key}>
 							{key === "schema" ? "Schema" : key}
 						</option>

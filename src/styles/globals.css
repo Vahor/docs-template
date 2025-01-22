@@ -116,8 +116,11 @@
 	.border-indicator:has(li a[data-active="true"]) {
 		@apply border-primary;
 	}
-	code {
+	code:not([data-variant="light"]) {
 		@apply relative bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg text-white text-xs;
+	}
+	code {
+		@apply relative font-semibold;
 	}
 	tr:last-child td {
 		@apply border-b-0;

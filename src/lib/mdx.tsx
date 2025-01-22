@@ -1,3 +1,4 @@
+import { OpenapiLayout } from "@/components/openapi/openapi-layout";
 import { OpenapiQuery } from "@/components/openapi/openapi-query";
 import { OpenapiSchema } from "@/components/openapi/openapi-schema";
 import {
@@ -9,6 +10,7 @@ import {
 import { Check, Info, Note, Tip, Warning } from "@/components/ui/callout";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import { CodeGroup } from "@/components/ui/code/code-group";
+import { Col } from "@/components/ui/col";
 import {
 	Table,
 	TableBody,
@@ -34,14 +36,6 @@ const MarkColor: React.FC<{ children: string; color: string }> = ({
 				{children}
 			</mark>
 		</code>
-	);
-};
-
-const Col: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	return (
-		<div className="grid grid-cols-1 gap-4 @lg:gap-8 @xl:grid-cols-2 max-w-full mx-0 relative">
-			{children}
-		</div>
 	);
 };
 
@@ -105,6 +99,7 @@ const mdxComponents: MDXComponents = {
 
 	Col,
 
+	OpenapiLayout: OpenapiLayout,
 	OpenapiQuery: OpenapiQuery,
 	OpenapiSchema: OpenapiSchema,
 	CodeGroup: CodeGroup,

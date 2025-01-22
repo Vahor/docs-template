@@ -57,12 +57,8 @@ export default async function Page(props: PagePropsSlug) {
 			/>
 			<BreadcrumbResponsive items={breadcrumbs} />
 
-			<article className="mt-8 text-pretty prose">
-				<div className="space-y-4 text-left">
-					<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
-					<p>{page.dateModified}</p>
-					<p>{page.description}</p>
-				</div>
+			<article className="mt-8 text-pretty prose space-y-4">
+				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
 
 				<Mdx code={page.body.code} />
 			</article>

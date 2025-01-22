@@ -65,7 +65,7 @@ export const CodeBlock = function CodeBlock({
 			{header && <CodeHeader>{header}</CodeHeader>}
 
 			<div
-				className="relative [&_code]:max-h-[500px] [&_code]:overflow-y-auto [&_code]:py-4 [&_code>span]:px-4 [&_code]:rounded-2xl group-data-[fullscreen=true]:[&_code]:max-h-[calc(100svh-theme(spacing.12))]"
+				className="relative [&_code]:max-h-[500px] [&_code]:overflow-auto [&_code]:py-4 [&_code>span]:px-4 [&_code]:rounded-2xl group-data-[fullscreen=true]:[&_code]:max-h-[calc(100svh-theme(spacing.12))]"
 				style={{ fontVariantLigatures: "none" }}
 			>
 				{!filename && (

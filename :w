@@ -1,0 +1,9 @@
+---
+title: Download
+description: Nice description
+method: post
+---
+
+# Title
+
+<OpenapiLayout path="/api/2.0/analyze/download" method="post" />

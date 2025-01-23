@@ -3,7 +3,10 @@ import { createHighlighterCore } from "shiki/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 export const shikiOptions = {
-	theme: "aurora-x",
+	theme: {
+		dark: "aurora-x",
+		light: "github-light",
+	},
 	keepBackground: false,
 	defaultLang: "plaintext",
 } satisfies Options;

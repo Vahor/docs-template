@@ -1,5 +1,4 @@
 import { getOpenapiSpec } from "@/components/openapi/utils";
-import { SimpleMdx } from "@/components/simple-mdx";
 import { Properties, Property } from "@/components/ui/property";
 import type { IJsonSchema, OpenAPIV3 } from "@/lib/openapi";
 
@@ -15,6 +14,8 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 	const parameters = (openapiSpec.parameters ??
 		[]) as OpenAPIV3.ParameterObject[];
 
+	const requiredParameters = parameters.filter((p) => p.required);
+
 	return (
 		<div>
 			<div>
@@ -22,17 +23,15 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 				<Properties>
 					{parameters.map((param) => {
 						const schema = param.schema as OpenAPIV3.SchemaObject;
+						const isRequired = requiredParameters.includes(param);
 						return (
+							// @ts-expect-error we are using a custom type
 							<Property
 								key={param.name}
 								name={param.name}
-								type={schema.type}
-								defaultValue={schema.default}
-								required={param.required}
-								values={schema.enum}
-							>
-								<SimpleMdx markdown={param.description} />
-							</Property>
+								{...schema}
+								required={isRequired}
+							/>
 						);
 					})}
 				</Properties>
@@ -42,16 +41,15 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 				<Properties>
 					{Object.entries(requestBody?.properties ?? {}).map(([key, value]) => {
 						const schema = value as OpenAPIV3.SchemaObject;
+						const isRequired = requestBody.required?.includes(key);
 						return (
+							// @ts-expect-error we are using a custom type
 							<Property
 								key={key}
 								name={key}
-								type={schema.type}
-								defaultValue={schema.default}
-								values={schema.enum}
-							>
-								<SimpleMdx markdown={value.description} />
-							</Property>
+								{...schema}
+								required={isRequired}
+							/>
 						);
 					})}
 				</Properties>

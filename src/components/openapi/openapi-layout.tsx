@@ -15,7 +15,7 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 		<div>
 			<div className="space-x-2">
 				<Tag>{method}</Tag>
-				<code data-variant="light">{path}</code>
+				<code data-language="plaintext">{path}</code>
 			</div>
 			{children}
 			<Col>

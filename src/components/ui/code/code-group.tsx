@@ -26,13 +26,6 @@ export type CodeGroupPropsBase = {
 export type CodeGroupProps = CodeGroupPropsBase &
 	Omit<ComponentPropsWithoutRef<"div">, keyof CodeGroupPropsBase>;
 
-/**
- * Group multiple code blocks into a tabbed UI.
- * Uses CodeBlocks as children but does not render them directly. Instead,
- * CodeGroup extracts the props and renders CodeBlock's children.
- *
- * @param {CodeBlock[]} - children
- */
 export const CodeGroup = forwardRef(function CodeGroup(
 	{ children, className, title, ...props }: CodeGroupProps,
 	ref: ForwardedRef<HTMLDivElement> | undefined,
@@ -41,7 +34,6 @@ export const CodeGroup = forwardRef(function CodeGroup(
 		return null;
 	}
 	if (!Array.isArray(children)) {
-		// Allow looping over a single child
 		children = [children];
 	}
 	if (children.length === 0) {
@@ -52,6 +44,7 @@ export const CodeGroup = forwardRef(function CodeGroup(
 	>;
 	return (
 		<Tabs
+			// @ts-expect-error ts is wrong
 			defaultValue="0"
 			ref={ref}
 			className={clsx(
@@ -62,7 +55,7 @@ export const CodeGroup = forwardRef(function CodeGroup(
 			data-fullscreen
 			{...props}
 		>
-			<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl px-3 min-h-12 gap-6">
+			<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl px-3 gap-6 h-11">
 				{title && (
 					<div className="mr-auto text-xs font-semibold text-white shrink-0">
 						{title}
@@ -70,7 +63,7 @@ export const CodeGroup = forwardRef(function CodeGroup(
 				)}
 				<TabsList
 					className={cn(
-						"gap-3 bg-transparent h-max pl-1 p-0 relative overflow-x-auto overflow-y-visible",
+						"pl-1 p-0 relative overflow-x-auto overflow-y-visible h-full",
 						!title && "justify-start",
 					)}
 				>
@@ -101,7 +94,7 @@ export const CodeGroup = forwardRef(function CodeGroup(
 					<TabsContent
 						key={title}
 						value={String(tabIndex)}
-						className="mt-0 [&>*]:rounded-t-none"
+						className="mt-0 [&>*]:rounded-t-none [&>*]:mt-0"
 					>
 						<CodeBlock>{renderChildren}</CodeBlock>
 					</TabsContent>

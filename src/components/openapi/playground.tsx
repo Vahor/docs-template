@@ -1,11 +1,11 @@
 "use client";
 
-import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
-import { PlaygroundResponse } from "@/components/openapi/response";
 import {
 	type Examples,
 	generateRequestsFromSchema,
 } from "@/components/openapi/example";
+import type { OpenapiQueryProps } from "@/components/openapi/openapi-query";
+import { PlaygroundResponse } from "@/components/openapi/response";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import {
@@ -16,7 +16,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { NativeSelect } from "@/components/ui/native-select";
-import { Properties, Property } from "@/components/ui/property";
 import {
 	Select,
 	SelectContent,
@@ -41,8 +40,8 @@ export function OpenapiPlayground({
 	method,
 	server,
 }: { spec: OpenAPIV3.OperationObject } & OpenapiQueryProps & {
-	server: OpenAPIV3.ServerObject;
-}) {
+		server: OpenAPIV3.ServerObject;
+	}) {
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
 	const bodyExamples = generateRequestsFromSchema(spec);
 	const [loading, setLoading] = useState(false);
@@ -154,7 +153,7 @@ function ParamsPlayground({
 	if (!parameters || !parameters.length) return null;
 
 	return (
-		<Properties>
+		<ul>
 			{parameters.map((param) => {
 				const schema = param.schema as OpenAPIV3.SchemaObject;
 
@@ -165,12 +164,7 @@ function ParamsPlayground({
 						name={param.name}
 						render={({ field }) => (
 							<FormItem>
-								<Property
-									key={param.name}
-									name={param.name}
-									type={schema.type}
-									required={param.required}
-								>
+								<div key={param.name}>
 									<FormControl>
 										{schema.type === "array" || schema.enum?.length ? (
 											<PlaygroundSelect
@@ -190,13 +184,13 @@ function ParamsPlayground({
 										)}
 									</FormControl>
 									<FormMessage />
-								</Property>
+								</div>
 							</FormItem>
 						)}
 					/>
 				);
 			})}
-		</Properties>
+		</ul>
 	);
 }
 
@@ -228,7 +222,7 @@ function BodyPlayground({
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 					dangerouslySetInnerHTML={{
 						__html: highlighter.codeToHtml(value, {
-							theme: shikiOptions.theme,
+							theme: shikiOptions.theme.dark,
 							lang: "json",
 						}),
 					}}

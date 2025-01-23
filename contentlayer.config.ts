@@ -20,6 +20,7 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import type { Node } from "unist";
 import { visit } from "unist-util-visit";
+import type { VFile } from "vfile";
 
 const slug = (path: string) => {
 	const withoutPrefix = path.split("/").splice(-1)[0];
@@ -158,7 +159,7 @@ function addCalloutComponent() {
 
 function includeMarkdown() {
 	// Adapted from https://github.com/hashicorp/remark-plugins/blob/main/plugins/include-markdown/index.js
-	return (tree: Node, file: any) => {
+	return (tree: Node, file: VFile) => {
 		visit(tree, "paragraph", (node) => {
 			const includeMatch = node.children[0].value?.match(
 				/^@include\s['"](.*)['"]$/,

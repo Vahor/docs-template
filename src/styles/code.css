@@ -114,7 +114,6 @@ code[data-theme*=" "],
 code[data-theme*=" "] span,
 pre[data-theme*=" "] {
 	color: var(--shiki-light);
-	background-color: var(--shiki-light-bg);
 }
 
 code .diff.remove {
@@ -133,12 +132,15 @@ code .diff.add::before {
 	content: "+";
 }
 
+/* light/dark */
 .dark {
 	code[data-theme*=" "],
 	code[data-theme*=" "] span,
 	pre[data-theme*=" "] {
 		color: var(--shiki-dark);
-		background-color: var(--shiki-dark-bg);
+		/* Optional, if you also want font styles */
+		font-style: var(--shiki-dark-font-style);
+		text-decoration: var(--shiki-dark-text-decoration);
 	}
 }
 

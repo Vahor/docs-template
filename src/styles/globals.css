@@ -116,11 +116,18 @@
 	.border-indicator:has(li a[data-active="true"]) {
 		@apply border-primary;
 	}
-	code:not([data-variant="light"]) {
-		@apply relative bg-zinc-900 dark:bg-zinc-900 p-1.5 rounded-lg text-white text-xs;
+	code:not([data-code-block] code, code[data-language="plaintext"]) {
+		@apply px-1.5 py-px border rounded-md;
 	}
 	code {
-		@apply relative font-semibold;
+		@apply relative font-semibold bg-transparent p-0 text-inherit text-[length:inherit];
+	}
+
+	[data-code-block] code {
+		@apply py-2 rounded-2xl overflow-auto max-h-[500px] text-xs font-medium;
+		> span {
+			@apply px-4;
+		}
 	}
 	tr:last-child td {
 		@apply border-b-0;

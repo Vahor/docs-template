@@ -1,6 +1,5 @@
 "use client";
 
-import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import {
 	Command,
 	CommandEmpty,
@@ -58,18 +57,22 @@ const SearchResult = ({
 				setOpen(false);
 			}}
 		>
-			<div
-				id={`${id}-title`}
-				className="font-medium text-sm block overflow-ellipsis whitespace-nowrap"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
-				dangerouslySetInnerHTML={{ __html: title }}
-			/>
-			<div
-				id={`${id}-description`}
-				className="overflow-ellipsis whitespace-nowrap text-xs overflow-hidden text-muted-foreground"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
-				dangerouslySetInnerHTML={{ __html: description }}
-			/>
+			{title && (
+				<div
+					id={`${id}-title`}
+					className="font-medium text-sm block overflow-ellipsis whitespace-nowrap"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+					dangerouslySetInnerHTML={{ __html: title }}
+				/>
+			)}
+			{description && (
+				<div
+					id={`${id}-description`}
+					className="overflow-ellipsis whitespace-nowrap text-xs overflow-hidden text-muted-foreground"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: should be safe
+					dangerouslySetInnerHTML={{ __html: description }}
+				/>
+			)}
 			<div className="text-2xs text-muted-foreground">
 				{breadcrumbsToString(breadcrumbs)}
 			</div>
@@ -119,7 +122,7 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
 		};
 		document.addEventListener("keydown", down);
 		return () => document.removeEventListener("keydown", down);
-	}, [open]);
+	}, [open, setOpen]);
 
 	return (
 		<div className={className}>

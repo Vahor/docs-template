@@ -35,6 +35,7 @@ export default function RootLayout({
 						<div className="flex w-full items-center gap-2">
 							<div className="basis-1/4 justify-start">
 								<img
+									alt="logo"
 									src="https://placehold.co/180x52"
 									className="hidden lg:block"
 								/>

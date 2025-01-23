@@ -29,7 +29,7 @@ export function CopyToClipboardButton({
 				{...props}
 			>
 				<svg
-					className="transform active:scale-95 transition-transform duration-100 size-5"
+					className="transform active:scale-95 transition-transform duration-100 size-[18px]"
 					data-active={hasCopied}
 					role="img"
 					aria-label="Clipboard icon"

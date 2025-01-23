@@ -8,7 +8,7 @@ interface SimpleMdx {
 
 const components: MDXRemoteProps["components"] = {
 	code: (props) => {
-		return <code {...props} data-variant="light" />;
+		return <code {...props} data-language="plaintext" />;
 	},
 };
 

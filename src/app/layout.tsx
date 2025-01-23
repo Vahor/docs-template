@@ -6,6 +6,12 @@ import { AppSidebar } from "@/app/sidebar";
 import { AlgoliaSearchBox } from "@/components/algolia/search-box";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { MenuIcon } from "lucide-react";
+import { Geist_Mono } from "next/font/google";
+
+const mono = Geist_Mono({
+	subsets: ["latin"],
+	variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -18,7 +24,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning className={`${mono.variable}`}>
 			<head>
 				<script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
 				<meta name="algolia-site-verification" content="B011E83821BA687B" />

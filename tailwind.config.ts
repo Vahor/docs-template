@@ -107,6 +107,9 @@ export default {
 			],
 		},
 		extend: {
+			fontFamily: {
+				mono: ["var(--font-mono)"],
+			},
 			containers: {
 				"2xs": "28rem",
 				xs: "32rem",

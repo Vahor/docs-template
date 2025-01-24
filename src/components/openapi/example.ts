@@ -16,7 +16,7 @@ export const generateRequestsFromSchema = (
 			acc[key] = (example as OpenAPIV3.ExampleObject).value;
 			return acc;
 		}, {} as Examples),
-		schema: generateFromSchema(content.schema),
+		schema: content.examples ? undefined : generateFromSchema(content.schema),
 	};
 };
 

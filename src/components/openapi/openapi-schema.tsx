@@ -1,5 +1,5 @@
+import { Properties, Property } from "@/components/openapi/openapi-property";
 import { getOpenapiSpec } from "@/components/openapi/utils";
-import { Properties, Property } from "@/components/ui/property";
 import type { IJsonSchema, OpenAPIV3 } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
@@ -37,7 +37,7 @@ export function OpenapiSchema({ path, method }: OpenapiQueryProps) {
 				</Properties>
 			</div>
 			<div>
-				<p>Request Body</p>
+				<h3>Request Body</h3>
 				<Properties>
 					{Object.entries(requestBody?.properties ?? {}).map(([key, value]) => {
 						const schema = value as OpenAPIV3.SchemaObject;

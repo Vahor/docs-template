@@ -1,5 +1,11 @@
 import "server-only";
 import { SimpleMdx } from "@/components/simple-mdx";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { cn } from "@/lib/utils";
@@ -24,9 +30,9 @@ export function Properties({
 	className,
 }: { children: React.ReactNode; className?: string }) {
 	return (
-		<div className={cn("my-6", className)}>
-			<ul className="list-none not-prose">{children}</ul>
-		</div>
+		<ul className={cn("list-none not-prose space-y-4 my-6", className)}>
+			{children}
+		</ul>
 	);
 }
 
@@ -52,7 +58,7 @@ export function Property(props: PropertyProps) {
 		: defaultValue;
 
 	return (
-		<li className={clsx("pb-3 mb-4")}>
+		<li className={clsx("pb-3 space-y-2")}>
 			<div className="flex font-mono text-sm">
 				<div className="py-0.5 flex-1 space-x-2 truncate">
 					<code style={{ paddingRight: required ? "1.5ch" : undefined }}>
@@ -78,20 +84,18 @@ export function Property(props: PropertyProps) {
 					</Badge>
 				)}
 			</div>
-			<div className="mt-2">
+			<div className="pl-1">
 				<SimpleMdx markdown={props.description} />
 				{defaultValueStr != null && (
-					<span className="text-slate-500 dark:text-slate-300 block">
-						Default: {defaultValueStr}
-					</span>
+					<Details>Default: {defaultValueStr}</Details>
 				)}
 
 				<PossibleValues {...props} />
 
 				{minimum != null && maximum != null && (
-					<span className="text-slate-500 dark:text-slate-300 block">
+					<Details>
 						Range: [{minimum}, {maximum}]
-					</span>
+					</Details>
 				)}
 
 				<SubProperty {...props} />
@@ -101,6 +105,14 @@ export function Property(props: PropertyProps) {
 	);
 }
 
+const Details = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<span className="text-slate-500 dark:text-slate-300 block text-xs">
+			{children}
+		</span>
+	);
+};
+
 const PossibleValues = (props: Partial<PropertyProps>) => {
 	const possibleValues =
 		props.values ??
@@ -109,29 +121,42 @@ const PossibleValues = (props: Partial<PropertyProps>) => {
 
 	if (!possibleValues) return null;
 
-	return (
-		<span className="text-slate-500 dark:text-slate-300 block">
-			Values: {possibleValues.join(", ")}
-		</span>
-	);
+	return <Details>Values: {possibleValues.join(", ")}</Details>;
 };
 
 const SubProperty = ({ properties, required }: PropertyProps) => {
 	if (!properties) return null;
 
 	return (
-		<Properties className="pt-2 my-0 ml-2 pl-2 border-l">
-			{Object.entries(properties).map(([key, value]) => {
-				const schema = value as OpenAPIV3.SchemaObject;
-				const isRequired = Array.isArray(required)
-					? required.includes(key)
-					: required;
-				return (
-					// @ts-expect-error we are using a custom type
-					<Property key={key} name={key} {...schema} required={isRequired} />
-				);
-			})}
-		</Properties>
+		<Accordion type="single" collapsible className="not-prose -ml-1">
+			<AccordionItem
+				value="sub-property"
+				className="pt-1 rounded-md border w-48 data-[state=open]:w-full"
+			>
+				<AccordionTrigger className="pt-0 pb-1 px-2 border-b border-transparent data-[state=open]:border-border">
+					Show sub-properties
+				</AccordionTrigger>
+				<AccordionContent className="py-0 px-2" asChild>
+					<Properties className="my-0 mt-2">
+						{Object.entries(properties).map(([key, value]) => {
+							const schema = value as OpenAPIV3.SchemaObject;
+							const isRequired = Array.isArray(required)
+								? required.includes(key)
+								: required;
+							return (
+								// @ts-expect-error we are using a custom type
+								<Property
+									key={key}
+									name={key}
+									{...schema}
+									required={isRequired}
+								/>
+							);
+						})}
+					</Properties>
+				</AccordionContent>
+			</AccordionItem>
+		</Accordion>
 	);
 };
 
@@ -144,11 +169,7 @@ const SubItems = ({ items }: PropertyProps) => {
 		return <SubProperty {...value} />;
 	}
 	if (value.example != null) {
-		return (
-			<span className="text-slate-500 dark:text-slate-300 block">
-				Example: ["{value.example}"]
-			</span>
-		);
+		return <Details>Example: ["{value.example}"]</Details>;
 	}
 
 	return null;

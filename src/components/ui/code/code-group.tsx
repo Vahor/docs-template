@@ -88,8 +88,13 @@ export const CodeGroup = forwardRef(function CodeGroup(
 						? getNodeText(children[0])
 						: "Missing title";
 
+				console.log(children);
 				const renderChildren =
-					children.length === 0 ? children : children.slice(1);
+					children.length === 0
+						? children
+						: Array.isArray(children)
+							? children.slice(1)
+							: children;
 				return (
 					<TabsContent
 						key={title}

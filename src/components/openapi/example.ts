@@ -8,10 +8,9 @@ export interface Examples {
 }
 
 export const generateRequestsFromSchema = (
-	schema: OpenAPIV3.OperationObject,
+	content: OpenAPIV3.MediaTypeObject | undefined,
 ) => {
-	const requestBody = schema.requestBody as OpenAPIV3.RequestBodyObject;
-	const content = requestBody?.content?.["application/json"];
+	if (!content) return null;
 	return {
 		...Object.entries(content.examples ?? {}).reduce((acc, [key, example]) => {
 			acc[key] = (example as OpenAPIV3.ExampleObject).value;
@@ -22,7 +21,7 @@ export const generateRequestsFromSchema = (
 };
 
 export const generateFromSchema = (
-	schema: (OpenAPIV3.BaseSchemaObject & IJsonSchema) | undefined,
+	schema: (OpenAPIV3.BaseSchemaObject & IJsonSchema) | undefined | null,
 ): Record<string, unknown> | unknown[] | string | number | null => {
 	if (!schema || !schema.type) return null;
 

@@ -10,7 +10,6 @@ export interface OpenapiQueryProps {
 
 export function OpenapiQuery({ path, method }: OpenapiQueryProps) {
 	const openapiSpec = getOpenapiSpec({ path, method });
-	const bodyExamples = generateRequestsFromSchema(openapiSpec);
 
 	return (
 		<div className="sticky-but-not-when-fullscreen-idk">

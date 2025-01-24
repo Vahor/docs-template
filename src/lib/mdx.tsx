@@ -1,6 +1,4 @@
 import { OpenapiLayout } from "@/components/openapi/openapi-layout";
-import { OpenapiQuery } from "@/components/openapi/openapi-query";
-import { OpenapiSchema } from "@/components/openapi/openapi-schema";
 import {
 	Accordion,
 	AccordionContent,
@@ -100,8 +98,6 @@ const mdxComponents: MDXComponents = {
 	Col,
 
 	OpenapiLayout: OpenapiLayout,
-	OpenapiQuery: OpenapiQuery,
-	OpenapiSchema: OpenapiSchema,
 	CodeGroup: CodeGroup,
 
 	Accordion: ({ children, multiple, props }) => (

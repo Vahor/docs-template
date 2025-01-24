@@ -10,9 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { cn } from "@/lib/utils";
 import { clsx } from "clsx";
+import { Children } from "react";
 
 export type PropertyProps = {
-	name: string;
+	name: string | null;
 	defaultValue?: string;
 	hidden?: boolean;
 	values?: string[];
@@ -30,7 +31,7 @@ export function Properties({
 	className,
 }: { children: React.ReactNode; className?: string }) {
 	return (
-		<ul className={cn("list-none not-prose space-y-4 my-6", className)}>
+		<ul className={cn("list-none not-prose space-y-6", className)}>
 			{children}
 		</ul>
 	);
@@ -39,15 +40,42 @@ export function Properties({
 export function Property(props: PropertyProps) {
 	const {
 		name,
-		type,
 		defaultValue,
 		required = false,
 		hidden = false,
 		deprecated = false,
 		minimum,
 		maximum,
-		format,
 	} = props;
+
+	if (name == null && props.type === "object") {
+		return (
+			<>
+				{Object.entries(props.properties ?? {}).map(([key, value]) => {
+					const schema = value as OpenAPIV3.SchemaObject;
+					const isRequired = Array.isArray(props.required)
+						? props.required.includes(key)
+						: props.required;
+					return (
+						// @ts-expect-error we are using a custom type
+						<Property key={key} name={key} {...schema} required={isRequired} />
+					);
+				})}
+			</>
+		);
+	}
+	if (name == null && props.type === "array") {
+		if (!props.items) return null;
+		return (
+			// @ts-expect-error we are using a custom type
+			<Property
+				name="[]"
+				{...(props.items as OpenAPIV3.SchemaObject)}
+				type="array"
+				required={false}
+			/>
+		);
+	}
 
 	if (hidden) {
 		return null;
@@ -57,8 +85,15 @@ export function Property(props: PropertyProps) {
 		? `[${defaultValue.join(", ")}]`
 		: defaultValue;
 
+	const hasRange = maximum != null && minimum != null;
+
+	const possibleValues =
+		props.values ??
+		props.enum ??
+		((props.items && "enum" in props.items && props.items.enum) || null);
+
 	return (
-		<li className={clsx("pb-3 space-y-2")}>
+		<li className={clsx("space-y-2")}>
 			<div className="flex font-mono text-sm">
 				<div className="py-0.5 flex-1 space-x-2 truncate">
 					<code style={{ paddingRight: required ? "1.5ch" : undefined }}>
@@ -72,9 +107,9 @@ export function Property(props: PropertyProps) {
 							</span>
 						)}
 					</code>
-					{type && (
+					{props.type && (
 						<span className="text-slate-600 dark:text-slate-300">
-							{format ?? type}
+							{props.format ?? props.type}
 						</span>
 					)}
 				</div>
@@ -90,16 +125,28 @@ export function Property(props: PropertyProps) {
 					<Details>Default: {defaultValueStr}</Details>
 				)}
 
-				<PossibleValues {...props} />
+				{possibleValues && (
+					<Details>
+						Values: {possibleValues.map((v) => JSON.stringify(v)).join(", ")}
+					</Details>
+				)}
 
-				{minimum != null && maximum != null && (
+				{hasRange && (
 					<Details>
 						Range: [{minimum}, {maximum}]
 					</Details>
 				)}
+				{!possibleValues &&
+					!hasRange &&
+					props.example &&
+					typeof props.example !== "object" && (
+						<Details>Example: {JSON.stringify(props.example)}</Details>
+					)}
 
-				<SubProperty {...props} />
-				<SubItems {...props} />
+				<div className="mt-2">
+					<SubProperty {...props} />
+					<SubItems {...props} />
+				</div>
 			</div>
 		</li>
 	);
@@ -111,17 +158,6 @@ const Details = ({ children }: { children: React.ReactNode }) => {
 			{children}
 		</span>
 	);
-};
-
-const PossibleValues = (props: Partial<PropertyProps>) => {
-	const possibleValues =
-		props.values ??
-		props.enum ??
-		((props.items && "enum" in props.items && props.items.enum) || null);
-
-	if (!possibleValues) return null;
-
-	return <Details>Values: {possibleValues.join(", ")}</Details>;
 };
 
 const SubProperty = ({ properties, required }: PropertyProps) => {
@@ -136,7 +172,7 @@ const SubProperty = ({ properties, required }: PropertyProps) => {
 				<AccordionTrigger className="pt-0 pb-1 px-2 border-b border-transparent data-[state=open]:border-border">
 					Show sub-properties
 				</AccordionTrigger>
-				<AccordionContent className="py-0 px-2" asChild>
+				<AccordionContent className="py-0 pb-1 px-2" asChild>
 					<Properties className="my-0 mt-2">
 						{Object.entries(properties).map(([key, value]) => {
 							const schema = value as OpenAPIV3.SchemaObject;

@@ -9,7 +9,8 @@ import { Suspense, use, useState } from "react";
 export function SchemaViewer({
 	examples,
 	title,
-}: { examples: Examples; title: string }) {
+}: { examples: Examples | null; title: string }) {
+	if (examples == null) return null;
 	return (
 		<Suspense>
 			<Viewer examples={examples} title={title} />

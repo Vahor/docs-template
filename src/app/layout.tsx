@@ -50,7 +50,7 @@ export default function RootLayout({
 
 					<div className="lg:flex">
 						<AppSidebar />
-						<SidebarInset>{children}</SidebarInset>
+						<SidebarInset className="md:pb-16">{children}</SidebarInset>
 					</div>
 				</Providers>
 			</body>

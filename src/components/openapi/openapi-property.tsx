@@ -113,11 +113,7 @@ export function Property(props: PropertyProps) {
 						</span>
 					)}
 				</div>
-				{deprecated && (
-					<Badge variant="warning" className="text-xs">
-						Deprecated
-					</Badge>
-				)}
+				{deprecated && <Details>(deprecated)</Details>}
 			</div>
 			<div className="pl-1">
 				<SimpleMdx markdown={props.description} />

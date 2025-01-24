@@ -123,10 +123,16 @@
 		@apply relative font-semibold bg-transparent p-0 text-inherit text-[length:inherit];
 	}
 
-	[data-code-block] code {
-		@apply py-2 rounded-2xl overflow-auto max-h-[500px] text-xs font-medium;
-		> span {
-			@apply px-4;
+	[data-code-block] {
+		pre {
+			@apply overflow-hidden rounded-b-2xl;
+
+			code {
+				@apply py-2 overflow-auto max-h-[500px] text-xs font-medium;
+				> span {
+					@apply px-4;
+				}
+			}
 		}
 	}
 	tr:last-child td {

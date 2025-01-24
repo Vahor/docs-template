@@ -75,7 +75,7 @@ export const CodeBlock = function CodeBlock({
 
 function CodeHeader({ children }: { children: ReactElement }) {
 	return (
-		<div className="flex h-9 items-center gap-2 border-b border-zinc-800 bg-zinc-900 bg-white/2.5 px-4">
+		<div className="flex h-9 items-center gap-2 border-b border-zinc-800 bg-zinc-900 bg-white/2.5 px-4 text-white">
 			{children}
 		</div>
 	);

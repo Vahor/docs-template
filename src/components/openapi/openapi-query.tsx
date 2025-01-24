@@ -1,6 +1,7 @@
-import { OpenapiPlayground } from "@/components/openapi/playground";
+import { generateRequestsFromSchema } from "@/components/openapi/example";
+import { SchemaViewer } from "@/components/openapi/schema-viewer";
 import { getOpenapiSpec } from "@/components/openapi/utils";
-import { type OpenAPIV3, openapi } from "@/lib/openapi";
+import type { OpenAPIV3 } from "@/lib/openapi";
 
 export interface OpenapiQueryProps {
 	path: string;
@@ -9,15 +10,11 @@ export interface OpenapiQueryProps {
 
 export function OpenapiQuery({ path, method }: OpenapiQueryProps) {
 	const openapiSpec = getOpenapiSpec({ path, method });
+	const bodyExamples = generateRequestsFromSchema(openapiSpec);
 
 	return (
 		<div className="sticky-but-not-when-fullscreen-idk">
-			<OpenapiPlayground
-				spec={openapiSpec}
-				path={path}
-				method={method}
-				server={openapi.servers[0]}
-			/>
+			<SchemaViewer examples={bodyExamples} title="Request" />
 		</div>
 	);
 }

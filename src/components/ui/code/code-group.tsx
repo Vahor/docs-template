@@ -88,7 +88,6 @@ export const CodeGroup = forwardRef(function CodeGroup(
 						? getNodeText(children[0])
 						: "Missing title";
 
-				console.log(children);
 				const renderChildren =
 					children.length === 0
 						? children

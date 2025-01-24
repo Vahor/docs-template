@@ -13,7 +13,7 @@ import {
 
 export interface CodeBlockPropsBase {
 	filename?: string;
-	children: ReactElement | ReactElement[];
+	children: OneOrMany<ReactElement | null>;
 	allowFullScreen?: boolean;
 }
 
@@ -33,7 +33,7 @@ export const CodeBlock = function CodeBlock({
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	// TODO: use captions
-	let header: ReactElement | undefined = undefined;
+	let header: ReactElement | null = null;
 	if (Array.isArray(children)) {
 		header = Array.isArray(children) ? children[1] : children;
 		children = children[0];

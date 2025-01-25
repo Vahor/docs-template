@@ -44,7 +44,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 	];
 	const requestBody = content?.schema as OpenAPIV3.SchemaObject;
 	const bodyExamples = generateRequestsFromSchema(content);
-	const properties = Object.entries(requestBody.properties ?? {});
+	const properties = Object.entries(requestBody?.properties ?? {});
 
 	return (
 		<Col>
@@ -58,6 +58,8 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 								<Property
 									id={`request-query-${param.name}`}
 									key={param.name}
+									description={param.description}
+									required={param.required}
 									{...param.schema}
 									name={param.name}
 								/>
@@ -70,12 +72,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 						<h3 className="mt-0 mb-4">Request Body</h3>
 						<Properties>
 							{/* @ts-expect-error we are using a custom type */}
-							<Property
-								{...requestBody}
-								required={false}
-								name={null}
-								id="request-body"
-							/>
+							<Property {...requestBody} name={null} id="request-body" />
 						</Properties>
 					</div>
 				)}
@@ -112,7 +109,7 @@ const ResponseBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 							{schema && (
 								<Properties>
 									{/* @ts-expect-error we are using a custom type */}
-									<Property {...schema} required={false} id="response-body" />
+									<Property {...schema} id="response-body" />
 								</Properties>
 							)}
 						</div>

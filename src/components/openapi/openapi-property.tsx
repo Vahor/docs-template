@@ -6,11 +6,9 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { cn } from "@/lib/utils";
 import { clsx } from "clsx";
-import { Children } from "react";
 
 export type PropertyProps = {
 	name: string | null;
@@ -47,6 +45,10 @@ export function Property(props: PropertyProps) {
 		minimum,
 		maximum,
 	} = props;
+
+	if (name === "search_in") {
+		console.log(props.example);
+	}
 
 	if (name == null && props.type === "object") {
 		return (
@@ -92,6 +94,17 @@ export function Property(props: PropertyProps) {
 		props.enum ??
 		((props.items && "enum" in props.items && props.items.enum) || null);
 
+	const cleanType = (() => {
+		if (props.type === "array") {
+			if (props.items === undefined) return "array";
+			const isEnum = props.items.enum != null;
+			// @ts-expect-error we are using a custom type
+			const result = `${props.items.format ?? props.items.type}[]`;
+			return isEnum ? `${result} (enum)` : result;
+		}
+		return props.format ?? props.type;
+	})();
+
 	return (
 		<li className={clsx("space-y-2")}>
 			<div className="flex font-mono text-sm">
@@ -109,7 +122,7 @@ export function Property(props: PropertyProps) {
 					</code>
 					{props.type && (
 						<span className="text-slate-600 dark:text-slate-300">
-							{props.format ?? props.type}
+							{cleanType}
 						</span>
 					)}
 				</div>
@@ -132,6 +145,7 @@ export function Property(props: PropertyProps) {
 						Range: [{minimum}, {maximum}]
 					</Details>
 				)}
+
 				{!possibleValues &&
 					!hasRange &&
 					props.example &&
@@ -139,7 +153,7 @@ export function Property(props: PropertyProps) {
 						<Details>Example: {JSON.stringify(props.example)}</Details>
 					)}
 
-				<div className="mt-2">
+				<div>
 					<SubProperty {...props} />
 					<SubItems {...props} />
 				</div>
@@ -201,7 +215,7 @@ const SubItems = ({ items }: PropertyProps) => {
 		return <SubProperty {...value} />;
 	}
 	if (value.example != null) {
-		return <Details>Example: ["{value.example}"]</Details>;
+		return <Details>Example: {JSON.stringify(value.example)}</Details>;
 	}
 
 	return null;

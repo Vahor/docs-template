@@ -21,10 +21,6 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 	return (
 		<div>
 			<div className="flex items-baseline gap-2">
-				<div className="space-x-2">
-					<Tag>{method}</Tag>
-					<code data-language="plaintext">{path}</code>
-				</div>
 				<OpenapiPlaygroundTrigger
 					spec={openapiSpec}
 					method={method}

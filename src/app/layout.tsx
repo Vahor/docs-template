@@ -5,9 +5,9 @@ import { Providers } from "@/app/providers";
 import { AppSidebar } from "@/app/sidebar";
 import { AlgoliaSearchBox } from "@/components/algolia/search-box";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { BASE_URL } from "@/lib/constants";
 import { MenuIcon } from "lucide-react";
 import { Geist_Mono } from "next/font/google";
-import { BASE_URL } from "@/lib/constants";
 
 const mono = Geist_Mono({
 	subsets: ["latin"],

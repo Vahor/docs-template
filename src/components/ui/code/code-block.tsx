@@ -60,7 +60,10 @@ export const CodeBlock = function CodeBlock({
 
 			{header && <CodeHeader>{header}</CodeHeader>}
 
-			<div className="relative" style={{ fontVariantLigatures: "none" }}>
+			<div
+				className="relative h-full pr-2 py-2"
+				style={{ fontVariantLigatures: "none" }}
+			>
 				{!filename && (
 					<div className="flex items-center gap-2 absolute top-[16px] right-4 z-[1] text-zinc-500">
 						<Button className="hover:text-zinc-400" />

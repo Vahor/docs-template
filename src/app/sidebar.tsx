@@ -18,6 +18,7 @@ import {
 	SidebarMenuSubItem,
 	SidebarRail,
 	SidebarTrigger,
+	useSidebar,
 } from "@/components/ui/sidebar";
 import {
 	type SidebarGroup as TSidebarGroup,
@@ -97,6 +98,7 @@ const SidebarItemComponent = ({
 }: { item: TSidebarItem; level: number }) => {
 	const pathname = usePathname();
 	const active = isActive(item, pathname);
+	const { setOpenMobile } = useSidebar();
 
 	return (
 		<Accordion type="single" asChild value={active ? "item" : undefined}>
@@ -109,7 +111,7 @@ const SidebarItemComponent = ({
 								isActive={active}
 								className="flex items-center justify-between gap-1"
 							>
-								<Link href={item.url}>
+								<Link href={item.url} onClick={() => setOpenMobile(false)}>
 									<span>{item.title}</span>
 									{item.badge && (
 										<SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
@@ -157,9 +159,11 @@ const SidebarComponent = ({
 };
 
 export function AppSidebar() {
+	const { setOpenMobile } = useSidebar();
+
 	return (
 		<Sidebar collapsible="icon">
-			<SidebarHeader className="group-data-[collapsible=icon]:relative absolute right-2 z-10 hidden lg:block">
+			<SidebarHeader className="group-data-[collapsible=icon]:relative absolute group-data-[collapsible=icon]:right-0 right-2 z-10 hidden lg:block">
 				<SidebarTrigger />
 			</SidebarHeader>
 			<SidebarContent>
@@ -183,10 +187,10 @@ export function AppSidebar() {
 							{secondarySidebar.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild size="sm">
-										<a href={item.url}>
+										<Link href={item.url} onClick={() => setOpenMobile(false)}>
 											<item.icon />
 											<span>{item.title}</span>
-										</a>
+										</Link>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}

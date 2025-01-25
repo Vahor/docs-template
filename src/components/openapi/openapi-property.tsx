@@ -125,11 +125,7 @@ export function Property(props: PropertyProps) {
 							</span>
 						)}
 					</code>
-					{props.type && (
-						<span className="text-slate-600 dark:text-slate-300">
-							{cleanType}
-						</span>
-					)}
+					{props.type && <Details>{cleanType}</Details>}
 				</div>
 				{deprecated && <Details>(deprecated)</Details>}
 			</div>

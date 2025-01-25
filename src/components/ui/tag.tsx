@@ -64,11 +64,16 @@ const variants = cva("font-mono text-[0.625rem] font-semibold leading-6", {
 
 export interface TagProps extends VariantProps<typeof variants> {
 	children: string;
+	className?: string;
 }
 
-export function Tag({ children, color, variant }: TagProps) {
+export function Tag({ children, color, variant, className }: TagProps) {
 	if (!color && typeof children === "string") {
 		color = valueColorMap[children.toLowerCase() as keyof typeof valueColorMap];
 	}
-	return <span className={cn(variants({ color, variant }))}>{children}</span>;
+	return (
+		<span className={cn(variants({ color, variant }), className)}>
+			{children}
+		</span>
+	);
 }

@@ -1,10 +1,13 @@
 import { generateRequestsFromSchema } from "@/components/openapi/example";
+import { OpenapiPlaygroundTrigger } from "@/components/openapi/openapi-playground";
 import { Properties, Property } from "@/components/openapi/openapi-property";
 import { SchemaViewer } from "@/components/openapi/schema-viewer";
 import { getOpenapiSpec } from "@/components/openapi/utils";
+import { Button } from "@/components/ui/button";
 import { Col } from "@/components/ui/col";
 import { Tag } from "@/components/ui/tag";
 import type { OpenAPIV3 } from "@/lib/openapi";
+import { ChevronRightIcon } from "lucide-react";
 
 export interface OpenapiLayoutProps {
 	path: string;
@@ -17,12 +20,19 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 
 	return (
 		<div>
-			<div className="space-x-2">
-				<Tag>{method}</Tag>
-				<code data-language="plaintext">{path}</code>
+			<div className="flex items-baseline gap-2">
+				<div className="space-x-2">
+					<Tag>{method}</Tag>
+					<code data-language="plaintext">{path}</code>
+				</div>
+				<OpenapiPlaygroundTrigger
+					spec={openapiSpec}
+					method={method}
+					path={path}
+				/>
 			</div>
-			{children}
-			<div className="mt-10">
+			<div>{children}</div>
+			<div className="mt-14">
 				<h2 className="sr-only" id="request">
 					Request
 				</h2>
@@ -51,7 +61,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 			<div className="space-y-8">
 				{parameters.length > 0 && (
 					<div>
-						<h3 className="mt-0 mb-4">Parameters</h3>
+						<h3 className="mb-4">Parameters</h3>
 						<Properties>
 							{parameters.map((param) => (
 								/* @ts-expect-error we are using a custom type */
@@ -69,7 +79,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 				)}
 				{properties.length > 0 && (
 					<div>
-						<h3 className="mt-0 mb-4">Request Body</h3>
+						<h3 className="mb-4">Request Body</h3>
 						<Properties>
 							{/* @ts-expect-error we are using a custom type */}
 							<Property {...requestBody} name={null} id="request-body" />
@@ -102,7 +112,7 @@ const ResponseBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 				return (
 					<Col key={code}>
 						<div>
-							<h3 className="mt-0">Response - {code}</h3>
+							<h3>Response - {code}</h3>
 							<p className={schema ? undefined : "mb-0"}>
 								{response.description}
 							</p>

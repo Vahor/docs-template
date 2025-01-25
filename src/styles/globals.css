@@ -157,7 +157,11 @@
 	.main-content {
 		@apply relative mx-auto mt-4 w-full max-w-6xl px-6;
 		article {
-			@apply mt-8 text-pretty prose space-y-4;
+			@apply mt-8 text-pretty prose;
+			h2,
+			h3 {
+				@apply mt-0;
+			}
 		}
 	}
 }

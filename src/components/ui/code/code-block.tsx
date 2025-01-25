@@ -3,6 +3,7 @@
 // based on https://mintlify.com/docs/content/components/code
 
 import { CopyToClipboardButton } from "@/components/ui/code/clipboard-button";
+import { CodeWrapButton } from "@/components/ui/code/code-wrap-button";
 import { getNodeText } from "@/lib/getNodeText";
 import { clsx } from "clsx";
 import {
@@ -15,6 +16,7 @@ export interface CodeBlockPropsBase {
 	filename?: string;
 	children: OneOrMany<ReactElement | null>;
 	allowFullScreen?: boolean;
+	actions?: boolean;
 }
 
 export type CodeBlockProps = CodeBlockPropsBase &
@@ -24,6 +26,7 @@ export const CodeBlock = function CodeBlock({
 	filename,
 	children,
 	className,
+	actions = true,
 	...props
 }: CodeBlockProps) {
 	const Button = (
@@ -54,19 +57,25 @@ export const CodeBlock = function CodeBlock({
 		>
 			{filename && (
 				<CodeTabBar filename={filename}>
-					<Button className="hover:text-zinc-400" />
+					{actions ? (
+						<>
+							<CodeWrapButton wrapperRef={wrapperRef} />
+							<Button />
+						</>
+					) : null}
 				</CodeTabBar>
 			)}
 
 			{header && <CodeHeader>{header}</CodeHeader>}
 
 			<div
-				className="relative h-full pr-2 py-2"
+				className="relative h-full mr-2"
 				style={{ fontVariantLigatures: "none" }}
 			>
-				{!filename && (
+				{!filename && actions && (
 					<div className="flex items-center gap-2 absolute top-[16px] right-4 z-[1] text-zinc-500">
-						<Button className="hover:text-zinc-400" />
+						<CodeWrapButton wrapperRef={wrapperRef} />
+						<Button />
 					</div>
 				)}
 
@@ -89,7 +98,7 @@ function CodeTabBar({
 	children,
 }: {
 	filename: string;
-	children?: ReactElement[] | ReactElement;
+	children?: OneOrMany<ReactElement | null>;
 }) {
 	return (
 		<div className="flex items-center justify-between border-b border-zinc-800 rounded-t-2xl bg-zinc-800 px-3 pr-5 h-11">

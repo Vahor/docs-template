@@ -133,6 +133,11 @@
 	}
 
 	[data-code-block] {
+		&[data-wrap-code="true"] {
+			pre {
+				@apply whitespace-pre-wrap;
+			}
+		}
 		pre {
 			@apply overflow-hidden rounded-b-2xl;
 

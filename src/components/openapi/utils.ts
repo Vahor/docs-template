@@ -13,3 +13,8 @@ export const getOpenapiSpec = ({
 	if (!openapiSpec) throw new Error(`No OpenAPI spec for ${path} ${method}`);
 	return openapiSpec;
 };
+
+export const getServerUrl = () => {
+	if (!openapi.servers) throw new Error("No OpenAPI servers");
+	return openapi.servers[0].url;
+};

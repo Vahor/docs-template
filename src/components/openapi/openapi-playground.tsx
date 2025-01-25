@@ -4,6 +4,10 @@ import {
 	type Examples,
 	generateRequestsFromSchema,
 } from "@/components/openapi/example";
+import {
+	ServerResponse,
+	type ServerResponseProps,
+} from "@/components/openapi/openapi-response";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import {
@@ -11,7 +15,6 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogDescription,
-	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
@@ -27,12 +30,14 @@ import { Textarea } from "@/components/ui/textarea";
 import type { OpenAPIV3 } from "@/lib/openapi";
 import { cn } from "@/lib/utils";
 import { type ReactFormExtendedApi, useForm } from "@tanstack/react-form";
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
+import { Suspense, useMemo, useState } from "react";
 
 interface OpenapiPlaygroundProps {
 	spec: OpenAPIV3.OperationObject;
 	path: string;
 	method: OpenAPIV3.HttpMethods;
+	server: string;
 }
 
 type FormType = {
@@ -40,17 +45,55 @@ type FormType = {
 	[key: string]: unknown;
 };
 
+const buildUrl = (
+	server: string,
+	path: string,
+	params: OpenAPIV3.ParameterObject[],
+	values: FormType,
+) => {
+	let cleanPath = path;
+	const queryParams = new URLSearchParams();
+	for (const param of params) {
+		const val = values[param.name] as string | string[];
+		if (param.in === "query") {
+			if (Array.isArray(val)) {
+				for (const v of val) {
+					queryParams.append(param.name, v);
+				}
+			} else {
+				queryParams.set(param.name, val);
+			}
+		} else if (param.in === "path") {
+			if (Array.isArray(val)) {
+				const valStr = val.join(",");
+				cleanPath = cleanPath.replace(`{${param.name}}`, valStr);
+			} else {
+				cleanPath = cleanPath.replace(`{${param.name}}`, val);
+			}
+		}
+	}
+	const targetUrl = new URL(`${server}${cleanPath}`);
+	targetUrl.search = queryParams.toString();
+	return targetUrl;
+};
+
 export function OpenapiPlaygroundTrigger({
 	spec,
 	path,
 	method,
+	server,
 }: OpenapiPlaygroundProps) {
 	const params = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
 	const content = (spec.requestBody as OpenAPIV3.RequestBodyObject)?.content?.[
 		"application/json"
 	];
-	const bodyExamples = generateRequestsFromSchema(content);
+	const bodyExamples = useMemo(
+		() => generateRequestsFromSchema(content),
+		[content],
+	);
 	const firstBody = bodyExamples ? Object.values(bodyExamples)[0] : null;
+
+	const [response, setResponse] = useState<ServerResponseProps | null>(null);
 
 	const form = useForm<FormType>({
 		defaultValues: {
@@ -63,8 +106,36 @@ export function OpenapiPlaygroundTrigger({
 				{} as Record<string, string>,
 			),
 		},
-		onSubmit: async (values) => {
-			console.log(values);
+		onSubmit: async ({ value }) => {
+			//const targetUrl = buildUrl(
+			//	server,
+			//	path,
+			//	params,
+			//	value,
+			//);
+			const targetUrl = new URL("https://jsonplaceholder.typicode.com/posts/1");
+
+			let res: Response | null = null;
+			try {
+				res = await fetch(targetUrl.toString(), {
+					method: method,
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: method === "get" ? undefined : value._body,
+				});
+				setResponse({
+					response: await res.arrayBuffer(),
+					headers: res.headers,
+					statusCode: res.status,
+				});
+			} catch (error) {
+				setResponse({
+					response: error as Error,
+					headers: res?.headers ?? undefined,
+					statusCode: res?.status ?? 500,
+				});
+			}
 		},
 	});
 
@@ -89,10 +160,26 @@ export function OpenapiPlaygroundTrigger({
 					</DialogDescription>
 					<div className="border-b w-full py-2 gap-4 flex justify-center items-center">
 						<UrlWithMethod method={method} path={path} />
-						<Button className="font-semibold group" size="sm" type="submit">
-							<span>Send</span>
-							<ChevronRightIcon className="size-4" />
-						</Button>
+						<form.Subscribe
+							selector={(state) => [state.canSubmit, state.isSubmitting]}
+						>
+							{([canSubmit, isSubmitting]) => (
+								<Button
+									type="submit"
+									size="sm"
+									disabled={!canSubmit || isSubmitting}
+									className="font-semibold group"
+								>
+									<span>Send</span>
+
+									{isSubmitting ? (
+										<LoaderCircleIcon className="size-4 animate-spin" />
+									) : (
+										<ChevronRightIcon className="size-4" />
+									)}
+								</Button>
+							)}
+						</form.Subscribe>
 					</div>
 
 					<ResizablePanelGroup
@@ -101,12 +188,12 @@ export function OpenapiPlaygroundTrigger({
 						className="grow"
 						style={{ height: "auto" }}
 					>
-						<CustomResizablePanel>
+						<CustomResizablePanel title="Request">
 							<Request spec={spec} form={form} examples={bodyExamples} />
 						</CustomResizablePanel>
 						<ResizableHandle withHandle />
-						<CustomResizablePanel>
-							<Response />
+						<CustomResizablePanel title="Response">
+							<Response response={response} />
 						</CustomResizablePanel>
 					</ResizablePanelGroup>
 				</Form>
@@ -117,17 +204,19 @@ export function OpenapiPlaygroundTrigger({
 
 const CustomResizablePanel = ({
 	children,
+	title,
 	...props
-}: React.ComponentProps<typeof ResizablePanel>) => {
+}: React.ComponentProps<typeof ResizablePanel> & { title: string }) => {
 	return (
 		<ResizablePanel
 			minSize={10}
 			collapsible
 			collapsedSize={10}
-			className="group"
+			className="prose data-[panel-size=10.0]:pointer-events-none data-[panel-size=10.0]:opacity-50 flex flex-col"
 			{...props}
 		>
-			<div className="overflow-x-visible h-full group-data-[panel-size=10.0]:pointer-events-none group-data-[panel-size=10.0]:opacity-50 prose p-2 min-w-[400px]">
+			<div className="font-mono w-full border-b px-2">{title}</div>
+			<div className="overflow-x-visible min-w-[400px] py-2 grow">
 				{children}
 			</div>
 		</ResizablePanel>
@@ -146,11 +235,10 @@ const ParameterField = ({
 
 	return (
 		<div className="flex items-center gap-2">
-			<span>{name}</span>
+			<span className="shrink-0">{name}</span>
 			<form.Field name={name}>
 				{(field) => (
 					<Input
-						className="flex-1 max-w-[400px]"
 						value={field.state.value as string}
 						name={field.name}
 						onBlur={field.handleBlur}
@@ -176,7 +264,7 @@ const Request = ({
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
 
 	return (
-		<div className="flex flex-col gap-2 h-full">
+		<div className="flex flex-col gap-2 h-full px-2">
 			{parameters.length > 0 && (
 				<div>
 					{parameters.map((param) => (
@@ -186,7 +274,7 @@ const Request = ({
 			)}
 
 			{examples && (
-				<CodeBlock className="grow">
+				<CodeBlock className="grow [&>div]:py-2" actions={false}>
 					<form.Field name="_body">
 						{(field) => (
 							<Textarea
@@ -208,7 +296,26 @@ const Request = ({
 	);
 };
 
-const Response = () => {
+const Response = ({
+	response,
+}: {
+	response: ServerResponseProps | null;
+}) => {
+	if (!response) return <ResponsePlaceholder />;
+
+	return (
+		<div className="flex flex-col gap-2 h-full">
+			<div className="grow p-2">
+				<Suspense fallback={<ResponsePlaceholder />}>
+					<ServerResponse {...response} />
+				</Suspense>
+			</div>
+			<div className="h-[200px] justify-end border-t p-2">headers</div>
+		</div>
+	);
+};
+
+const ResponsePlaceholder = () => {
 	return <div className="overflow-x-visible h-full">response</div>;
 };
 

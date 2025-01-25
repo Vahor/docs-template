@@ -2,12 +2,9 @@ import { generateRequestsFromSchema } from "@/components/openapi/example";
 import { OpenapiPlaygroundTrigger } from "@/components/openapi/openapi-playground";
 import { Properties, Property } from "@/components/openapi/openapi-property";
 import { SchemaViewer } from "@/components/openapi/schema-viewer";
-import { getOpenapiSpec } from "@/components/openapi/utils";
-import { Button } from "@/components/ui/button";
+import { getOpenapiSpec, getServerUrl } from "@/components/openapi/utils";
 import { Col } from "@/components/ui/col";
-import { Tag } from "@/components/ui/tag";
 import type { OpenAPIV3 } from "@/lib/openapi";
-import { ChevronRightIcon } from "lucide-react";
 
 export interface OpenapiLayoutProps {
 	path: string;
@@ -25,6 +22,7 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 					spec={openapiSpec}
 					method={method}
 					path={path}
+					server={getServerUrl()}
 				/>
 			</div>
 			<div>{children}</div>

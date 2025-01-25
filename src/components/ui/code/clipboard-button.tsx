@@ -26,6 +26,7 @@ export function CopyToClipboardButton({
 			<TooltipTrigger
 				aria-label={"Copy code to clipboard"}
 				onClick={handleClick}
+				className="hover:text-zinc-400"
 				{...props}
 			>
 				<svg

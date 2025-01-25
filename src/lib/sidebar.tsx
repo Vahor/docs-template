@@ -22,11 +22,11 @@ export const sidebar: SidebarGroup[] = [
 		title: "Guides",
 		url: "#",
 		items: allGuides
-			.toSorted((a, b) =>
-				a.sidebar?.order && b.sidebar?.order
-					? a.sidebar.order - b.sidebar.order
-					: 0,
-			)
+			.toSorted((a, b) => {
+				const aOrder = a.sidebar?.order ?? Number.MAX_SAFE_INTEGER;
+				const bOrder = b.sidebar?.order ?? Number.MAX_SAFE_INTEGER;
+				return aOrder - bOrder;
+			})
 			.map((guide) => ({
 				title: guide.sidebar?.title ?? guide.title,
 				url: `/guide/${guide.slug}`,
@@ -38,11 +38,11 @@ export const sidebar: SidebarGroup[] = [
 		url: "#",
 		badge: "New",
 		items: allApis
-			.toSorted((a, b) =>
-				a.sidebar?.order && b.sidebar?.order
-					? a.sidebar.order - b.sidebar.order
-					: 0,
-			)
+			.toSorted((a, b) => {
+				const aOrder = a.sidebar?.order ?? Number.MAX_SAFE_INTEGER;
+				const bOrder = b.sidebar?.order ?? Number.MAX_SAFE_INTEGER;
+				return aOrder - bOrder;
+			})
 			.map((api) => ({
 				title: api.sidebar?.title ?? api.title,
 				url: `/api/${api.slug}`,

@@ -47,7 +47,7 @@ export default async function Page(props: PagePropsSlug) {
 	const breadcrumbs = getPageBreadcrumbs(`/api/${page.slug}`).slice(0, -1);
 
 	return (
-		<main className="relative mx-auto mt-4 max-w-6xl px-6">
+		<main className="main-content">
 			<JsonLd
 				jsonLd={articlePage({
 					headline: page.title,
@@ -57,7 +57,7 @@ export default async function Page(props: PagePropsSlug) {
 			/>
 			<BreadcrumbResponsive items={breadcrumbs} />
 
-			<article className="mt-8 text-pretty prose space-y-4">
+			<article>
 				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
 
 				<Mdx code={page.body.code} />

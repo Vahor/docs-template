@@ -3,7 +3,7 @@ import { BreadcrumbResponsive } from "@/components/ui/breakcrumbs-responsive";
 import { articlePage } from "@/lib/jsonld";
 import { Mdx } from "@/lib/mdx";
 import { getPageBreadcrumbs } from "@/lib/sidebar";
-import { allChangelogs } from "contentlayer/generated";
+import { allGuides } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 
 interface PagePropsSlug {
@@ -12,13 +12,13 @@ interface PagePropsSlug {
 
 const getPage = (params: Awaited<PagePropsSlug["params"]>) => {
 	if (!params.slug) return null;
-	return allChangelogs.find((post) => post.slug === params.slug);
+	return allGuides.find((post) => post.slug === params.slug);
 };
 
 export function generateStaticParams() {
 	const pages = [];
 
-	for (const page of allChangelogs) {
+	for (const page of allGuides) {
 		pages.push({
 			slug: page.slug,
 		});
@@ -34,7 +34,7 @@ export async function generateMetadata(props: PagePropsSlug) {
 		title: page.title,
 		description: page.description,
 		alternates: {
-			canonical: `/changelog/${page.slug}`,
+			canonical: `/guide/${page.slug}`,
 		},
 	};
 }
@@ -44,10 +44,7 @@ export default async function Page(props: PagePropsSlug) {
 	const page = getPage(params);
 	if (!page) notFound(); // should never happen
 
-	const breadcrumbs = getPageBreadcrumbs(`/changelog/${page.slug}`).slice(
-		0,
-		-1,
-	);
+	const breadcrumbs = getPageBreadcrumbs(`/guide/${page.slug}`).slice(0, -1);
 
 	return (
 		<main className="main-content">
@@ -55,20 +52,13 @@ export default async function Page(props: PagePropsSlug) {
 				jsonLd={articlePage({
 					headline: page.title,
 					description: page.description,
-					datePublished: page.releaseDate,
 					dateModified: page.dateModified,
 				})}
 			/>
 			<BreadcrumbResponsive items={breadcrumbs} />
 
 			<article>
-				<div className="space-y-4 text-left">
-					<h1>{page.title}</h1>
-					<p>{page.version}</p>
-					<p>{page.releaseDate}</p>
-					<p>{page.dateModified}</p>
-					<p>{page.description}</p>
-				</div>
+				<h1 className="font-bold text-3xl md:text-5xl">{page.title}</h1>
 
 				<Mdx code={page.body.code} />
 			</article>

@@ -38,19 +38,34 @@ const lastModified = (path: string) => {
 };
 
 const extractToc = async (raw: string) => {
-	const headings: { depth: number; value: string; slug: string }[] = [];
+	const headings: { title: string; url: string }[] = [];
 	const slugger = new GithubSlugger();
 
 	await remark()
 		.use(remarkParse)
 		.use(() => (tree) => {
+			visit(tree, "html", (node) => {
+				const text = toStringMdx(node);
+				// add toc elements from the OpenApiLayout
+				if (text.includes("<OpenapiLayout")) {
+					// TODO
+					headings.push({
+						title: "Request",
+						url: "#request",
+					});
+					headings.push({
+						title: "Response",
+						url: "#response",
+					});
+				}
+			});
 			visit(tree, "heading", (node) => {
+				// @ts-expect-error node.depth is a number
+				if (node.depth > 1) return;
 				const text = toStringMdx(node);
 				headings.push({
-					// @ts-ignore
-					depth: node.depth,
-					value: text,
-					slug: slugger.slug(text),
+					title: text,
+					url: `#${slugger.slug(text)}`,
 				});
 			});
 		})

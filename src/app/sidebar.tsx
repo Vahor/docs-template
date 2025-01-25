@@ -2,11 +2,6 @@
 
 import { AccordionContent } from "@/components/ui/accordion";
 import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
@@ -68,7 +63,7 @@ const SidebarGroupComponent = ({
 			type="single"
 			collapsible
 			asChild
-			className="data-[state=open]:[&>span>svg]:rotate-90 group/collapsible [&[data-state=open]>li>div>button>svg]:rotate-90"
+			className="[&[data-state=open]>li>div>button>svg]:rotate-90"
 			defaultValue={active ? "item" : undefined}
 		>
 			<AccordionItem value="item">
@@ -103,20 +98,39 @@ const SidebarItemComponent = ({
 	const active = isActive(item, pathname);
 
 	return (
-		<BorderIndicator level={level + 1}>
-			<SidebarMenuSubItem key={item.title}>
-				<SidebarMenuSubButton
-					asChild
-					isActive={active}
-					className="flex items-center justify-between gap-1"
-				>
-					<Link href={item.url}>
-						<span>{item.title}</span>
-						{item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
-					</Link>
-				</SidebarMenuSubButton>
-			</SidebarMenuSubItem>
-		</BorderIndicator>
+		<Accordion type="single" asChild value={active ? "item" : undefined}>
+			<AccordionItem value="item">
+				<BorderIndicator level={level + 1}>
+					<AccordionTrigger asChild>
+						<SidebarMenuSubItem key={item.title}>
+							<SidebarMenuSubButton
+								asChild
+								isActive={active}
+								className="flex items-center justify-between gap-1"
+							>
+								<Link href={item.url}>
+									<span>{item.title}</span>
+									{item.badge && (
+										<SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+									)}
+								</Link>
+							</SidebarMenuSubButton>
+						</SidebarMenuSubItem>
+					</AccordionTrigger>
+				</BorderIndicator>
+				{item.toc && (
+					<AccordionContent className="pb-0">
+						{item.toc.map((tocItem) => (
+							<SidebarComponent
+								item={tocItem}
+								key={tocItem.title}
+								level={level + 1}
+							/>
+						))}
+					</AccordionContent>
+				)}
+			</AccordionItem>
+		</Accordion>
 	);
 };
 

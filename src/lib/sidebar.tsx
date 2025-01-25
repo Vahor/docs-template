@@ -38,7 +38,6 @@ export const sidebar: SidebarGroup[] = [
 		collapsible: true,
 		items: allChangelogs
 			.toSorted((a, b) => b.version.localeCompare(a.version))
-			.slice(1) // TODO: remove this
 			.map((changelog) => ({
 				title: changelog.sidebar?.title ?? changelog.title,
 				url: `/changelog/${changelog.slug}`,

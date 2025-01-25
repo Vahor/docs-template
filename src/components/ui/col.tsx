@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
+import type { HTMLAttributes } from "react";
 
-export const Col: React.FC<{
-	children: React.ReactNode;
-	className?: string;
-}> = ({ children, className }) => {
+export const Col: React.FC<HTMLAttributes<HTMLDivElement>> = ({
+	children,
+	className,
+}) => {
 	return (
 		<div
 			className={cn(

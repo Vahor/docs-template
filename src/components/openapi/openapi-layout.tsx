@@ -41,7 +41,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 	const properties = Object.entries(requestBody.properties ?? {});
 
 	return (
-		<Col>
+		<Col id="request">
 			<div className="space-y-8">
 				{parameters.length > 0 && (
 					<div>

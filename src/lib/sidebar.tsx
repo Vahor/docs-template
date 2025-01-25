@@ -1,11 +1,12 @@
 import { Tag } from "@/components/ui/tag";
 import { allApis, allChangelogs, allGuides } from "contentlayer/generated";
+import { PhoneIcon } from "lucide-react";
 
 export interface SidebarItem {
 	title: string;
 	url: string;
 	badge?: string | React.ReactNode;
-	collapsible?: boolean;
+	className?: string;
 	items?: SidebarItem[];
 	toc?: {
 		title: string;
@@ -33,18 +34,6 @@ export const sidebar: SidebarGroup[] = [
 			})),
 	},
 	{
-		title: "Changelog",
-		url: "#",
-		collapsible: true,
-		items: allChangelogs
-			.toSorted((a, b) => b.version.localeCompare(a.version))
-			.map((changelog) => ({
-				title: changelog.sidebar?.title ?? changelog.title,
-				url: `/changelog/${changelog.slug}`,
-				toc: changelog.toc,
-			})),
-	},
-	{
 		title: "API Reference",
 		url: "#",
 		badge: "New",
@@ -62,40 +51,24 @@ export const sidebar: SidebarGroup[] = [
 			})),
 	},
 	{
-		title: "Examples",
+		title: "Changelog",
 		url: "#",
-		items: [
-			{
-				title: "Something",
-				url: "#",
-				items: [
-					{
-						title: "Using abc",
-						url: "#",
-					},
-					{
-						title: "Using xyz",
-						url: "#",
-						items: [
-							{
-								title: "Another level",
-								url: "/a/random/path",
-							},
-							{
-								title: "Test active state post",
-								badge: "NEW",
-								url: `/api/${allApis[0].slug}`,
-							},
-							{
-								title: "Test active state changelog",
-								badge: "NEW",
-								url: `/changelog/${allChangelogs[1].slug}`,
-							},
-						],
-					},
-				],
-			},
-		],
+		className: "max-h-[250px] overflow-y-auto",
+		items: allChangelogs
+			.toSorted((a, b) => b.version.localeCompare(a.version))
+			.map((changelog) => ({
+				title: changelog.sidebar?.title ?? changelog.title,
+				url: `/changelog/${changelog.slug}`,
+				toc: changelog.toc,
+			})),
+	},
+];
+
+export const secondarySidebar = [
+	{
+		title: "Contact",
+		url: "/contact",
+		icon: PhoneIcon,
 	},
 ];
 

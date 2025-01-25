@@ -58,7 +58,7 @@
 		--accent: 12 6.5% 15.1%;
 		--accent-foreground: 0 0% 98%;
 
-		--border: 0 0% 14.9%;
+		--border: 0 0% 18.9%;
 		--input: 0 0% 14.9%;
 		--ring: 0 0% 83.1%;
 
@@ -84,9 +84,14 @@
 		@apply border-border;
 		animation-timing-function: east-out;
 		font-variant-numeric: tabular-nums;
+		scrollbar-width: thin;
+		scrollbar-color: hsl(var(--border)) transparent;
 	}
 	body {
-		@apply text-zinc-700 bg-background antialiased min-h-[100dvh];
+		@apply text-zinc-700 bg-background antialiased min-h-[100svh];
+		@apply text-foreground;
+		scroll-margin-top: theme("spacing.14");
+		overscroll-behavior: none;
 		overflow-x: hidden;
 		-webkit-text-size-adjust: 100%;
 		text-rendering: optimizeLegibility;
@@ -102,16 +107,6 @@
 	ul:not(.list-none) li::before {
 		content: "";
 	}
-}
-
-@layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-		scroll-margin-top: theme("spacing.14");
-	}
 	html {
 		scroll-behavior: smooth;
 	}
@@ -121,11 +116,16 @@
 		}
 	}
 }
+
 @layer components {
 	.border-indicator:has(li a[data-active="true"]) {
 		@apply border-primary;
 	}
-	code:not([data-code-block] code, code[data-language="plaintext"]) {
+	code:not(
+			[data-code-block] code,
+			code[data-language="plaintext"],
+			code:has(> mark)
+		) {
 		@apply px-1.5 py-px border rounded-md;
 	}
 	code {
@@ -137,7 +137,7 @@
 			@apply overflow-hidden rounded-b-2xl;
 
 			code {
-				@apply py-2 overflow-auto max-h-[500px] text-xs font-medium;
+				@apply py-2 overflow-auto max-h-[500px] text-xs font-medium m-1;
 				> span {
 					@apply px-4;
 				}

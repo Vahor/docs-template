@@ -22,6 +22,7 @@ import {
 import {
 	type SidebarGroup as TSidebarGroup,
 	type SidebarItem as TSidebarItem,
+	secondarySidebar,
 	sidebar,
 } from "@/lib/sidebar";
 import {
@@ -158,14 +159,14 @@ const SidebarComponent = ({
 export function AppSidebar() {
 	return (
 		<Sidebar collapsible="icon">
-			<SidebarHeader className="group-data-[collapsible=icon]:relative absolute right-0 z-10 hidden lg:block">
+			<SidebarHeader className="group-data-[collapsible=icon]:relative absolute right-2 z-10 hidden lg:block">
 				<SidebarTrigger />
 			</SidebarHeader>
 			<SidebarContent>
 				{sidebar.map((item) => (
 					<SidebarGroup key={item.title}>
 						<SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-						<SidebarGroupContent>
+						<SidebarGroupContent className={item.className}>
 							<SidebarMenu>
 								{item.items.map((item) => (
 									<SidebarComponent item={item} key={item.title} />
@@ -175,7 +176,24 @@ export function AppSidebar() {
 					</SidebarGroup>
 				))}
 			</SidebarContent>
-			<SidebarFooter />
+			<SidebarFooter>
+				<SidebarGroup className="mt-auto">
+					<SidebarGroupContent>
+						<SidebarMenu>
+							{secondarySidebar.map((item) => (
+								<SidebarMenuItem key={item.title}>
+									<SidebarMenuButton asChild size="sm">
+										<a href={item.url}>
+											<item.icon />
+											<span>{item.title}</span>
+										</a>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							))}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>
 	);

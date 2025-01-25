@@ -1,5 +1,6 @@
+// TODO: env var for host
 const HOSTNAME =
-	process.env.NODE_ENV === "production" ? "localhost:8080" : "localhost:3000";
+	process.env.NODE_ENV === "production" ? "vahor.github.io" : "localhost:3000";
 const PROTOCOL = process.env.NODE_ENV === "production" ? "https" : "http";
 export const BASE_URL = `${PROTOCOL}://${HOSTNAME}`;
 export const OPENAPI_JSON_URL = "https://api.textreveal.com/schema/v2";

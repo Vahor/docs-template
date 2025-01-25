@@ -33,9 +33,6 @@ export async function generateMetadata(props: PagePropsSlug) {
 	return {
 		title: page.title,
 		description: page.description,
-		alternates: {
-			canonical: `/changelog/${page.slug}`,
-		},
 	};
 }
 

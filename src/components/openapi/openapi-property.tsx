@@ -17,6 +17,8 @@ export type PropertyProps = {
 	values?: string[];
 	required?: boolean | OpenAPIV3.SchemaObject["required"];
 
+	id?: string;
+
 	items?: // items.enums is not in spec but apparently used
 		| {
 				enum?: string[];
@@ -46,10 +48,6 @@ export function Property(props: PropertyProps) {
 		maximum,
 	} = props;
 
-	if (name === "search_in") {
-		console.log(props.example);
-	}
-
 	if (name == null && props.type === "object") {
 		return (
 			<>
@@ -60,7 +58,13 @@ export function Property(props: PropertyProps) {
 						: props.required;
 					return (
 						// @ts-expect-error we are using a custom type
-						<Property key={key} name={key} {...schema} required={isRequired} />
+						<Property
+							key={key}
+							name={key}
+							{...schema}
+							required={isRequired}
+							id={`${props.id}-${key}`}
+						/>
 					);
 				})}
 			</>
@@ -75,6 +79,7 @@ export function Property(props: PropertyProps) {
 				{...(props.items as OpenAPIV3.SchemaObject)}
 				type="array"
 				required={false}
+				id={`${props.id}-${name ?? "[]"}`}
 			/>
 		);
 	}
@@ -106,7 +111,7 @@ export function Property(props: PropertyProps) {
 	})();
 
 	return (
-		<li className={clsx("space-y-2")}>
+		<li className={clsx("space-y-2")} id={props.id}>
 			<div className="flex font-mono text-sm">
 				<div className="py-0.5 flex-1 space-x-2 truncate">
 					<code style={{ paddingRight: required ? "1.5ch" : undefined }}>
@@ -153,10 +158,8 @@ export function Property(props: PropertyProps) {
 						<Details>Example: {JSON.stringify(props.example)}</Details>
 					)}
 
-				<div>
-					<SubProperty {...props} />
-					<SubItems {...props} />
-				</div>
+				<SubItems {...props} />
+				<SubProperty {...props} />
 			</div>
 		</li>
 	);
@@ -174,7 +177,7 @@ const SubProperty = ({ properties, required }: PropertyProps) => {
 	if (!properties) return null;
 
 	return (
-		<Accordion type="single" collapsible className="not-prose -ml-1">
+		<Accordion type="single" collapsible className="not-prose -ml-1 mt-2">
 			<AccordionItem
 				value="sub-property"
 				className="pt-1 rounded-md border w-48 data-[state=open]:w-full"

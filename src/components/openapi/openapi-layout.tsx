@@ -23,8 +23,14 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 			</div>
 			{children}
 			<div className="mt-10">
+				<h2 className="sr-only" id="request">
+					Request
+				</h2>
 				<RequestBody spec={openapiSpec} />
 				<hr />
+				<h2 className="sr-only" id="response">
+					Response
+				</h2>
 				<ResponseBody spec={openapiSpec} />
 			</div>
 		</div>
@@ -41,7 +47,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 	const properties = Object.entries(requestBody.properties ?? {});
 
 	return (
-		<Col id="request">
+		<Col>
 			<div className="space-y-8">
 				{parameters.length > 0 && (
 					<div>
@@ -50,6 +56,7 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 							{parameters.map((param) => (
 								/* @ts-expect-error we are using a custom type */
 								<Property
+									id={`request-query-${param.name}`}
 									key={param.name}
 									{...param.schema}
 									name={param.name}
@@ -63,7 +70,12 @@ const RequestBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 						<h3 className="mt-0 mb-4">Request Body</h3>
 						<Properties>
 							{/* @ts-expect-error we are using a custom type */}
-							<Property {...requestBody} required={false} name={null} />
+							<Property
+								{...requestBody}
+								required={false}
+								name={null}
+								id="request-body"
+							/>
 						</Properties>
 					</div>
 				)}
@@ -81,7 +93,7 @@ const ResponseBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 	const responses = spec.responses as Record<string, OpenAPIV3.ResponseObject>;
 
 	return (
-		<div id="response" className="space-y-8">
+		<div className="space-y-8">
 			{Object.entries(responses).map(([code, response]) => {
 				const content = response.content?.["application/json"];
 				const codeNumber = Number.parseInt(code);
@@ -100,7 +112,7 @@ const ResponseBody = ({ spec }: { spec: OpenAPIV3.OperationObject }) => {
 							{schema && (
 								<Properties>
 									{/* @ts-expect-error we are using a custom type */}
-									<Property {...schema} required={false} />
+									<Property {...schema} required={false} id="response-body" />
 								</Properties>
 							)}
 						</div>

@@ -86,7 +86,7 @@
 		font-variant-numeric: tabular-nums;
 		scrollbar-width: thin;
 		scrollbar-color: hsl(var(--border)) transparent;
-		scroll-margin-top: theme("spacing.16");
+		scroll-margin-top: theme("spacing.24");
 	}
 	body {
 		@apply text-zinc-700 bg-background antialiased min-h-[100svh];

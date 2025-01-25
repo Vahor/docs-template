@@ -1,6 +1,12 @@
 import type { IJsonSchema, OpenAPIV3 } from "@/lib/openapi";
 
-type Example = Record<string, unknown> | unknown[] | string | number | null;
+type Example =
+	| Record<string, unknown>
+	| unknown[]
+	| string
+	| number
+	| null
+	| undefined;
 
 export interface Examples {
 	schema: Example;
@@ -9,7 +15,7 @@ export interface Examples {
 
 export const generateRequestsFromSchema = (
 	content: OpenAPIV3.MediaTypeObject | undefined,
-) => {
+): Examples | null => {
 	if (!content) return null;
 	return {
 		...Object.entries(content.examples ?? {}).reduce((acc, [key, example]) => {

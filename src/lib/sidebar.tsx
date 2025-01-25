@@ -1,5 +1,5 @@
 import { Tag } from "@/components/ui/tag";
-import { allApis, allChangelogs } from "contentlayer/generated";
+import { allApis, allChangelogs, allGuides } from "contentlayer/generated";
 
 export interface SidebarItem {
 	title: string;
@@ -7,12 +7,31 @@ export interface SidebarItem {
 	badge?: string | React.ReactNode;
 	collapsible?: boolean;
 	items?: SidebarItem[];
+	toc?: {
+		title: string;
+		url: string;
+	}[];
 }
 export interface SidebarGroup extends SidebarItem {
 	items: SidebarItem[];
 }
 
 export const sidebar: SidebarGroup[] = [
+	{
+		title: "Guides",
+		url: "#",
+		items: allGuides
+			.toSorted((a, b) =>
+				a.sidebar?.order && b.sidebar?.order
+					? a.sidebar.order - b.sidebar.order
+					: 0,
+			)
+			.map((guide) => ({
+				title: guide.sidebar?.title ?? guide.title,
+				url: `/guide/${guide.slug}`,
+				toc: guide.toc,
+			})),
+	},
 	{
 		title: "Changelog",
 		url: "#",
@@ -21,19 +40,27 @@ export const sidebar: SidebarGroup[] = [
 			.toSorted((a, b) => b.version.localeCompare(a.version))
 			.slice(1) // TODO: remove this
 			.map((changelog) => ({
-				title: changelog.title,
+				title: changelog.sidebar?.title ?? changelog.title,
 				url: `/changelog/${changelog.slug}`,
+				toc: changelog.toc,
 			})),
 	},
 	{
 		title: "API Reference",
 		url: "#",
 		badge: "New",
-		items: allApis.map((api) => ({
-			title: api.title,
-			url: `/api/${api.slug}`,
-			badge: <Tag variant="small">{api.method.toUpperCase()}</Tag>,
-		})),
+		items: allApis
+			.toSorted((a, b) =>
+				a.sidebar?.order && b.sidebar?.order
+					? a.sidebar.order - b.sidebar.order
+					: 0,
+			)
+			.map((api) => ({
+				title: api.sidebar?.title ?? api.title,
+				url: `/api/${api.slug}`,
+				badge: <Tag variant="small">{api.method.toUpperCase()}</Tag>,
+				toc: api.toc,
+			})),
 	},
 	{
 		title: "Examples",

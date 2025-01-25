@@ -1,5 +1,6 @@
 "use client";
 
+import { AccordionContent } from "@/components/ui/accordion";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -28,6 +29,11 @@ import {
 	type SidebarItem as TSidebarItem,
 	sidebar,
 } from "@/lib/sidebar";
+import {
+	Accordion,
+	AccordionItem,
+	AccordionTrigger,
+} from "@radix-ui/react-accordion";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -57,31 +63,35 @@ const SidebarGroupComponent = ({
 	const active = isActive(group, pathname);
 
 	return (
-		<Collapsible
+		<Accordion
 			key={group.title}
+			type="single"
+			collapsible
 			asChild
-			className="data-[state=open]:[&>span>svg]:rotate-90 group/collapsible [&[data-state=open]>div>button>svg]:rotate-90"
-			defaultOpen={active}
+			className="data-[state=open]:[&>span>svg]:rotate-90 group/collapsible [&[data-state=open]>li>div>button>svg]:rotate-90"
+			defaultValue={active ? "item" : undefined}
 		>
-			<SidebarMenuItem>
-				<BorderIndicator level={level}>
-					<CollapsibleTrigger asChild>
-						<SidebarMenuButton isActive={active}>
-							<span>{group.title}</span>
-							<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
-							<ChevronRight className="ml-auto transition-transform duration-200" />
-						</SidebarMenuButton>
-					</CollapsibleTrigger>
-				</BorderIndicator>
-				<CollapsibleContent>
-					<SidebarMenuSub>
-						{group.items.map((item) => (
-							<SidebarComponent item={item} key={item.title} level={level} />
-						))}
-					</SidebarMenuSub>
-				</CollapsibleContent>
-			</SidebarMenuItem>
-		</Collapsible>
+			<AccordionItem value="item">
+				<SidebarMenuItem>
+					<BorderIndicator level={level}>
+						<AccordionTrigger asChild>
+							<SidebarMenuButton isActive={active}>
+								<span>{group.title}</span>
+								<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
+								<ChevronRight className="ml-auto transition-transform duration-200" />
+							</SidebarMenuButton>
+						</AccordionTrigger>
+					</BorderIndicator>
+					<AccordionContent>
+						<SidebarMenuSub>
+							{group.items.map((item) => (
+								<SidebarComponent item={item} key={item.title} level={level} />
+							))}
+						</SidebarMenuSub>
+					</AccordionContent>
+				</SidebarMenuItem>
+			</AccordionItem>
+		</Accordion>
 	);
 };
 
@@ -95,10 +105,14 @@ const SidebarItemComponent = ({
 	return (
 		<BorderIndicator level={level + 1}>
 			<SidebarMenuSubItem key={item.title}>
-				<SidebarMenuSubButton asChild isActive={active}>
+				<SidebarMenuSubButton
+					asChild
+					isActive={active}
+					className="flex items-center justify-between gap-1"
+				>
 					<Link href={item.url}>
 						<span>{item.title}</span>
-						<SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+						{item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
 					</Link>
 				</SidebarMenuSubButton>
 			</SidebarMenuSubItem>

@@ -7,7 +7,11 @@ import {
 	transformerNotationFocus,
 	transformerRenderWhitespace,
 } from "@shikijs/transformers";
-import { defineDocumentType, makeSource } from "contentlayer2/source-files";
+import {
+	defineDocumentType,
+	defineNestedType,
+	makeSource,
+} from "contentlayer2/source-files";
 import GithubSlugger from "github-slugger";
 import { h } from "hastscript";
 import { toString as toStringMdx } from "mdast-util-to-string";
@@ -55,7 +59,45 @@ const extractToc = async (raw: string) => {
 	return headings;
 };
 
+const Sidebar = defineNestedType(() => ({
+	name: "Sidebar",
+	fields: {
+		title: { type: "string", required: false },
+		order: { type: "number", required: false },
+	},
+}));
+
 const contentFolder = "content";
+
+export const Guide = defineDocumentType(() => ({
+	name: "Guide",
+	filePathPattern: "guide/**/*.mdx",
+	contentType: "mdx",
+	fields: {
+		title: { type: "string", required: true },
+		description: { type: "string", required: true },
+		sidebar: { type: "nested", of: Sidebar, required: false },
+	},
+	computedFields: {
+		slug: {
+			type: "string",
+			resolve: (post) => slug(post._raw.flattenedPath),
+		},
+		dateModified: {
+			type: "date",
+			resolve: (post) => {
+				const sourceFilePath = post._raw.sourceFilePath;
+				return lastModified(sourceFilePath);
+			},
+		},
+		toc: {
+			type: "json",
+			resolve: async (post) => {
+				return extractToc(post.body.raw);
+			},
+		},
+	},
+}));
 
 export const Api = defineDocumentType(() => ({
 	name: "Api",
@@ -65,6 +107,7 @@ export const Api = defineDocumentType(() => ({
 		title: { type: "string", required: true },
 		description: { type: "string", required: true },
 		method: { type: "string", required: true },
+		sidebar: { type: "nested", of: Sidebar, required: false },
 	},
 	computedFields: {
 		slug: {
@@ -94,6 +137,7 @@ export const Changelog = defineDocumentType(() => ({
 	fields: {
 		version: { type: "string", required: true },
 		releaseDate: { type: "date", required: true },
+		sidebar: { type: "nested", of: Sidebar, required: false },
 	},
 	computedFields: {
 		slug: {
@@ -218,6 +262,6 @@ export const mdxOptions = {
 
 export default makeSource({
 	contentDirPath: contentFolder,
-	documentTypes: [Api, Changelog],
+	documentTypes: [Api, Changelog, Guide],
 	mdx: mdxOptions,
 });

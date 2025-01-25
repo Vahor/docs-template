@@ -7,7 +7,7 @@ export const Col: React.FC<{
 	return (
 		<div
 			className={cn(
-				"grid grid-cols-1 gap-4 @lg:gap-8 @xl:grid-cols-2 max-w-full mx-0 relative",
+				"grid grid-cols-1 gap-4 @xl:gap-8 @xl:grid-cols-2 max-w-full mx-0 relative",
 				className,
 			)}
 		>

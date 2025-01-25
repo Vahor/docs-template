@@ -207,7 +207,7 @@ const Sidebar = React.forwardRef<
 			>
 				<div
 					className={cn(
-						"duration-100 sticky bottom-0 top-14 min-h-[calc(100svh-3.5rem)] z-10 hidden w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+						"duration-100 h-full sticky bottom-0 top-14 min-h-[calc(100svh-3.5rem)] z-10 hidden w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
 						"group-data-[collapsible=icon]:w-[--sidebar-width-icon] border-r border-border/30",
 						className,
 					)}
@@ -350,7 +350,7 @@ const SidebarContent = React.forwardRef<
 			ref={ref}
 			data-sidebar="content"
 			className={cn(
-				"flex min-h-0 flex-1 flex-col gap-2 overflow-auto delay-100 group-data-[collapsible=icon]:opacity-0 opacity-100 group-data-[collapsible=icon]:overflow-hidden transition-opacity ease-in-out",
+				"flex h-full min-h-0 flex-1 flex-col gap-2 overflow-auto delay-100 group-data-[collapsible=icon]:opacity-0 opacity-100 group-data-[collapsible=icon]:overflow-hidden transition-opacity ease-in-out",
 				className,
 			)}
 			{...props}
@@ -576,7 +576,7 @@ const SidebarMenuBadge = React.forwardRef<
 		ref={ref}
 		data-sidebar="menu-badge"
 		className={cn(
-			"absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 tabular-nums text-sidebar-foreground select-none pointer-events-none font-mono text-[0.625rem] font-semibold leading-6",
+			"flex h-5 min-w-5 items-center justify-center rounded-md px-1 tabular-nums text-sidebar-foreground select-none pointer-events-none font-mono text-[0.625rem] font-semibold leading-6",
 			"peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
 			"peer-data-[size=sm]/menu-button:top-1",
 			"peer-data-[size=default]/menu-button:top-1.5",

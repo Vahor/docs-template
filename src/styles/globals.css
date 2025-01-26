@@ -179,8 +179,13 @@
 		@apply bg-transparent px-3;
 	}
 
-	.monaco-hover-content .hover-row.status-bar {
-		display: none !important;
+	.monaco-hover-content .hover-row {
+		.rendered-markdown > p:first-child {
+			@apply font-semibold;
+		}
+		.status-bar {
+			display: none !important;
+		}
 	}
 
 	span {

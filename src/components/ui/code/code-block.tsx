@@ -45,9 +45,8 @@ export const CodeBlock = function CodeBlock({
 	return (
 		<div
 			className={clsx(
-				"not-prose relative my-3 rounded-2xl bg-zinc-900",
+				"relative my-3 rounded-2xl bg-zinc-900 h-full overflow-hidden",
 				"dark",
-				"group/my-0",
 				"group",
 				className,
 			)}
@@ -69,11 +68,14 @@ export const CodeBlock = function CodeBlock({
 			{header && <CodeHeader>{header}</CodeHeader>}
 
 			<div
-				className="relative h-full mr-2"
+				className="relative h-full mr-2 overflow-hidden"
 				style={{ fontVariantLigatures: "none" }}
 			>
 				{!filename && actions && (
-					<div className="flex items-center gap-2 absolute top-[16px] right-4 z-[1] text-zinc-500">
+					<div
+						className="flex items-center gap-2 absolute top-[16px] right-4 z-[1] text-zinc-500"
+						data-actions
+					>
 						<CodeWrapButton wrapperRef={wrapperRef} />
 						<Button />
 					</div>

@@ -27,7 +27,7 @@ function Viewer({ examples, title }: { examples: Examples; title: string }) {
 	return (
 		<CodeBlock filename={title}>
 			<div
-				className="[&_code]:grid"
+				className="[&_code]:max-h-[500px]"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 				dangerouslySetInnerHTML={{
 					__html: highlighter.codeToHtml(value, {

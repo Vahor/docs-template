@@ -16,8 +16,6 @@ export const ServerResponse = ({ response, headers }: ServerResponseProps) => {
 	if (response instanceof Error)
 		return <ErrorResponse message={response.message} />;
 
-	console.log({ response, headers });
-
 	const contentType = headers?.get("content-type")?.split(";")[0];
 	const child = (() => {
 		switch (contentType) {
@@ -50,9 +48,9 @@ const JSONResponse = ({ response }: { response: ArrayBuffer }) => {
 	const highlighter = use(shiki);
 
 	return (
-		<CodeBlock className="text-white max-h-full group">
+		<CodeBlock className="text-white group mt-0">
 			<div
-				className="[&_code]:grid [&_pre]:rounded-2xl"
+				className="h-full"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: json
 				dangerouslySetInnerHTML={{
 					__html: highlighter.codeToHtml(JSON.stringify(json, null, 2), {

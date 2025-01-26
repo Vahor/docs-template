@@ -22,8 +22,8 @@ export const editorOptions: EditorProps["options"] = {
 	tabCompletion: "on",
 	selectionHighlight: false,
 	scrollbar: {
+		useShadows: false,
 		horizontal: "hidden",
-		vertical: "hidden",
 		// avoid can not scroll page when hover monaco
 		alwaysConsumeMouseWheel: false,
 	},

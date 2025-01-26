@@ -9,6 +9,7 @@ import {
 	type ServerResponseProps,
 } from "@/components/openapi/openapi-response";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/ui/code/code-block";
 import {
 	Dialog,
 	DialogClose,
@@ -24,16 +25,22 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import { Tag } from "@/components/ui/tag";
 import { editorOptions } from "@/lib/monaco";
 import type { OpenAPIV3 } from "@/lib/openapi";
-import { shiki, shikiOptions } from "@/lib/shiki";
 import { cn } from "@/lib/utils";
 import MonacoEditor, { type Monaco } from "@monaco-editor/react";
-import { shikiToMonaco } from "@shikijs/monaco";
 import { type ReactFormExtendedApi, useForm } from "@tanstack/react-form";
 import { ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
-import { Suspense, use, useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 interface OpenapiPlaygroundProps {
 	spec: OpenAPIV3.OperationObject;
@@ -208,17 +215,19 @@ const CustomResizablePanel = ({
 	children,
 	title,
 	...props
-}: React.ComponentProps<typeof ResizablePanel> & { title: string }) => {
+}: Omit<React.ComponentProps<typeof ResizablePanel>, "title"> & {
+	title: React.ReactNode;
+}) => {
 	return (
 		<ResizablePanel
-			minSize={10}
+			minSize={15}
 			collapsible
-			collapsedSize={10}
-			className="prose data-[panel-size=10.0]:pointer-events-none data-[panel-size=10.0]:opacity-50 flex flex-col"
+			collapsedSize={15}
+			className="prose data-[panel-size=15.0]:pointer-events-none data-[panel-size=15.0]:opacity-50 flex flex-col"
 			{...props}
 		>
 			<div className="font-mono w-full border-b px-2">{title}</div>
-			<div className="overflow-x-visible min-w-[400px] py-2 grow">
+			<div className="overflow-x-visible min-w-[400px] pt-2 pb-4 h-full">
 				{children}
 			</div>
 		</ResizablePanel>
@@ -266,23 +275,29 @@ const Request = ({
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
 	const requestBody = spec.requestBody as OpenAPIV3.RequestBodyObject;
 	const content = requestBody?.content?.["application/json"];
-	const highlighter = use(shiki);
 
 	const handleEditorWillMount = (monaco: Monaco) => {
-		shikiToMonaco(highlighter, monaco);
-
 		const schema = content.schema;
 		// TODO: fix directly in the openapi schema
 		// note: we should also fix the enum (see fields and issue on order)
 		// @ts-expect-error hack
-		for (const entry of Object.entries(schema.properties)) {
-			const [key, value] = entry;
+		for (const value of Object.values(schema.properties)) {
 			// @ts-expect-error hack
 			if (value.format === "YYYY-MM-DD") {
 				// @ts-expect-error hack
 				value.type = "string";
 				// @ts-expect-error hack
 				value.format = "date";
+			}
+			// @ts-expect-error hack
+			if (value.type === "map") {
+				// @ts-expect-error hack
+				value.type = "object";
+			}
+			// @ts-expect-error hack
+			if (value.type === "number($float)") {
+				// @ts-expect-error hack
+				value.type = "number";
 			}
 		}
 
@@ -299,7 +314,7 @@ const Request = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-2 h-full px-2">
+		<div className="flex flex-col gap-2 h-full px-2 pb-4">
 			{parameters.length > 0 && (
 				<div>
 					{parameters.map((param) => (
@@ -307,20 +322,22 @@ const Request = ({
 					))}
 				</div>
 			)}
-			<form.Field name="_body">
-				{(field) => (
-					<MonacoEditor
-						language="json"
-						theme={shikiOptions.theme.dark}
-						value={field.state.value as string}
-						options={editorOptions}
-						beforeMount={handleEditorWillMount}
-						onChange={(value) => {
-							field.handleChange(value ?? "");
-						}}
-					/>
-				)}
-			</form.Field>
+			<div className="border p-2 rounded-xl h-full" data-editor-wrapper>
+				<form.Field name="_body">
+					{(field) => (
+						<MonacoEditor
+							language="json"
+							theme="light"
+							value={field.state.value as string}
+							options={editorOptions}
+							beforeMount={handleEditorWillMount}
+							onChange={(value) => {
+								field.handleChange(value ?? "");
+							}}
+						/>
+					)}
+				</form.Field>
+			</div>
 		</div>
 	);
 };
@@ -333,14 +350,50 @@ const Response = ({
 	if (!response) return <ResponsePlaceholder />;
 
 	return (
-		<div className="flex flex-col gap-2 h-full">
-			<div className="grow p-2">
+		<ResizablePanelGroup
+			direction="vertical"
+			autoSaveId="response"
+			className="gap-2 pb-4 h-full"
+		>
+			<ResizablePanel
+				minSize={20}
+				collapsible
+				collapsedSize={20}
+				className="grow px-2 overflow-hidden h-full"
+			>
 				<Suspense fallback={<ResponsePlaceholder />}>
 					<ServerResponse {...response} />
 				</Suspense>
-			</div>
-			<div className="h-[200px] justify-end border-t p-2">headers</div>
-		</div>
+			</ResizablePanel>
+
+			<ResizableHandle withHandle />
+
+			{response.headers && (
+				<ResizablePanel
+					minSize={20}
+					collapsible
+					collapsedSize={20}
+					className="shrink-0 justify-end border-t px-2 pt-2 overflow-y-auto [&>div]:h-full"
+				>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>Header</TableHead>
+								<TableHead>Value</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody className="overflow-y-auto">
+							{response.headers.entries().map(([key, value]) => (
+								<TableRow key={key}>
+									<TableCell>{key}</TableCell>
+									<TableCell>{value}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</ResizablePanel>
+			)}
+		</ResizablePanelGroup>
 	);
 };
 

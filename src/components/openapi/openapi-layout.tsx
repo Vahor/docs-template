@@ -25,7 +25,7 @@ export function OpenapiLayout({ path, method, children }: OpenapiLayoutProps) {
 					server={getServerUrl()}
 				/>
 			</div>
-			<div>{children}</div>
+			{children && <div>{children}</div>}
 			<div className="mt-14">
 				<h2 className="sr-only" id="request">
 					Request

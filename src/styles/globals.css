@@ -22,7 +22,7 @@
 
 		--border: 0 0% 89.8%;
 		--input: 0 0% 89.8%;
-		--ring: 0 0% 3.9%;
+		--ring: 158 4.4% 41.6%;
 
 		--chart-1: 12 76% 61%;
 		--chart-2: 173 58% 39%;
@@ -86,7 +86,7 @@
 		font-variant-numeric: tabular-nums;
 		scrollbar-width: thin;
 		scrollbar-color: hsl(var(--border)) transparent;
-		scroll-margin-top: theme("spacing.24");
+		scroll-margin-top: 6rem;
 	}
 	body {
 		@apply text-zinc-700 bg-background antialiased min-h-[100svh];
@@ -139,11 +139,11 @@
 			}
 		}
 		pre {
-			@apply overflow-hidden rounded-2xl;
+			@apply overflow-hidden rounded-2xl h-full;
 			background-color: #15151e !important;
 
 			code {
-				@apply py-2 overflow-auto max-h-[500px] text-xs font-medium m-1;
+				@apply py-2 overflow-auto text-xs font-medium my-1 px-1 grid h-full;
 				> span {
 					@apply px-4;
 				}
@@ -172,20 +172,25 @@
 	}
 }
 
+[data-editor-wrapper]:has(.monaco-editor.focused) {
+	@apply ring-1 ring-ring;
+}
+
 .monaco-editor {
-	@apply rounded-xl;
-
-	.lines-content {
-		@apply bg-transparent px-3;
+	.scrollbar {
+		&.vertical {
+			.slider {
+				width: 6px !important;
+				border-radius: 8px !important;
+				background-color: hsl(var(--border)) !important;
+			}
+		}
 	}
-
-	.monaco-hover-content .hover-row {
-		.rendered-markdown > p:first-child {
-			@apply font-semibold;
-		}
-		.status-bar {
-			display: none !important;
-		}
+	.current-line {
+		border: none !important;
+	}
+	.monaco-hover-content .hover-row.status-bar {
+		display: none !important;
 	}
 
 	span {

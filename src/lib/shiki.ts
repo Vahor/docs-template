@@ -4,7 +4,7 @@ import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 export const shikiOptions = {
 	theme: {
-		dark: "aurora-x",
+		dark: "catppuccin-mocha",
 		light: "github-light",
 	},
 	keepBackground: false,
@@ -13,6 +13,6 @@ export const shikiOptions = {
 
 export const shiki = createHighlighterCore({
 	langs: [import("@shikijs/langs/json")],
-	themes: [import("@shikijs/themes/aurora-x")],
+	themes: [import("@shikijs/themes/catppuccin-mocha")],
 	engine: createJavaScriptRegexEngine(),
 });

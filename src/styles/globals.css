@@ -139,7 +139,8 @@
 			}
 		}
 		pre {
-			@apply overflow-hidden rounded-b-2xl;
+			@apply overflow-hidden rounded-2xl;
+			background-color: #15151e !important;
 
 			code {
 				@apply py-2 overflow-auto max-h-[500px] text-xs font-medium m-1;
@@ -168,5 +169,21 @@
 				@apply mt-0;
 			}
 		}
+	}
+}
+
+.monaco-editor {
+	@apply rounded-xl;
+
+	.lines-content {
+		@apply bg-transparent px-3;
+	}
+
+	.monaco-hover-content .hover-row.status-bar {
+		display: none !important;
+	}
+
+	span {
+		font-style: normal !important;
 	}
 }

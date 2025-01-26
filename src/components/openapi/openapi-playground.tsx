@@ -9,7 +9,6 @@ import {
 	type ServerResponseProps,
 } from "@/components/openapi/openapi-response";
 import { Button } from "@/components/ui/button";
-import { CodeBlock } from "@/components/ui/code/code-block";
 import {
 	Dialog,
 	DialogClose,
@@ -26,12 +25,15 @@ import {
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tag } from "@/components/ui/tag";
-import { Textarea } from "@/components/ui/textarea";
+import { editorOptions } from "@/lib/monaco";
 import type { OpenAPIV3 } from "@/lib/openapi";
+import { shiki, shikiOptions } from "@/lib/shiki";
 import { cn } from "@/lib/utils";
+import MonacoEditor, { type Monaco } from "@monaco-editor/react";
+import { shikiToMonaco } from "@shikijs/monaco";
 import { type ReactFormExtendedApi, useForm } from "@tanstack/react-form";
 import { ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, use, useMemo, useState } from "react";
 
 interface OpenapiPlaygroundProps {
 	spec: OpenAPIV3.OperationObject;
@@ -262,6 +264,39 @@ const Request = ({
 	examples: Examples | null;
 }) => {
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
+	const requestBody = spec.requestBody as OpenAPIV3.RequestBodyObject;
+	const content = requestBody?.content?.["application/json"];
+	const highlighter = use(shiki);
+
+	const handleEditorWillMount = (monaco: Monaco) => {
+		shikiToMonaco(highlighter, monaco);
+
+		const schema = content.schema;
+		// TODO: fix directly in the openapi schema
+		// note: we should also fix the enum (see fields and issue on order)
+		// @ts-expect-error hack
+		for (const entry of Object.entries(schema.properties)) {
+			const [key, value] = entry;
+			// @ts-expect-error hack
+			if (value.format === "YYYY-MM-DD") {
+				// @ts-expect-error hack
+				value.type = "string";
+				// @ts-expect-error hack
+				value.format = "date";
+			}
+		}
+
+		monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+			validate: true,
+			schemas: [
+				{
+					uri: "http://schema/schema.json",
+					fileMatch: ["*"], // Match all files
+					schema: content?.schema,
+				},
+			],
+		});
+	};
 
 	return (
 		<div className="flex flex-col gap-2 h-full px-2">
@@ -272,26 +307,20 @@ const Request = ({
 					))}
 				</div>
 			)}
-
-			{examples && (
-				<CodeBlock className="grow [&>div]:py-2" actions={false}>
-					<form.Field name="_body">
-						{(field) => (
-							<Textarea
-								className="resize-none py-4 px-[1.375rem] font-mono border-none focus-visible:ring-0 text-xs text-white h-full overflow-y-auto"
-								autoCorrect="off"
-								spellCheck={false}
-								value={field.state.value as string}
-								name={field.name}
-								onBlur={field.handleBlur}
-								onChange={(e) => {
-									field.handleChange(e.target.value);
-								}}
-							/>
-						)}
-					</form.Field>
-				</CodeBlock>
-			)}
+			<form.Field name="_body">
+				{(field) => (
+					<MonacoEditor
+						language="json"
+						theme={shikiOptions.theme.dark}
+						value={field.state.value as string}
+						options={editorOptions}
+						beforeMount={handleEditorWillMount}
+						onChange={(value) => {
+							field.handleChange(value ?? "");
+						}}
+					/>
+				)}
+			</form.Field>
 		</div>
 	);
 };

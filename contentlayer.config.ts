@@ -64,6 +64,7 @@ const extractToc = (raw: string) => {
 						let maxContentLine = 0;
 						if (content) {
 							const toc = extractToc(content.value);
+							if (toc.length === 0) return;
 							maxContentLine = toc[toc.length - 1].line;
 							for (const item of toc) {
 								headings.push({

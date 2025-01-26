@@ -139,7 +139,6 @@ code .diff.add::before {
 	pre[data-theme*=" "] {
 		color: var(--shiki-dark);
 		/* Optional, if you also want font styles */
-		font-style: var(--shiki-dark-font-style);
 		text-decoration: var(--shiki-dark-text-decoration);
 	}
 }

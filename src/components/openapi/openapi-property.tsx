@@ -125,7 +125,7 @@ export function Property(props: PropertyProps) {
 							</span>
 						)}
 					</code>
-					{props.type && <Details>{cleanType}</Details>}
+					{props.type && <Details className="inline">{cleanType}</Details>}
 				</div>
 				{deprecated && <Details>(deprecated)</Details>}
 			</div>
@@ -161,9 +161,17 @@ export function Property(props: PropertyProps) {
 	);
 }
 
-const Details = ({ children }: { children: React.ReactNode }) => {
+const Details = ({
+	children,
+	className,
+}: { children: React.ReactNode; className?: string }) => {
 	return (
-		<span className="text-slate-500 dark:text-slate-300 block text-xs">
+		<span
+			className={cn(
+				"text-slate-500 dark:text-slate-300 text-xs block",
+				className,
+			)}
+		>
 			{children}
 		</span>
 	);

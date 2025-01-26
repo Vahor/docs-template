@@ -37,39 +37,72 @@ const lastModified = (path: string) => {
 	return date;
 };
 
-const extractToc = async (raw: string) => {
-	const headings: { title: string; url: string }[] = [];
+const extractToc = (raw: string) => {
+	const headings: { title: string; url: string; line: number }[] = [];
 	const slugger = new GithubSlugger();
 
-	await remark()
+	remark()
 		.use(remarkParse)
 		.use(() => (tree) => {
-			visit(tree, "html", (node) => {
-				const text = toStringMdx(node);
-				// add toc elements from the OpenApiLayout
-				if (text.includes("<OpenapiLayout")) {
-					// TODO
-					headings.push({
-						title: "Request",
-						url: "#request",
-					});
-					headings.push({
-						title: "Response",
-						url: "#response",
-					});
-				}
-			});
-			visit(tree, "heading", (node) => {
+			visit(
+				tree,
+				"html",
+				(
+					node: Node,
+					index: number,
+					parent: { children: (Node & { value: string })[] },
+				) => {
+					const text = toStringMdx(node);
+
+					// add toc elements from the OpenApiLayout
+					if (text.includes("<OpenapiLayout")) {
+						const line = node.position?.start?.line ?? 0;
+
+						// custom description can contain headers, so we parse those as well
+						//  and we take their position into account
+						const content = parent.children[index + 1];
+						let maxContentLine = 0;
+						if (content) {
+							const toc = extractToc(content.value);
+							maxContentLine = toc[toc.length - 1].line;
+							for (const item of toc) {
+								headings.push({
+									title: item.title,
+									url: item.url,
+									line: line + item.line,
+								});
+							}
+						}
+
+						headings.push({
+							title: "Request",
+							url: "#request",
+							line: line + maxContentLine + 1,
+						});
+						headings.push({
+							title: "Response",
+							url: "#response",
+							line: line + maxContentLine + 2,
+						});
+					}
+				},
+			);
+
+			visit(tree, "heading", (node: Node) => {
 				// @ts-expect-error node.depth is a number
 				if (node.depth > 1) return;
 				const text = toStringMdx(node);
+				const line = node.position?.start?.line ?? 0;
 				headings.push({
 					title: text,
 					url: `#${slugger.slug(text)}`,
+					line,
 				});
 			});
 		})
-		.process(raw);
+		.processSync(raw);
+
+	headings.sort((a, b) => a.line - b.line);
 
 	return headings;
 };
@@ -107,7 +140,7 @@ export const Guide = defineDocumentType(() => ({
 		},
 		toc: {
 			type: "json",
-			resolve: async (post) => {
+			resolve: (post) => {
 				return extractToc(post.body.raw);
 			},
 		},
@@ -138,7 +171,7 @@ export const Api = defineDocumentType(() => ({
 		},
 		toc: {
 			type: "json",
-			resolve: async (post) => {
+			resolve: (post) => {
 				return extractToc(post.body.raw);
 			},
 		},
@@ -176,7 +209,7 @@ export const Changelog = defineDocumentType(() => ({
 		},
 		toc: {
 			type: "json",
-			resolve: async (post) => {
+			resolve: (post) => {
 				return extractToc(post.body.raw);
 			},
 		},
@@ -197,7 +230,7 @@ const highlightPlugin = () => {
 
 function addCalloutComponent() {
 	return (tree: Node) => {
-		visit(tree, (node) => {
+		visit(tree, (node: Node) => {
 			if (
 				node.type === "containerDirective" ||
 				node.type === "leafDirective" ||
@@ -219,7 +252,7 @@ function addCalloutComponent() {
 function includeMarkdown() {
 	// Adapted from https://github.com/hashicorp/remark-plugins/blob/main/plugins/include-markdown/index.js
 	return (tree: Node, file: VFile) => {
-		visit(tree, "paragraph", (node) => {
+		visit(tree, "paragraph", (node: Node) => {
 			const includeMatch = node.children[0].value?.match(
 				/^@include\s['"](.*)['"]$/,
 			);

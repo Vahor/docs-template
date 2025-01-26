@@ -134,7 +134,9 @@ export function OpenapiPlaygroundTrigger({
 					body: method === "get" ? undefined : value._body,
 				});
 				setResponse({
-					response: await res.arrayBuffer(),
+					//response: await res.arrayBuffer(),
+					// encode body for debug
+					response: new TextEncoder().encode(value._body).buffer,
 					headers: res.headers,
 					statusCode: res.status,
 				});
@@ -197,7 +199,7 @@ export function OpenapiPlaygroundTrigger({
 						className="grow"
 						style={{ height: "auto" }}
 					>
-						<CustomResizablePanel title="Request">
+						<CustomResizablePanel title="Request" defaultSize={60}>
 							<Request spec={spec} form={form} examples={bodyExamples} />
 						</CustomResizablePanel>
 						<ResizableHandle withHandle />
@@ -277,27 +279,29 @@ const Request = ({
 	const content = requestBody?.content?.["application/json"];
 
 	const handleEditorWillMount = (monaco: Monaco) => {
-		const schema = content.schema;
-		// TODO: fix directly in the openapi schema
-		// note: we should also fix the enum (see fields and issue on order)
-		// @ts-expect-error hack
-		for (const value of Object.values(schema.properties)) {
+		const schema = content?.schema;
+		if (schema) {
+			// TODO: fix directly in the openapi schema
+			// note: we should also fix the enum (see fields and issue on order)
 			// @ts-expect-error hack
-			if (value.format === "YYYY-MM-DD") {
+			for (const value of Object.values(schema.properties)) {
 				// @ts-expect-error hack
-				value.type = "string";
+				if (value.format === "YYYY-MM-DD") {
+					// @ts-expect-error hack
+					value.type = "string";
+					// @ts-expect-error hack
+					value.format = "date";
+				}
 				// @ts-expect-error hack
-				value.format = "date";
-			}
-			// @ts-expect-error hack
-			if (value.type === "map") {
+				if (value.type === "map") {
+					// @ts-expect-error hack
+					value.type = "object";
+				}
 				// @ts-expect-error hack
-				value.type = "object";
-			}
-			// @ts-expect-error hack
-			if (value.type === "number($float)") {
-				// @ts-expect-error hack
-				value.type = "number";
+				if (value.type === "number($float)") {
+					// @ts-expect-error hack
+					value.type = "number";
+				}
 			}
 		}
 
@@ -356,9 +360,9 @@ const Response = ({
 			className="gap-2 pb-4 h-full"
 		>
 			<ResizablePanel
-				minSize={20}
+				minSize={10}
 				collapsible
-				collapsedSize={20}
+				collapsedSize={10}
 				className="grow px-2 overflow-hidden h-full"
 			>
 				<Suspense fallback={<ResponsePlaceholder />}>
@@ -370,10 +374,10 @@ const Response = ({
 
 			{response.headers && (
 				<ResizablePanel
-					minSize={20}
+					minSize={10}
 					collapsible
-					collapsedSize={20}
-					className="shrink-0 justify-end border-t px-2 pt-2 overflow-y-auto [&>div]:h-full"
+					collapsedSize={10}
+					className="shrink-0 justify-end border-t px-2 pt-2 overflow-y-auto [&>div]:max-h-full"
 				>
 					<Table>
 						<TableHeader>
@@ -383,7 +387,7 @@ const Response = ({
 							</TableRow>
 						</TableHeader>
 						<TableBody className="overflow-y-auto">
-							{response.headers.entries().map(([key, value]) => (
+							{Array.from(response.headers.entries()).map(([key, value]) => (
 								<TableRow key={key}>
 									<TableCell>{key}</TableCell>
 									<TableCell>{value}</TableCell>

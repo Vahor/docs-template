@@ -9,7 +9,6 @@ import {
 	type ServerResponseProps,
 } from "@/components/openapi/openapi-response";
 import { Button } from "@/components/ui/button";
-import { CodeBlock } from "@/components/ui/code/code-block";
 import {
 	Dialog,
 	DialogClose,
@@ -229,7 +228,7 @@ const CustomResizablePanel = ({
 			{...props}
 		>
 			<div className="font-mono w-full border-b px-2">{title}</div>
-			<div className="overflow-x-visible min-w-[400px] pt-2 pb-4 h-full">
+			<div className="overflow-x-visible min-w-[400px] py-2 h-full @container">
 				{children}
 			</div>
 		</ResizablePanel>
@@ -247,7 +246,7 @@ const ParameterField = ({
 	if (!schema) return null;
 
 	return (
-		<div className="flex items-center gap-2">
+		<>
 			<span className="shrink-0">{name}</span>
 			<form.Field name={name}>
 				{(field) => (
@@ -261,7 +260,7 @@ const ParameterField = ({
 					/>
 				)}
 			</form.Field>
-		</div>
+		</>
 	);
 };
 
@@ -318,15 +317,18 @@ const Request = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-2 h-full px-2 pb-4">
+		<div className="flex flex-col gap-2 h-full px-1 overflow-y-auto mx-1">
 			{parameters.length > 0 && (
-				<div>
+				<div className="grid grid-cols-[auto,1fr] gap-2 items-center">
 					{parameters.map((param) => (
 						<ParameterField key={param.name} param={param} form={form} />
 					))}
 				</div>
 			)}
-			<div className="border p-2 rounded-xl h-full" data-editor-wrapper>
+			<div
+				className="border p-2 rounded-xl h-full min-h-[200px]"
+				data-editor-wrapper
+			>
 				<form.Field name="_body">
 					{(field) => (
 						<MonacoEditor
@@ -357,7 +359,7 @@ const Response = ({
 		<ResizablePanelGroup
 			direction="vertical"
 			autoSaveId="response"
-			className="gap-2 pb-4 h-full"
+			className="gap-2 h-full"
 		>
 			<ResizablePanel
 				minSize={10}

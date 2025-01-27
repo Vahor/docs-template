@@ -29,7 +29,13 @@ export const generateRequestsFromSchema = (
 export const generateFromSchema = (
 	schema: (OpenAPIV3.BaseSchemaObject & IJsonSchema) | undefined | null,
 ): Record<string, unknown> | unknown[] | string | number | null => {
-	if (!schema || !schema.type) return null;
+	if (!schema) return null;
+
+	if (schema.oneOf) {
+		return generateFromSchema(schema.oneOf[0] as OpenAPIV3.BaseSchemaObject);
+	}
+
+	if (!schema.type) return null;
 
 	switch (schema.type) {
 		case "object": {
@@ -53,6 +59,7 @@ export const generateFromSchema = (
 		case "number($float)":
 		case "number":
 		case "integer": {
+			console.log(schema);
 			if (schema.example) {
 				return schema.example;
 			}

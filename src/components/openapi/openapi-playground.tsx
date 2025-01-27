@@ -5,6 +5,7 @@ import {
 	generateRequestsFromSchema,
 } from "@/components/openapi/example";
 import { OpenApiBoxedUrl } from "@/components/openapi/openapi-boxed-url";
+import { ParameterField } from "@/components/openapi/openapi-playground-parameter";
 import {
 	ServerResponse,
 	type ServerResponseProps,
@@ -18,8 +19,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormLabel } from "@/components/ui/form";
 import {
 	ResizableHandle,
 	ResizablePanel,
@@ -34,6 +34,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { OpenAPIV3 } from "@/lib/openapi";
+import { buildUrl } from "@/lib/url";
 import { type ReactFormExtendedApi, useForm } from "@tanstack/react-form";
 import { ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -87,12 +88,8 @@ export function OpenapiPlaygroundTrigger({
 			),
 		},
 		onSubmit: async ({ value }) => {
-			//const targetUrl = buildUrl(
-			//	server,
-			//	path,
-			//	params,
-			//	value,
-			//);
+			const _targetUrl = buildUrl(server, path, params, value);
+			console.log(_targetUrl.toString());
 			const targetUrl = new URL("https://jsonplaceholder.typicode.com/posts/1");
 
 			let res: Response | null = null;
@@ -204,39 +201,10 @@ const CustomResizablePanel = ({
 			{...props}
 		>
 			<div className="font-mono w-full border-b px-2">{title}</div>
-			<div className="overflow-x-visible min-w-[400px] [&>*]:py-2 h-full @container">
+			<div className="overflow-x-visible overflow-y-hidden min-w-[400px] py-2 h-full @container">
 				{children}
 			</div>
 		</ResizablePanel>
-	);
-};
-
-const ParameterField = ({
-	param,
-	form,
-}: {
-	param: OpenAPIV3.ParameterObject;
-	form: ReactFormExtendedApi<FormType>;
-}) => {
-	const { name, schema } = param;
-	if (!schema) return null;
-
-	return (
-		<>
-			<span className="shrink-0">{name}</span>
-			<form.Field name={name}>
-				{(field) => (
-					<Input
-						value={field.state.value as string}
-						name={field.name}
-						onBlur={field.handleBlur}
-						onChange={(e) => {
-							field.handleChange(e.target.value);
-						}}
-					/>
-				)}
-			</form.Field>
-		</>
 	);
 };
 
@@ -248,25 +216,30 @@ const Request = ({
 	form: ReactFormExtendedApi<FormType>;
 }) => {
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
+	const requestBody = spec.requestBody as OpenAPIV3.RequestBodyObject;
+	const content = requestBody?.content?.["application/json"];
+	const schema = content?.schema as OpenAPIV3.SchemaObject;
 
 	return (
 		<div className="flex flex-col gap-2 h-full px-1 overflow-y-auto mx-1">
 			{parameters.length > 0 && (
-				<div className="grid grid-cols-[auto,1fr] gap-2 items-center">
+				<div className="flex flex-col gap-2">
 					{parameters.map((param) => (
 						<ParameterField key={param.name} param={param} form={form} />
 					))}
 				</div>
 			)}
-			<Suspense
-				fallback={
-					<div className="h-full flex items-center justify-center">
-						Loading...
-					</div>
-				}
-			>
-				<OpenApiRequestEditor spec={spec} form={form} />
-			</Suspense>
+			{schema && (
+				<Suspense
+					fallback={
+						<div className="h-full flex items-center justify-center">
+							Loading...
+						</div>
+					}
+				>
+					<OpenApiRequestEditor schema={schema} form={form} />
+				</Suspense>
+			)}
 		</div>
 	);
 };
@@ -300,7 +273,7 @@ const Response = ({
 					minSize={10}
 					collapsible
 					collapsedSize={10}
-					className="shrink-0 justify-end border-t px-2 pt-2 overflow-y-auto [&>div]:max-h-full"
+					className="shrink-0 justify-end px-2 pt-2 overflow-y-auto [&>div]:max-h-full"
 				>
 					<Table>
 						<TableHeader>

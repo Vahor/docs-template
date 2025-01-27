@@ -11,6 +11,7 @@ export const buildUrl = (
 
 	for (const param of params) {
 		const val = values[param.name] as string | string[];
+		if (val == null || val.toString() === "") continue;
 		if (param.in === "query") {
 			if (Array.isArray(val)) {
 				for (const v of val) {

@@ -35,7 +35,11 @@ const FormLabel = ({
 		<Label className={className} htmlFor={formItemId} {...props}>
 			{children}
 			{required && (
-				<span aria-hidden="true" className="ml-1 text-destructive">
+				<span
+					aria-hidden="true"
+					className="ml-1 text-destructive"
+					title="Required"
+				>
 					*
 				</span>
 			)}

@@ -59,7 +59,6 @@ export const generateFromSchema = (
 		case "number($float)":
 		case "number":
 		case "integer": {
-			console.log(schema);
 			if (schema.example) {
 				return schema.example;
 			}

@@ -19,12 +19,10 @@ export type PropertyProps = {
 
 	id?: string;
 
-	items?: // items.enums is not in spec but apparently used
-		| {
-				enum?: string[];
-		  }
-		| OpenAPIV3.SchemaObject;
-} & Omit<OpenAPIV3.SchemaObject, "children" | "required">;
+	items?: {
+		enum?: string[];
+	} & OpenAPIV3.SchemaObject;
+} & Omit<OpenAPIV3.SchemaObject, "children" | "required" | "items">;
 
 export function Properties({
 	children,
@@ -36,6 +34,22 @@ export function Properties({
 		</ul>
 	);
 }
+
+const cleanType = (props: PropertyProps): string | undefined => {
+	if (props.oneOf) {
+		const nested = (props.oneOf as PropertyProps[])
+			.map(cleanType)
+			.filter(Boolean);
+		return nested.join(" | ");
+	}
+	if (props.type === "array") {
+		if (props.items === undefined) return "array";
+		const isEnum = props.items.enum != null;
+		const result = `${props.items.format ?? props.items.type}[]`;
+		return isEnum ? `${result} (enum)` : result;
+	}
+	return props.format ?? props.type;
+};
 
 export function Property(props: PropertyProps) {
 	const {
@@ -99,16 +113,7 @@ export function Property(props: PropertyProps) {
 		props.enum ??
 		((props.items && "enum" in props.items && props.items.enum) || null);
 
-	const cleanType = (() => {
-		if (props.type === "array") {
-			if (props.items === undefined) return "array";
-			const isEnum = props.items.enum != null;
-			// @ts-expect-error we are using a custom type
-			const result = `${props.items.format ?? props.items.type}[]`;
-			return isEnum ? `${result} (enum)` : result;
-		}
-		return props.format ?? props.type;
-	})();
+	const cleanTypeStr = cleanType(props);
 
 	return (
 		<li className={clsx("space-y-2")} id={props.id}>
@@ -125,7 +130,7 @@ export function Property(props: PropertyProps) {
 							</span>
 						)}
 					</code>
-					{props.type && <Details className="inline">{cleanType}</Details>}
+					{cleanTypeStr && <Details className="inline">{cleanTypeStr}</Details>}
 				</div>
 				{deprecated && <Details>(deprecated)</Details>}
 			</div>
@@ -156,6 +161,7 @@ export function Property(props: PropertyProps) {
 
 				<SubItems {...props} />
 				<SubProperty {...props} />
+				<OneOf {...props} />
 			</div>
 		</li>
 	);
@@ -174,6 +180,39 @@ const Details = ({
 		>
 			{children}
 		</span>
+	);
+};
+
+const OneOf = ({ oneOf }: PropertyProps) => {
+	if (!oneOf) return null;
+
+	return (
+		<Accordion type="single" collapsible className="not-prose -ml-1 mt-2">
+			<AccordionItem
+				value="sub-property"
+				className="pt-1 rounded-md border w-48 data-[state=open]:w-full"
+			>
+				<AccordionTrigger className="pt-0 pb-1 px-2 border-b border-transparent data-[state=open]:border-border">
+					Show types
+				</AccordionTrigger>
+				<AccordionContent className="py-0 pb-1 px-2" asChild>
+					<Properties className="my-0 mt-2">
+						{oneOf.map((value) => {
+							const schema = value as OpenAPIV3.SchemaObject;
+							return (
+								// @ts-expect-error we are using a custom type
+								<Property
+									key={schema.title}
+									name={schema.type ?? ""}
+									{...schema}
+									type={undefined}
+								/>
+							);
+						})}
+					</Properties>
+				</AccordionContent>
+			</AccordionItem>
+		</Accordion>
 	);
 };
 

@@ -46,7 +46,7 @@ export const sidebar: SidebarGroup[] = [
 			.map((api) => ({
 				title: api.sidebar?.title ?? api.title,
 				url: `/api/${api.slug}`,
-				badge: <Tag variant="small">{api.method.toUpperCase()}</Tag>,
+				badge: <Tag>{api.method.toUpperCase()}</Tag>,
 				toc: api.toc,
 			})),
 	},

@@ -11,7 +11,7 @@ const valueColorMap = {
 	delete: "rose",
 } as const;
 
-const variants = cva("font-mono text-[0.625rem] font-semibold leading-6", {
+const variants = cva("font-mono text-[0.625rem] font-semibold", {
 	variants: {
 		color: {
 			emerald: "text-emerald-500 dark:text-emerald-400",
@@ -22,7 +22,7 @@ const variants = cva("font-mono text-[0.625rem] font-semibold leading-6", {
 		},
 		variant: {
 			small: "",
-			medium: "rounded-lg px-1.5 ring-1",
+			medium: "rounded-lg px-1 ring-1",
 		},
 	},
 	compoundVariants: [
@@ -58,22 +58,31 @@ const variants = cva("font-mono text-[0.625rem] font-semibold leading-6", {
 	],
 	defaultVariants: {
 		color: "emerald",
-		variant: "medium",
+		variant: "small",
 	},
 });
 
 export interface TagProps extends VariantProps<typeof variants> {
 	children: string;
 	className?: string;
+	as?: "span" | "mark";
 }
 
-export function Tag({ children, color, variant, className }: TagProps) {
+export const getTagColor = (value: string) => {
+	return (
+		valueColorMap[value.toLowerCase() as keyof typeof valueColorMap] ??
+		"emerald"
+	);
+};
+
+export function Tag({ children, color, variant, className, as }: TagProps) {
 	if (!color && typeof children === "string") {
 		color = valueColorMap[children.toLowerCase() as keyof typeof valueColorMap];
 	}
+	const TagComponent = as ?? "span";
 	return (
-		<span className={cn(variants({ color, variant }), className)}>
+		<TagComponent className={cn(variants({ color, variant }), className)}>
 			{children}
-		</span>
+		</TagComponent>
 	);
 }

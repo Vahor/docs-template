@@ -30,3 +30,4 @@ and open https://localhost:8080
 - openai: https://platform.openai.com/docs/api-reference/chat/create
 - https://supabase.com/docs/reference/api/v1-list-all-snippets
 - https://github.com/fuma-nama/fumadocs/tree/dev/packages/ui/src/theme/typography
+- https://docs.scalar.com/swagger-editor#version-0/reference/tag/planets/GET/planets/{planetId} for the modal editor

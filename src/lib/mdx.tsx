@@ -1,3 +1,4 @@
+import { OpenApiBoxedUrl } from "@/components/openapi/openapi-boxed-url";
 import { OpenapiLayout } from "@/components/openapi/openapi-layout";
 import {
 	Accordion,
@@ -98,6 +99,7 @@ const mdxComponents: MDXComponents = {
 	Col,
 
 	OpenapiLayout: OpenapiLayout,
+	BoxedUrl: OpenApiBoxedUrl,
 	CodeGroup: CodeGroup,
 
 	Accordion: ({ children, multiple, props }) => (

@@ -4,6 +4,7 @@ import {
 	type Examples,
 	generateRequestsFromSchema,
 } from "@/components/openapi/example";
+import { OpenApiBoxedUrl } from "@/components/openapi/openapi-boxed-url";
 import {
 	ServerResponse,
 	type ServerResponseProps,
@@ -32,14 +33,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Tag } from "@/components/ui/tag";
-import { editorOptions } from "@/lib/monaco";
 import type { OpenAPIV3 } from "@/lib/openapi";
-import { cn } from "@/lib/utils";
-import MonacoEditor, { type Monaco } from "@monaco-editor/react";
 import { type ReactFormExtendedApi, useForm } from "@tanstack/react-form";
 import { ChevronRightIcon, LoaderCircleIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import { Suspense, useMemo, useState } from "react";
+
+const OpenApiRequestEditor = dynamic(
+	() =>
+		import("./openapi-request-editor").then((mod) => mod.OpenApiRequestEditor),
+	{ ssr: false },
+);
 
 interface OpenapiPlaygroundProps {
 	spec: OpenAPIV3.OperationObject;
@@ -48,41 +52,9 @@ interface OpenapiPlaygroundProps {
 	server: string;
 }
 
-type FormType = {
+export type FormType = {
 	_body: string;
 	[key: string]: unknown;
-};
-
-const buildUrl = (
-	server: string,
-	path: string,
-	params: OpenAPIV3.ParameterObject[],
-	values: FormType,
-) => {
-	let cleanPath = path;
-	const queryParams = new URLSearchParams();
-	for (const param of params) {
-		const val = values[param.name] as string | string[];
-		if (param.in === "query") {
-			if (Array.isArray(val)) {
-				for (const v of val) {
-					queryParams.append(param.name, v);
-				}
-			} else {
-				queryParams.set(param.name, val);
-			}
-		} else if (param.in === "path") {
-			if (Array.isArray(val)) {
-				const valStr = val.join(",");
-				cleanPath = cleanPath.replace(`{${param.name}}`, valStr);
-			} else {
-				cleanPath = cleanPath.replace(`{${param.name}}`, val);
-			}
-		}
-	}
-	const targetUrl = new URL(`${server}${cleanPath}`);
-	targetUrl.search = queryParams.toString();
-	return targetUrl;
 };
 
 export function OpenapiPlaygroundTrigger({
@@ -152,7 +124,7 @@ export function OpenapiPlaygroundTrigger({
 	return (
 		<Dialog>
 			<div className="flex items-center py-1 gap-2">
-				<UrlWithMethod method={method} path={path} />
+				<OpenApiBoxedUrl method={method} path={path} />
 				<DialogTrigger asChild>
 					<Button className="font-semibold group" size="sm" type="button">
 						<span>Try it out</span>
@@ -169,7 +141,7 @@ export function OpenapiPlaygroundTrigger({
 						Try out the API in the playground
 					</DialogDescription>
 					<div className="border-b w-full py-2 gap-4 flex justify-center items-center">
-						<UrlWithMethod method={method} path={path} />
+						<OpenApiBoxedUrl method={method} path={path} />
 						<form.Subscribe
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
 						>
@@ -198,13 +170,17 @@ export function OpenapiPlaygroundTrigger({
 						className="grow"
 						style={{ height: "auto" }}
 					>
-						<CustomResizablePanel title="Request" defaultSize={60}>
-							<Request spec={spec} form={form} examples={bodyExamples} />
+						<CustomResizablePanel title="Request">
+							<Request spec={spec} form={form} />
 						</CustomResizablePanel>
-						<ResizableHandle withHandle />
-						<CustomResizablePanel title="Response">
-							<Response response={response} />
-						</CustomResizablePanel>
+						{!response ? null : (
+							<>
+								<ResizableHandle withHandle />
+								<CustomResizablePanel title="Response" defaultSize={60}>
+									<Response response={response} />
+								</CustomResizablePanel>
+							</>
+						)}
 					</ResizablePanelGroup>
 				</Form>
 			</DialogContent>
@@ -228,7 +204,7 @@ const CustomResizablePanel = ({
 			{...props}
 		>
 			<div className="font-mono w-full border-b px-2">{title}</div>
-			<div className="overflow-x-visible min-w-[400px] py-2 h-full @container">
+			<div className="overflow-x-visible min-w-[400px] [&>*]:py-2 h-full @container">
 				{children}
 			</div>
 		</ResizablePanel>
@@ -267,54 +243,11 @@ const ParameterField = ({
 const Request = ({
 	spec,
 	form,
-	examples,
 }: {
 	spec: OpenAPIV3.OperationObject;
 	form: ReactFormExtendedApi<FormType>;
-	examples: Examples | null;
 }) => {
 	const parameters = (spec.parameters ?? []) as OpenAPIV3.ParameterObject[];
-	const requestBody = spec.requestBody as OpenAPIV3.RequestBodyObject;
-	const content = requestBody?.content?.["application/json"];
-
-	const handleEditorWillMount = (monaco: Monaco) => {
-		const schema = content?.schema;
-		if (schema) {
-			// TODO: fix directly in the openapi schema
-			// note: we should also fix the enum (see fields and issue on order)
-			// @ts-expect-error hack
-			for (const value of Object.values(schema.properties)) {
-				// @ts-expect-error hack
-				if (value.format === "YYYY-MM-DD") {
-					// @ts-expect-error hack
-					value.type = "string";
-					// @ts-expect-error hack
-					value.format = "date";
-				}
-				// @ts-expect-error hack
-				if (value.type === "map") {
-					// @ts-expect-error hack
-					value.type = "object";
-				}
-				// @ts-expect-error hack
-				if (value.type === "number($float)") {
-					// @ts-expect-error hack
-					value.type = "number";
-				}
-			}
-		}
-
-		monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-			validate: true,
-			schemas: [
-				{
-					uri: "http://schema/schema.json",
-					fileMatch: ["*"], // Match all files
-					schema: content?.schema,
-				},
-			],
-		});
-	};
 
 	return (
 		<div className="flex flex-col gap-2 h-full px-1 overflow-y-auto mx-1">
@@ -325,25 +258,15 @@ const Request = ({
 					))}
 				</div>
 			)}
-			<div
-				className="border p-2 rounded-xl h-full min-h-[200px]"
-				data-editor-wrapper
+			<Suspense
+				fallback={
+					<div className="h-full flex items-center justify-center">
+						Loading...
+					</div>
+				}
 			>
-				<form.Field name="_body">
-					{(field) => (
-						<MonacoEditor
-							language="json"
-							theme="light"
-							value={field.state.value as string}
-							options={editorOptions}
-							beforeMount={handleEditorWillMount}
-							onChange={(value) => {
-								field.handleChange(value ?? "");
-							}}
-						/>
-					)}
-				</form.Field>
-			</div>
+				<OpenApiRequestEditor spec={spec} form={form} />
+			</Suspense>
 		</div>
 	);
 };
@@ -353,7 +276,7 @@ const Response = ({
 }: {
 	response: ServerResponseProps | null;
 }) => {
-	if (!response) return <ResponsePlaceholder />;
+	if (!response) return null;
 
 	return (
 		<ResizablePanelGroup
@@ -367,9 +290,7 @@ const Response = ({
 				collapsedSize={10}
 				className="grow px-2 overflow-hidden h-full"
 			>
-				<Suspense fallback={<ResponsePlaceholder />}>
-					<ServerResponse {...response} />
-				</Suspense>
+				<ServerResponse {...response} />
 			</ResizablePanel>
 
 			<ResizableHandle withHandle />
@@ -401,59 +322,4 @@ const Response = ({
 			)}
 		</ResizablePanelGroup>
 	);
-};
-
-const ResponsePlaceholder = () => {
-	return <div className="overflow-x-visible h-full">response</div>;
-};
-
-const UrlWithMethod = ({
-	method,
-	path,
-	className,
-}: { method: OpenAPIV3.HttpMethods; path: string; className?: string }) => {
-	return (
-		<div
-			className={cn(
-				"border bg-background rounded-md w-auto px-2 flex items-center gap-2 divide-x",
-				className,
-			)}
-		>
-			<Tag variant="small" className="text-xs">
-				{method.toUpperCase()}
-			</Tag>
-			<code
-				data-language="plaintext"
-				className="text-xs text-slate-600 px-px pl-2"
-			>
-				<PathWithColoredParams path={path} />
-			</code>
-		</div>
-	);
-};
-
-const PathWithColoredParams = ({ path }: { path: string }) => {
-	const params = path.split("/").map((part, index) => {
-		const isParam = part[0] === "{" && part[part.length - 1] === "}";
-		const key = `${part}-${index}`;
-		const isLast = index === path.split("/").length - 1;
-		if (isParam) {
-			return (
-				<span key={key}>
-					<mark className="text-emerald-500 dark:text-emerald-400  bg-emerald-400/10 rounded-lg px-1.5">
-						{part}
-					</mark>
-					/
-				</span>
-			);
-		}
-		return (
-			<span key={key}>
-				{part}
-				{isLast ? "" : "/"}
-			</span>
-		);
-	});
-
-	return <code data-language="plaintext">{params}</code>;
 };

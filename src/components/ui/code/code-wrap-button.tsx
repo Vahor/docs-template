@@ -25,7 +25,7 @@ export function CodeWrapButton({ wrapperRef, ...props }: CodeWrapButtonProps) {
 				aria-label="Wrap code"
 				{...props}
 				onClick={toggle}
-				className="hover:text-zinc-400"
+				className="hover:text-zinc-400 group-data-[wrap-code=true]:text-zinc-400"
 			>
 				<svg
 					role="img"

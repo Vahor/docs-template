@@ -145,7 +145,10 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
 				className="flex lg:hidden"
 				onClick={() => setOpen(true)}
 			>
-				<SearchIcon className="h-4 w-4 shrink-0 opacity-50" />
+				<SearchIcon
+					className="h-4 w-4 shrink-0 opacity-50"
+					aria-label="Search"
+				/>
 			</button>
 
 			<Dialog open={open} onOpenChange={setOpen}>

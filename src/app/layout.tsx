@@ -61,6 +61,8 @@ export default function RootLayout({
 									alt="logo"
 									src="https://placehold.co/180x52"
 									className="hidden lg:block"
+									height={52}
+									width={180}
 								/>
 								<SidebarTrigger className="lg:hidden">
 									<MenuIcon />

@@ -35,20 +35,21 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cache } from "react";
+import { Root as AsChild } from "@radix-ui/react-slot";
 
 const BorderIndicator = ({
 	level,
 	children,
 }: { level: number; children: React.ReactNode }) => {
 	return (
-		<div
+		<ul
 			style={{
 				paddingLeft: level * 8,
 			}}
 			className="border-l hover:border-zinc-400 peer-data-[state=open]:border-zinc-400 border-indicator py-0.5 group-data-[collapsible=icon]:hidden"
 		>
 			{children}
-		</div>
+		</ul>
 	);
 };
 
@@ -60,35 +61,41 @@ const SidebarGroupComponent = ({
 	const active = isActive(group, pathname);
 
 	return (
-		<Accordion
-			key={group.title}
-			type="single"
-			collapsible
-			asChild
-			className="[&[data-state=open]>li>div>button>svg]:rotate-90"
-			defaultValue={active ? "item" : undefined}
-		>
-			<AccordionItem value="item">
-				<SidebarMenuItem>
-					<BorderIndicator level={level}>
-						<AccordionTrigger asChild>
-							<SidebarMenuButton isActive={active}>
-								<span>{group.title}</span>
-								<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
-								<ChevronRight className="ml-auto transition-transform duration-200" />
-							</SidebarMenuButton>
-						</AccordionTrigger>
-					</BorderIndicator>
-					<AccordionContent>
-						<SidebarMenuSub>
-							{group.items.map((item) => (
-								<SidebarComponent item={item} key={item.title} level={level} />
-							))}
-						</SidebarMenuSub>
-					</AccordionContent>
-				</SidebarMenuItem>
-			</AccordionItem>
-		</Accordion>
+		<li>
+			<Accordion
+				key={group.title}
+				type="single"
+				collapsible
+				asChild
+				className="[&[data-state=open]>li>div>button>svg]:rotate-90"
+				defaultValue={active ? "item" : undefined}
+			>
+				<AccordionItem value="item">
+					<SidebarMenuItem>
+						<BorderIndicator level={level}>
+							<AccordionTrigger asChild>
+								<SidebarMenuButton isActive={active}>
+									<span>{group.title}</span>
+									<SidebarMenuBadge>{group.badge}</SidebarMenuBadge>
+									<ChevronRight className="ml-auto transition-transform duration-200" />
+								</SidebarMenuButton>
+							</AccordionTrigger>
+						</BorderIndicator>
+						<AccordionContent>
+							<SidebarMenuSub>
+								{group.items.map((item) => (
+									<SidebarComponent
+										item={item}
+										key={item.title}
+										level={level}
+									/>
+								))}
+							</SidebarMenuSub>
+						</AccordionContent>
+					</SidebarMenuItem>
+				</AccordionItem>
+			</Accordion>
+		</li>
 	);
 };
 
@@ -101,10 +108,10 @@ const SidebarItemComponent = ({
 	const { setOpenMobile } = useSidebar();
 
 	return (
-		<Accordion type="single" asChild value={active ? "item" : undefined}>
-			<AccordionItem value="item">
+		<Accordion type="single" value={active ? "item" : undefined} asChild>
+			<AccordionItem value="item" data-accordion-item="item">
 				<BorderIndicator level={level + 1}>
-					<AccordionTrigger asChild>
+					<AccordionTrigger asChild data-accordion-item="trigger">
 						<SidebarMenuSubItem key={item.title}>
 							<SidebarMenuSubButton
 								asChild

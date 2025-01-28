@@ -4,7 +4,7 @@ import type { Examples } from "@/components/openapi/example";
 import { CodeBlock } from "@/components/ui/code/code-block";
 import { NativeSelect } from "@/components/ui/native-select";
 import { shiki, shikiOptions } from "@/lib/shiki";
-import { Suspense, use, useState } from "react";
+import { Suspense, use, useId, useState } from "react";
 
 export function SchemaViewer({
 	examples,
@@ -23,6 +23,7 @@ function Viewer({ examples, title }: { examples: Examples; title: string }) {
 		JSON.stringify(Object.values(examples)[0], null, 2),
 	);
 	const highlighter = use(shiki);
+	const id = useId();
 
 	return (
 		<CodeBlock filename={title}>
@@ -39,8 +40,11 @@ function Viewer({ examples, title }: { examples: Examples; title: string }) {
 
 			{Object.keys(examples).length === 1 ? null : (
 				<div className="flex items-center justify-between gap-4 w-full">
-					<span className="basis-1/3 text-xs">Select schema</span>
+					<label htmlFor={id} className="basis-1/3 text-xs">
+						Select schema
+					</label>
 					<NativeSelect
+						id={id}
 						className="border-zinc-600 basis-2/3 py-1 text-sm overflow-hidden truncate px-1.5"
 						onChange={(e) => {
 							const example = examples[e.target.value];

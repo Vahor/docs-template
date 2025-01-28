@@ -216,8 +216,12 @@ const OneOf = ({ oneOf }: PropertyProps) => {
 	);
 };
 
-const SubProperty = ({ properties, required }: PropertyProps) => {
-	if (!properties) return null;
+const SubProperty = ({
+	properties,
+	additionalProperties,
+	required,
+}: PropertyProps) => {
+	if (!properties && !additionalProperties) return null;
 
 	return (
 		<Accordion type="single" collapsible className="not-prose -ml-1 mt-2">
@@ -230,21 +234,28 @@ const SubProperty = ({ properties, required }: PropertyProps) => {
 				</AccordionTrigger>
 				<AccordionContent className="py-0 pb-1 px-2" asChild>
 					<Properties className="my-0 mt-2">
-						{Object.entries(properties).map(([key, value]) => {
-							const schema = value as OpenAPIV3.SchemaObject;
-							const isRequired = Array.isArray(required)
-								? required.includes(key)
-								: required;
-							return (
+						{additionalProperties &&
+							typeof additionalProperties === "object" && (
 								// @ts-expect-error we are using a custom type
-								<Property
-									key={key}
-									name={key}
-									{...schema}
-									required={isRequired}
-								/>
-							);
-						})}
+								<Property name="*" {...additionalProperties} />
+							)}
+
+						{properties &&
+							Object.entries(properties).map(([key, value]) => {
+								const schema = value as OpenAPIV3.SchemaObject;
+								const isRequired = Array.isArray(required)
+									? required.includes(key)
+									: required;
+								return (
+									// @ts-expect-error we are using a custom type
+									<Property
+										key={key}
+										name={key}
+										{...schema}
+										required={isRequired}
+									/>
+								);
+							})}
 					</Properties>
 				</AccordionContent>
 			</AccordionItem>

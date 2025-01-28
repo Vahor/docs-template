@@ -192,7 +192,7 @@ const OneOf = ({ oneOf }: PropertyProps) => {
 				value="sub-property"
 				className="pt-1 rounded-md border w-48 data-[state=open]:w-full"
 			>
-				<AccordionTrigger className="pt-0 pb-1 px-2 border-b border-transparent data-[state=open]:border-border">
+				<AccordionTrigger className="py-0 px-2 border-b border-transparent data-[state=open]:border-border">
 					Show types
 				</AccordionTrigger>
 				<AccordionContent className="py-0 pb-1 px-2" asChild>
@@ -229,7 +229,7 @@ const SubProperty = ({
 				value="sub-property"
 				className="pt-1 rounded-md border w-48 data-[state=open]:w-full"
 			>
-				<AccordionTrigger className="pt-0 pb-1 px-2 border-b border-transparent data-[state=open]:border-border">
+				<AccordionTrigger className="py-0 px-2 border-b border-transparent data-[state=open]:border-border">
 					Show sub-properties
 				</AccordionTrigger>
 				<AccordionContent className="py-0 pb-1 px-2" asChild>

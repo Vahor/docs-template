@@ -1,5 +1,8 @@
-import { redirect } from "next/navigation";
 
 export default function Home() {
-	redirect("/guide/overview");
+  return (
+    <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
+  );
 }

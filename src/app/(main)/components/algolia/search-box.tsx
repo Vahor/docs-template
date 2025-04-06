@@ -59,7 +59,6 @@ const SearchResult = ({
     <CommandMenu.Item
       value={result.objectID}
       aria-labelledby={`${id}-title`}
-      title={result.url}
       onSelect={() => {
         router.push(result.url);
         setOpen(false);

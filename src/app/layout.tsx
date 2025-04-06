@@ -5,6 +5,7 @@ import { Providers } from "@/app/(main)/providers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/app/(main)/components/site-header";
 import { BannerContainer } from "@/app/(main)/components/banner";
+import { HorizontalMenu } from "@/app/(main)/components/horizontal-menu";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <Providers>
           <SidebarProvider className="flex flex-col">
             <SiteHeader />
+            <HorizontalMenu />
             <main className="mt-[var(--banner-height)] flex-1 overflow-y-auto">
               {children}
             </main>

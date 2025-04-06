@@ -20,7 +20,8 @@
 		@apply bg-bg-white text-text-dark antialiased font-sans;
 	}
 	html {
-		--header-height: 3rem;
+		--header-height: 3.5rem;
+		--menu-height: 2.7rem;
 		--banner-height: 2.5rem;
 	}
 	button:not(:disabled),

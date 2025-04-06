@@ -5,11 +5,8 @@ import { useEffect, useId } from "react";
 import {
   RiArrowDownLine,
   RiArrowUpLine,
-  RiCodeSSlashLine,
-  RiBookLine,
   RiCloseLine,
   RiCornerDownLeftLine,
-  RiHistoryLine,
   RiSearch2Line,
 } from '@remixicon/react';
 
@@ -21,13 +18,9 @@ import * as Tag from '@/components/ui/tag';
 import { AutocompleteCollection, Entry, useAutocomplete } from "@/app/(main)/components/algolia/useAlgoliaSearch";
 import { cn } from "@/lib/utils";
 import { searchStore } from "./search.store";
+import { Section, SectionIcon } from "@/lib/sections";
 
 
-const SearchResultIcon = {
-  guide: RiBookLine,
-  api: RiCodeSSlashLine,
-  changelog: RiHistoryLine,
-}
 
 const suggested: Entry[] = [{
   objectID: '1',
@@ -60,7 +53,7 @@ const SearchResult = ({
   // const breadcrumbs = getPageBreadcrumbs(result.url).slice(0, -1);
   const breadcrumbs = [];
 
-  const icon = SearchResultIcon[result.category];
+  const icon = SectionIcon[result.category];
 
   return (
     <CommandMenu.Item
@@ -167,7 +160,7 @@ const SearchResults = ({
   );
 };
 
-const DismissibleCategory = ({ category, label, onChange }: { category: keyof typeof SearchResultIcon, label: string, onChange: () => void }) => {
+const DismissibleCategory = ({ category, label, onChange }: { category: Section, label: string, onChange: () => void }) => {
   const searchCategories = searchStore((state) => state.searchCategories);
   const setEnabledCategory = searchStore((state) => state.setEnabledCategory);
 
@@ -178,7 +171,7 @@ const DismissibleCategory = ({ category, label, onChange }: { category: keyof ty
     onChange();
   }
 
-  const icon = SearchResultIcon[category];
+  const icon = SectionIcon[category];
 
   return (
     <Tag.Root variant='gray' disabled={!enabled} className="pointer-events-auto cursor-pointer" onClick={() => setEnabled(!enabled)}>

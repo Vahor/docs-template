@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./styles/globals.css";
 import { Providers } from "@/app/(main)/providers";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/app/(main)/components/site-header";
 import { BannerContainer } from "@/app/(main)/components/banner";
 import { HorizontalMenu } from "@/app/(main)/components/horizontal-menu";
+import { AppSidebar } from "@/app/(main)/components/sidebar/sidebar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,8 +37,11 @@ export default function RootLayout({
           <SidebarProvider className="flex flex-col">
             <SiteHeader />
             <HorizontalMenu />
-            <main className="mt-[var(--banner-height)] flex-1 overflow-y-auto">
-              {children}
+            <main className="mt-[var(--banner-height)] flex flex-1 overflow-y-auto">
+              <AppSidebar />
+              <SidebarInset>
+                {children}
+              </SidebarInset>
             </main>
           </SidebarProvider>
         </Providers>

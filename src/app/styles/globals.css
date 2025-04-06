@@ -9,7 +9,8 @@
 	--font-sans: var(--font-inter);
 	--font-mono: var(--font-geist-mono);
 
-	--color-navbar: var(--color-bg-light);
+	--color-navbar: var(--color-bg-white);
+	--color-sidebar: var(--color-bg-white);
 }
 
 @layer base {

@@ -18,8 +18,16 @@ export default function Home() {
             Try Again
           </Button.Root>
         </div>
-
       </div>
+      <div className="h-[500px] bg-red-500 w-full"></div>
+      <div className="h-[500px] bg-blue-500 w-full"></div>
+      <div className="h-[500px] bg-red-500 w-full"></div>
+      <div className="h-[500px] bg-blue-500 w-full"></div>
+      <div className="h-[500px] bg-red-500 w-full"></div>
+      <div className="h-[500px] bg-blue-500 w-full"></div>
+      <div className="h-[500px] bg-red-500 w-full"></div>
+      <div className="h-[500px] bg-red-500 w-full"></div>
+      <div className="h-[500px] bg-blue-500 w-full"></div>
     </div>
   );
 }

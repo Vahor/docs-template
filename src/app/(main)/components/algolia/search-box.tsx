@@ -137,7 +137,17 @@ const SearchResults = ({
   query: string;
   collection: AutocompleteCollection<Entry>;
 }) => {
+  const searchCategories = searchStore((state) => state.searchCategories);
+
   if (!collection || collection.items.length === 0) {
+    if (!Object.values(searchCategories).some(enabled => enabled)) {
+      return (
+        <CommandMenu.Empty>
+          Enable at least one category to search
+        </CommandMenu.Empty>
+      );
+    }
+
     return (
       <CommandMenu.Empty>
         Nothing found for{" "}
@@ -157,7 +167,7 @@ const SearchResults = ({
   );
 };
 
-const DismissibleCategory = ({ category, label, onChange }: { category: string, label: string, onChange: () => void }) => {
+const DismissibleCategory = ({ category, label, onChange }: { category: keyof typeof SearchResultIcon, label: string, onChange: () => void }) => {
   const searchCategories = searchStore((state) => state.searchCategories);
   const setEnabledCategory = searchStore((state) => state.setEnabledCategory);
 
@@ -168,10 +178,12 @@ const DismissibleCategory = ({ category, label, onChange }: { category: string, 
     onChange();
   }
 
+  const icon = SearchResultIcon[category];
+
   return (
     <Tag.Root variant='gray' disabled={!enabled} className="pointer-events-auto cursor-pointer" onClick={() => setEnabled(!enabled)}>
+      <Tag.Icon as={icon} />
       {label}
-      <Tag.DismissButton type='button' />
     </Tag.Root>
   )
 
@@ -203,11 +215,11 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
   return (
     <div className={className}>
 
-      <label className="relative items-center flex border p-2 rounded-10 w-full max-w-[400px]">
+      <label className="relative items-center flex border px-2 py-1.5 rounded-10 w-full max-w-[400px]">
         <RiSearch2Line
           className={cn(
             'absolute left-2 pointer-events-none',
-            'text-text-lighter size-5 shrink-0',
+            'text-text-lighter size-4.5 shrink-0',
             'transition duration-200 ease-out',
             // focus within
             'group-focus-within/cmd-input:text-primary-base',
@@ -221,13 +233,14 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
           placeholder={inputProps.placeholder}
           onFocus={() => setOpen(true)}
         />
-        <Kbd.Root className="bg-navbar">
+        <Kbd.Root className="bg-navbar h-4.5">
           /
         </Kbd.Root>
       </label>
 
       <CommandMenu.Dialog open={open} onOpenChange={setOpen} commandProps={{
         shouldFilter: false,
+        loop: true,
       }}>
         {/* Input wrapper */}
         <div className='group/cmd-input bg-bg-white flex h-12 w-full items-center gap-2 px-5'>
@@ -266,7 +279,6 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
           </div>
         </div>
 
-        {/* Smart Prompt Examples */}
         <CommandMenu.List>
           {autocompleteState && autocompleteState.query !== "" ? (
             <SearchResults

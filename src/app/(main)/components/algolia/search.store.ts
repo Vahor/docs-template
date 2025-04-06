@@ -18,7 +18,7 @@ export const searchStore = create<SearchStore>()(persist(
 		open: false,
 		setOpen: (open) => set({ open }),
 		searchCategories: {
-			guides: true,
+			guide: true,
 			api: true,
 			changelog: true,
 		},

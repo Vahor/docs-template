@@ -32,6 +32,7 @@ const SearchResultIcon = {
 const suggested: Entry[] = [{
   objectID: '1',
   url: '/changelog/xyz',
+  category: 'changelog',
   _highlightResult: {
     headline: {
       value: 'Latest Changes',
@@ -43,8 +44,10 @@ const suggested: Entry[] = [{
 
 const SearchResult = ({
   result,
+  append = true
 }: {
   result: Entry;
+  append?: boolean;
 }) => {
   const id = useId();
   const setOpen = searchStore((state) => state.setOpen);
@@ -57,21 +60,7 @@ const SearchResult = ({
   // const breadcrumbs = getPageBreadcrumbs(result.url).slice(0, -1);
   const breadcrumbs = [];
 
-  // TODO: replace with breadcrumbs
-  const getResultType = (result: Entry) => {
-    if (result.url.includes("api")) {
-      return "api";
-    }
-    if (result.url.includes("guide")) {
-      return "guide";
-    }
-    if (result.url.includes("changelog")) {
-      return "changelog";
-    }
-    return "guide";
-  };
-  const resultType = getResultType(result);
-  const icon = SearchResultIcon[resultType];
+  const icon = SearchResultIcon[result.category];
 
   return (
     <CommandMenu.Item
@@ -81,7 +70,9 @@ const SearchResult = ({
       onSelect={() => {
         router.push(result.url);
         setOpen(false);
-        appendHistory(result);
+        if (append) {
+          appendHistory(result);
+        }
       }}
     >
       <CommandMenu.ItemIcon as={icon} />
@@ -117,7 +108,7 @@ const SuggestedResults = () => {
     <>
       <CommandMenu.Group heading='Suggested Results'>
         {suggested.map((result) => (
-          <SearchResult key={result.objectID} result={result} />
+          <SearchResult key={result.objectID} result={result} append={false} />
         ))}
       </CommandMenu.Group>
       {history.length > 0 && (
@@ -131,7 +122,7 @@ const SuggestedResults = () => {
             Clear Recent
           </LinkButton.Root>
           {history.map((result) => (
-            <SearchResult key={result.objectID} result={result} />
+            <SearchResult key={result.objectID} result={result} append={false} />
           ))}
         </CommandMenu.Group>
       )}
@@ -166,16 +157,15 @@ const SearchResults = ({
   );
 };
 
-const DismissibleCategory = ({ category, label }: { category: string, label: string }) => {
+const DismissibleCategory = ({ category, label, onChange }: { category: string, label: string, onChange: () => void }) => {
   const searchCategories = searchStore((state) => state.searchCategories);
   const setEnabledCategory = searchStore((state) => state.setEnabledCategory);
-  const { autocomplete } = useAutocomplete();
 
   const enabled = searchCategories[category];
 
   const setEnabled = (enabled: boolean) => {
     setEnabledCategory(category, enabled);
-    autocomplete.refresh();
+    onChange();
   }
 
   return (
@@ -205,6 +195,10 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [open, setOpen]);
+
+  const onDismissTag = () => {
+    autocomplete.refresh();
+  }
 
   return (
     <div className={className}>
@@ -266,9 +260,9 @@ export const AlgoliaSearchBox = ({ className }: { className?: string }) => {
             Searching for
           </div>
           <div className='flex flex-wrap gap-2'>
-            <DismissibleCategory category='guides' label='Guides' />
-            <DismissibleCategory category='api' label='API' />
-            <DismissibleCategory category='changelog' label='Changelog' />
+            <DismissibleCategory category='guide' label='Guides' onChange={onDismissTag} />
+            <DismissibleCategory category='api' label='API' onChange={onDismissTag} />
+            <DismissibleCategory category='changelog' label='Changelog' onChange={onDismissTag} />
           </div>
         </div>
 

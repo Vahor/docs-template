@@ -25,6 +25,7 @@ export type Entry = {
 	url: string;
 	headline?: string;
 	description?: string;
+	category: "guide" | "api" | "changelog";
 
 	_highlightResult: {
 		headline?: {
@@ -43,13 +44,13 @@ export function useAutocomplete() {
 	const router = useRouter();
 	const [autocompleteState, setAutocompleteState] =
 		useState<AutocompleteState<Entry>>();
-	const appendHistory = searchStore((state) => state.appendHistory);
 	const getSearchCategories = searchStore((state) => state.getSearchCategories);
 
 	const [autocomplete] = useState(() =>
 		createAutocomplete<Entry>({
 			id,
 			placeholder: "Search the docs...",
+			autoFocus: false,
 			defaultActiveItemId: 0,
 			onStateChange({ state }) {
 				setAutocompleteState(state);
@@ -68,11 +69,9 @@ export function useAutocomplete() {
 							return undefined;
 						},
 						onSelect({ item, itemUrl }) {
-							console.log("Selected", item);
 							if (itemUrl) {
 								router.push(itemUrl);
 							}
-							appendHistory(item);
 						},
 						getItems({ query }) {
 							const enabledCategories = getSearchCategories();

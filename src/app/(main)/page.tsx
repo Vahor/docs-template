@@ -14,7 +14,7 @@ export default function Home() {
         </Button.Root>
         <Button.Root variant="error">Tr Again</Button.Root>
         <div className='flex flex-col items-center gap-4'>
-          <Button.Root variant='error' mode='filled'>
+          <Button.Root variant='error' mode='lighter'>
             Try Again
           </Button.Root>
         </div>

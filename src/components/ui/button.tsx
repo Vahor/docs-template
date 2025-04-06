@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { tv, VariantProps } from "tailwind-variants";
 import { recursiveCloneChildren } from "@/lib/recursive-clone-children";
 import { PolymorphicComponentProps } from "@/lib/polymorphic";
+import { tv, VariantProps } from "@/lib/utils";
 
 const BUTTON_ROOT_NAME = 'ButtonRoot';
 const BUTTON_ICON_NAME = 'ButtonIcon';
@@ -10,13 +10,20 @@ const BUTTON_ICON_NAME = 'ButtonIcon';
 const buttonVariants = tv({
   slots: {
     root: [
-      "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+      // base
+      'group relative inline-flex items-center justify-center whitespace-nowrap outline-none',
+      'transition duration-200 ease-out',
+      // focus
+      'focus:outline-none',
+      // disabled
+      'disabled:pointer-events-none disabled:bg-bg-light disabled:text-text-disabled disabled:ring-transparent',
     ],
     icon: []
   },
   variants: {
     variant: {
       primary: {},
+      neutral: {},
       error: {},
     },
     mode: {
@@ -24,10 +31,16 @@ const buttonVariants = tv({
       stroke: {
         root: 'ring-1 ring-inset',
       },
+      lighter: {
+        root: 'ring-1 ring-inset',
+      },
+      ghost: {
+        root: 'ring-1 ring-inset',
+      },
     },
     size: {
       large: {
-        root: 'h-10 gap-3 rounded-xl px-3.5 text-label-sm',
+        root: 'h-10 gap-3 rounded-10 px-3.5 text-label-sm',
         icon: '-mx-1',
       },
       medium: {
@@ -40,6 +53,10 @@ const buttonVariants = tv({
       },
       xsmall: {
         root: 'h-7 gap-2.5 rounded-lg px-2 text-label-sm',
+        icon: '-mx-1',
+      },
+      xxsmall: {
+        root: 'h-6 gap-2 rounded-lg px-1.5 text-label-sm',
         icon: '-mx-1',
       },
     },
@@ -74,6 +91,79 @@ const buttonVariants = tv({
         ],
       },
     },
+    {
+      variant: 'primary',
+      mode: 'ghost',
+      class: {
+        root: [
+          // base
+          'bg-transparent text-primary-base ring-transparent',
+          // hover
+          'hover:bg-primary/10',
+          // focus
+          'focus-visible:bg-bg-white-0 focus-visible:shadow-button-primary-focus focus-visible:ring-primary-base',
+        ],
+      },
+    },
+    //#endregion
+
+    //#region variant=neutral
+    {
+      variant: 'neutral',
+      mode: 'filled',
+      class: {
+        root: [
+          // base
+          'bg-strong-950 text-white',
+          // hover
+          'hover:bg-surface-800',
+          // focus
+          'focus-visible:shadow-button-important-focus',
+        ],
+      },
+    },
+    {
+      variant: 'neutral',
+      mode: 'stroke',
+      class: {
+        root: [
+          // base
+          'bg-bg-white text-sub shadow-regular-xs ring-stroke-soft',
+          // hover
+          'hover:bg-weak hover:text-strong hover:shadow-none hover:ring-transparent',
+          // focus
+          'focus-visible:text-text-strong focus-visible:shadow-button-important-focus focus-visible:ring-stroke-strong',
+        ],
+      },
+    },
+    {
+      variant: 'neutral',
+      mode: 'lighter',
+      class: {
+        root: [
+          // base
+          'bg-bg-light text-text-base ring-transparent',
+          // hover
+          'hover:bg-bg-white hover:text-text-strong-950 hover:shadow-regular-xs hover:ring-stroke-soft-200',
+          // focus
+          'focus-visible:bg-bg-white-0 focus-visible:text-text-strong-950 focus-visible:shadow-button-important-focus focus-visible:ring-stroke-strong-950',
+        ],
+      },
+    },
+    {
+      variant: 'neutral',
+      mode: 'ghost',
+      class: {
+        root: [
+          // base
+          'bg-transparent text-text-base ring-transparent',
+          // hover
+          'hover:bg-bg-light hover:text-text-dark',
+          // focus
+          'focus-visible:bg-bg-white focus-visible:text-text-dark focus-visible:shadow-button-important-focus focus-visible:ring-stroke-dark',
+        ],
+      },
+    },
     //#endregion
 
     //#region variant=error
@@ -88,6 +178,48 @@ const buttonVariants = tv({
           'hover:bg-red-700',
           // focus
           'focus-visible:shadow-button-error-focus',
+        ],
+      },
+    },
+    {
+      variant: 'error',
+      mode: 'stroke',
+      class: {
+        root: [
+          // base
+          'bg-bg-white text-error-base ring-error-base',
+          // hover
+          'hover:bg-red-500/10 hover:ring-transparent',
+          // focus
+          'focus-visible:shadow-button-error-focus',
+        ],
+      },
+    },
+    {
+      variant: 'error',
+      mode: 'lighter',
+      class: {
+        root: [
+          // base
+          'bg-red-500/10 text-error-base ring-transparent',
+          // hover
+          'hover:bg-bg-white hover:ring-error-base',
+          // focus
+          'focus-visible:bg-bg-white focus-visible:shadow-button-error-focus focus-visible:ring-error-base',
+        ],
+      },
+    },
+    {
+      variant: 'error',
+      mode: 'ghost',
+      class: {
+        root: [
+          // base
+          'bg-transparent text-error-base ring-transparent',
+          // hover
+          'hover:bg-red-500/10',
+          // focus
+          'focus-visible:bg-bg-white focus-visible:shadow-button-error-focus focus-visible:ring-error-base',
         ],
       },
     },

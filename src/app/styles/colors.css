@@ -149,6 +149,7 @@
 	--color-overlay: var(--color-overlay-gray);
 }
 
+.light,
 :root {
 	--color-primary-dark: var(--color-purple-800);
 	--color-primary-darker: var(--color-purple-700);
@@ -226,6 +227,80 @@
 	--color-stable-lighter: var(--color-teal-50);
 }
 
+.dark {
+	--color-bg-strong-950: var(--color-neutral-0);
+	--color-bg-surface-800: var(--color-neutral-200);
+	--color-bg-sub-300: var(--color-neutral-600);
+	--color-bg-soft-200: var(--color-neutral-700);
+	--color-bg-weak-50: var(--color-neutral-900);
+	--color-bg-white-0: var(--color-neutral-950);
+
+	--color-text-strong-950: var(--color-neutral-0);
+	--color-text-sub-600: var(--color-neutral-400);
+	--color-text-soft-400: var(--color-neutral-500);
+	--color-text-disabled-300: var(--color-neutral-600);
+	--color-text-white-0: var(--color-neutral-950);
+
+	--color-stroke-strong-950: var(--color-neutral-0);
+	--color-stroke-sub-300: var(--color-neutral-600);
+	--color-stroke-soft-200: var(--color-neutral-700);
+	--color-stroke-white-0: var(--color-neutral-950);
+
+	--color-faded-dark: var(--color-neutral-300);
+	--color-faded-base: var(--color-neutral-500);
+	--color-faded-light: --alpha(var(--color-neutral-500) / 24%);
+	--color-faded-lighter: --alpha(var(--color-neutral-500) / 16%);
+
+	--color-information-dark: var(--color-blue-400);
+	--color-information-base: var(--color-blue-500);
+	--color-information-light: --alpha(var(--color-blue-500) / 24%);
+	--color-information-lighter: --alpha(var(--color-blue-500) / 16%);
+
+	--color-warning-dark: var(--color-orange-400);
+	--color-warning-base: var(--color-orange-600);
+	--color-warning-light: --alpha(var(--color-orange-500) / 24%);
+	--color-warning-lighter: --alpha(var(--color-orange-500) / 16%);
+
+	--color-error-dark: var(--color-red-400);
+	--color-error-base: var(--color-red-600);
+	--color-error-light: --alpha(var(--color-red-500) / 24%);
+	--color-error-lighter: --alpha(var(--color-red-500) / 16%);
+
+	--color-success-dark: var(--color-green-400);
+	--color-success-base: var(--color-green-600);
+	--color-success-light: --alpha(var(--color-green-500) / 24%);
+	--color-success-lighter: --alpha(var(--color-green-500) / 16%);
+
+	--color-away-dark: var(--color-yellow-400);
+	--color-away-base: var(--color-yellow-600);
+	--color-away-light: --alpha(var(--color-yellow-500) / 24%);
+	--color-away-lighter: --alpha(var(--color-yellow-500) / 16%);
+
+	--color-feature-dark: var(--color-purple-400);
+	--color-feature-base: var(--color-purple-500);
+	--color-feature-light: --alpha(var(--color-purple-500) / 24%);
+	--color-feature-lighter: --alpha(var(--color-purple-500) / 16%);
+
+	--color-verified-dark: var(--color-sky-400);
+	--color-verified-base: var(--color-sky-600);
+	--color-verified-light: --alpha(var(--color-sky-500) / 24%);
+	--color-verified-lighter: --alpha(var(--color-sky-500) / 16%);
+
+	--color-highlighted-dark: var(--color-pink-400);
+	--color-highlighted-base: var(--color-pink-600);
+	--color-highlighted-light: --alpha(var(--color-pink-500) / 24%);
+	--color-highlighted-lighter: --alpha(var(--color-pink-500) / 16%);
+
+	--color-stable-dark: var(--color-teal-400);
+	--color-stable-base: var(--color-teal-600);
+	--color-stable-light: --alpha(var(--color-teal-500) / 24%);
+	--color-stable-lighter: --alpha(var(--color-teal-500) / 16%);
+
+	--color-overlay-gray: 51 51 51 / 56%;
+
+	--color-overlay: var(--color-overlay-gray);
+}
+
 @theme inline {
 	--color-primary-dark: var(--color-primary-dark);
 	--color-primary-darker: var(--color-primary-darker);
@@ -234,22 +309,23 @@
 	--color-static-black: var(--color-static-black);
 	--color-static-white: var(--color-static-white);
 
-	--color-bg-strong: var(--color-bg-strong-950);
-	--color-bg-surface: var(--color-bg-surface-800);
-	--color-bg-sub: var(--color-bg-sub-300);
-	--color-bg-soft: var(--color-bg-soft-200);
-	--color-bg-weak: var(--color-bg-weak-50);
+	--color-bg-dark: var(--color-bg-strong-950);
+	--color-bg-darker: var(--color-bg-surface-800);
+	--color-bg-base: var(--color-bg-sub-300);
+	--color-bg-lighter: var(--color-bg-soft-200);
+	--color-bg-light: var(--color-bg-weak-50);
 	--color-bg-white: var(--color-bg-white-0);
 
-	--color-text-strong: var(--color-text-strong-950);
-	--color-text-sub: var(--color-text-sub-600);
-	--color-text-soft: var(--color-text-soft-400);
+	--color-text-dark: var(--color-text-strong-950);
+	--color-text-base: var(--color-text-sub-600);
+	--color-text-lighter: var(--color-text-soft-400);
 	--color-text-disabled: var(--color-text-disabled-300);
-	--color-text-white: var(--color-text-white);
+	--color-text-white: var(--color-text-white-0);
 
-	--color-stroke-strong: var(--color-stroke-strong-950);
-	--color-stroke-sub: var(--color-stroke-sub-300);
-	--color-stroke-soft: var(--color-stroke-soft-200);
+	--color-stroke-dark: var(--color-stroke-strong-950);
+	--color-stroke-base: var(--color-stroke-sub-300);
+	--color-stroke-lighter: var(--color-stroke-soft-200);
+	--color-border: var(--color-stroke-lighter);
 	--color-stroke-white: var(--color-stroke-white);
 
 	--color-faded-dark: var(--color-faded-dark);
@@ -301,4 +377,169 @@
 	--color-stable-base: var(--color-stable-base);
 	--color-stable-light: var(--color-stable-light);
 	--color-stable-lighter: var(--color-stable-lighter);
+
+	/* Shadows */
+	--shadow-regular-xs: 0 1px 2px 0 rgba(10, 13, 20, 0.03);
+	--shadow-regular-sm: 0 2px 4px rgba(27, 28, 29, 0.04);
+	--shadow-regular-md: 0 16px 32px -12px rgba(14, 18, 27, 0.1);
+	--shadow-button-primary-focus: 0 0 0 2px var(--color-bg-white-0), 0 0 0 4px
+		--alpha(var(--color-primary-base) / 16%);
+	--shadow-button-important-focus: 0 0 0 2px var(--color-bg-white-0), 0 0 0 4px
+		--alpha(var(--color-neutral-500) / 16%);
+
+	--shadow-button-error-focus: 0 0 0 2px var(--color-bg-white-0), 0 0 0 4px
+		--alpha(var(--color-red-500) / 10%);
+	--shadow-toggle-switch: 0 6px 10px 0 rgba(14, 18, 27, 0.06), 0 2px 4px 0
+		rgba(14, 18, 27, 0.03);
+	--shadow-switch-thumb: 0 4px 8px 0 rgba(27, 28, 29, 0.06), 0 2px 4px 0
+		rgba(14, 18, 27, 0.08);
+	--shadow-tooltip: 0 12px 24px 0 rgba(14, 18, 27, 0.06), 0 1px 2px 0
+		rgba(14, 18, 27, 0.03);
+	--shadow-custom-xs:
+		0 0 0 1px rgba(51, 51, 51, 0.04),
+		0 4px 8px -2px rgba(51, 51, 51, 0.06),
+		0 2px 4px rgba(51, 51, 51, 0.04),
+		0 1px 2px rgba(51, 51, 51, 0.04),
+		inset 0 -1px 1px -0.5px rgba(51, 51, 51, 0.06);
+	--shadow-custom-sm:
+		0 0 0 1px rgba(51, 51, 51, 0.04),
+		0 16px 8px -8px rgba(51, 51, 51, 0.01),
+		0 12px 6px -6px rgba(51, 51, 51, 0.02),
+		0 5px 5px -2.5px rgba(51, 51, 51, 0.08),
+		0 1px 3px -1.5px rgba(51, 51, 51, 0.16),
+		inset 0 -0.5px 0.5px rgba(51, 51, 51, 0.08);
+	--shadow-custom-md:
+		0 0 0 1px rgba(51, 51, 51, 0.04),
+		0 1px 1px 0.5px rgba(51, 51, 51, 0.04),
+		0 3px 3px -1.5px rgba(51, 51, 51, 0.02),
+		0 6px 6px -3px rgba(51, 51, 51, 0.04),
+		0 12px 12px -6px rgba(51, 51, 51, 0.04),
+		0 24px 24px -12px rgba(51, 51, 51, 0.04),
+		0 48px 48px -24px rgba(51, 51, 51, 0.04),
+		inset 0 -1px 1px -0.5px rgba(51, 51, 51, 0.06);
+	--shadow-custom-lg:
+		0 0 0 1px rgba(51, 51, 51, 0.04),
+		0 1px 1px 0.5px rgba(51, 51, 51, 0.04),
+		0 3px 3px -1.5px rgba(51, 51, 51, 0.02),
+		0 6px 6px -3px rgba(51, 51, 51, 0.04),
+		0 12px 12px -6px rgba(51, 51, 51, 0.04),
+		0 24px 24px -12px rgba(51, 51, 51, 0.04),
+		0 48px 48px -24px rgba(51, 51, 51, 0.04),
+		0 96px 96px -32px rgba(51, 51, 51, 0.06),
+		inset 0 -1px 1px -0.5px rgba(51, 51, 51, 0.06);
+
+	/* Font sizes */
+	--text-title-h1: 3.5rem;
+	--text-title-h1--line-height: 4rem;
+	--text-title-h1--letter-spacing: -0.01em;
+	--text-title-h1--font-weight: 500;
+
+	--text-title-h2: 3rem;
+	--text-title-h2--line-height: 3.5rem;
+	--text-title-h2--letter-spacing: -0.01em;
+	--text-title-h2--font-weight: 500;
+
+	--text-title-h3: 2.5rem;
+	--text-title-h3--line-height: 3rem;
+	--text-title-h3--letter-spacing: -0.01em;
+	--text-title-h3--font-weight: 500;
+
+	--text-title-h4: 2rem;
+	--text-title-h4--line-height: 2.5rem;
+	--text-title-h4--letter-spacing: -0.005em;
+	--text-title-h4--font-weight: 500;
+
+	--text-title-h5: 1.5rem;
+	--text-title-h5--line-height: 2rem;
+	--text-title-h5--letter-spacing: 0em;
+	--text-title-h5--font-weight: 500;
+
+	--text-title-h6: 1.25rem;
+	--text-title-h6--line-height: 1.75rem;
+	--text-title-h6--letter-spacing: 0em;
+	--text-title-h6--font-weight: 500;
+
+	--text-label-xl: 1.5rem;
+	--text-label-xl--line-height: 2rem;
+	--text-label-xl--letter-spacing: -0.015em;
+	--text-label-xl--font-weight: 500;
+
+	--text-label-lg: 1.125rem;
+	--text-label-lg--line-height: 1.5rem;
+	--text-label-lg--letter-spacing: -0.015em;
+	--text-label-lg--font-weight: 500;
+
+	--text-label-md: 1rem;
+	--text-label-md--line-height: 1.5rem;
+	--text-label-md--letter-spacing: -0.011em;
+	--text-label-md--font-weight: 500;
+
+	--text-label-sm: .875rem;
+	--text-label-sm--line-height: 1.25rem;
+	--text-label-sm--letter-spacing: -0.006em;
+	--text-label-sm--font-weight: 500;
+
+	--text-label-xs: .75rem;
+	--text-label-xs--line-height: 1rem;
+	--text-label-xs--letter-spacing: 0em;
+	--text-label-xs--font-weight: 500;
+
+	--text-paragraph-xl: 1.5rem;
+	--text-paragraph-xl--line-height: 2rem;
+	--text-paragraph-xl--letter-spacing: -0.015em;
+	--text-paragraph-xl--font-weight: 400;
+
+	--text-paragraph-lg: 1.125rem;
+	--text-paragraph-lg--line-height: 1.5rem;
+	--text-paragraph-lg--letter-spacing: -0.015em;
+	--text-paragraph-lg--font-weight: 400;
+
+	--text-paragraph-md: 1rem;
+	--text-paragraph-md--line-height: 1.5rem;
+	--text-paragraph-md--letter-spacing: -0.011em;
+	--text-paragraph-md--font-weight: 400;
+
+	--text-paragraph-sm: .875rem;
+	--text-paragraph-sm--line-height: 1.25rem;
+	--text-paragraph-sm--letter-spacing: -0.006em;
+	--text-paragraph-sm--font-weight: 400;
+
+	--text-paragraph-xs: .75rem;
+	--text-paragraph-xs--line-height: 1rem;
+	--text-paragraph-xs--letter-spacing: 0em;
+	--text-paragraph-xs--font-weight: 400;
+
+	--text-subheading-md: 1rem;
+	--text-subheading-md--line-height: 1.5rem;
+	--text-subheading-md--letter-spacing: 0.06em;
+	--text-subheading-md--font-weight: 500;
+
+	--text-subheading-sm: .875rem;
+	--text-subheading-sm--line-height: 1.25rem;
+	--text-subheading-sm--letter-spacing: 0.06em;
+	--text-subheading-sm--font-weight: 500;
+
+	--text-subheading-xs: .75rem;
+	--text-subheading-xs--line-height: 1rem;
+	--text-subheading-xs--letter-spacing: 0.04em;
+	--text-subheading-xs--font-weight: 500;
+
+	--text-subheading-2xs: .6875rem;
+	--text-subheading-2xs--line-height: .75rem;
+	--text-subheading-2xs--letter-spacing: 0.02em;
+	--text-subheading-2xs--font-weight: 500;
+
+	--text-doc-label: 1.125rem;
+	--text-doc-label--line-height: 2rem;
+	--text-doc-label--letter-spacing: -0.015em;
+	--text-doc-label--font-weight: 500;
+
+	--text-doc-paragraph: 1.125rem;
+	--text-doc-paragraph--line-height: 2rem;
+	--text-doc-paragraph--letter-spacing: -0.015em;
+	--text-doc-paragraph--font-weight: 400;
+
+	/* BorderRadius */
+	--radius-10: 0.625rem;
+	--radius-20: 1.25rem;
 }

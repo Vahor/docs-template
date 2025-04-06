@@ -8,17 +8,28 @@
 @theme inline {
 	--font-sans: var(--font-inter);
 	--font-mono: var(--font-geist-mono);
+
+	--color-navbar: var(--color-bg-light);
 }
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border outline-border;
 	}
 	body {
-		@apply bg-background text-foreground antialiased font-sans;
+		@apply bg-bg-white text-text-dark antialiased font-sans;
+	}
+	html {
+		--header-height: 3.5rem;
+		--banner-height: 2.5rem;
 	}
 	button:not(:disabled),
 	[role="button"]:not(:disabled) {
 		cursor: pointer;
 	}
+}
+
+.remixicon path {
+	transform: scale(0.8996);
+	transform-origin: center;
 }

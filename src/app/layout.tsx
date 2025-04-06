@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./styles/globals.css";
+import { Providers } from "@/app/(main)/providers";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { SiteHeader } from "@/app/(main)/components/site-header";
+import { BannerContainer } from "@/app/(main)/components/banner";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  preload: true
 });
 
 const geistMono = Geist_Mono({
@@ -24,8 +29,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${geistMono.variable}`} >
-        {children}
+      <body className={`${inter.variable} ${geistMono.variable}`}>
+        <BannerContainer />
+        <Providers>
+          <SidebarProvider className="flex flex-col">
+            <SiteHeader />
+            <main className="mt-[var(--banner-height)] flex-1 overflow-y-auto">
+              {children}
+            </main>
+          </SidebarProvider>
+        </Providers>
       </body>
     </html>
   );

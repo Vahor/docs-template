@@ -54,6 +54,7 @@ export default async function Page(props: PagePropsSlug) {
 					description: page.description,
 					datePublished: page.releaseDate,
 					dateModified: page.dateModified,
+					articleSection: "changelog",
 				})}
 			/>
 			<BreadcrumbResponsive items={breadcrumbs} />

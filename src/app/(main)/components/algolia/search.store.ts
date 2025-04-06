@@ -41,7 +41,7 @@ export const searchStore = create<SearchStore>()(persist(
 			const cleanEntry: Entry = {
 				...entry,
 				_highlightResult: {
-					title: { value: entry.title ?? entry._highlightResult.title?.value ?? '', matchedWords: [] },
+					headline: { value: entry.headline ?? entry._highlightResult.headline?.value ?? '', matchedWords: [] },
 					description: { value: entry.description ?? entry._highlightResult.description?.value ?? '', matchedWords: [] },
 				},
 			};

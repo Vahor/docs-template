@@ -33,7 +33,7 @@ const suggested: Entry[] = [{
   objectID: '1',
   url: '/changelog/xyz',
   _highlightResult: {
-    title: {
+    headline: {
       value: 'Latest Changes',
       matchedWords: [],
     },
@@ -51,7 +51,7 @@ const SearchResult = ({
   const appendHistory = searchStore((state) => state.appendHistory);
   const router = useRouter();
 
-  const title = result._highlightResult.title?.value;
+  const title = result._highlightResult.headline?.value;
   const description = result._highlightResult.description?.value;
 
   // const breadcrumbs = getPageBreadcrumbs(result.url).slice(0, -1);

@@ -23,11 +23,11 @@ export type Entry = {
 	objectID: string;
 
 	url: string;
-	title?: string;
+	headline?: string;
 	description?: string;
 
 	_highlightResult: {
-		title?: {
+		headline?: {
 			value: string;
 			matchedWords: string[];
 		};
@@ -59,8 +59,10 @@ export function useAutocomplete() {
 					{
 						sourceId: "documentation",
 						getItemUrl({ item }) {
+							return item.url;
 							if (typeof item.url === "string") {
-								const url = new URL(item.url);
+								// TODO: add full url in jsonld
+								const url = new URL("http://localhost", item.url);
 								return `${url.pathname}${url.hash}`;
 							}
 							return undefined;
@@ -74,8 +76,7 @@ export function useAutocomplete() {
 						},
 						getItems({ query }) {
 							const enabledCategories = getSearchCategories();
-							const filters = Object.entries(enabledCategories).filter(([_, enabled]) => !enabled).map(([category]) => `NOT url:"/docs-template/${category}"`).join("AND ");
-							console.log({ filters });
+							const filters = Object.entries(enabledCategories).filter(([_, enabled]) => !enabled).map(([category]) => `category:-${category}`);
 							return getAlgoliaResults({
 								searchClient,
 								queries: [
@@ -87,11 +88,18 @@ export function useAutocomplete() {
 											highlightPreTag:
 												'<mark class="bg-transparent text-primary-base">',
 											highlightPostTag: "</mark>",
-											filters,
-											responseFields: [
-												"url",
-												"title",
+											facetFilters: filters,
+											responseFields: ["hits"],
+											attributesToHighlight: [
+												"headline",
 												"description",
+											],
+											attributesToRetrieve: [
+												"objectID",
+												"url",
+												"headline",
+												"description",
+												"category",
 											],
 										},
 									},
